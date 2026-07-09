@@ -300,3 +300,5 @@ footer.site-footer .footer-brand {
   font-family: 'Patrick Hand', cursive;
   font-size: 1.2rem;
 }
+.social-buttons{ display:flex; gap:14px; flex-wrap:wrap; margin-top:18px; } .btn-social{ transition:transform .2s ease, box-shadow .2s ease; } .btn-social:hover{ transform:scale(1.08); } .btn-social:active{ transform:scale(1.03); 
+}
