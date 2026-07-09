@@ -13,8 +13,8 @@ const NEWS_EINTRAEGE = [
   },
   {
     datum: "2026-07-05",
-    titel: "Beispiel-Meldung",
-    text: "So sieht ein News-Eintrag aus — einfach in dieser Datei einen neuen Block ganz oben einfügen.",
+    titel: "Hier riecht es komisch...",
+    text: "Ungewöhnlich...",
     tag: "Community"
   }
 ];
