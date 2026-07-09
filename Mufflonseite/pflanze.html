@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Die Pflanze — Das__Mufflon</title>
+  <link rel="icon" type="image/png" href="assets/mufflon-mascot.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="nav-inner">
+      <a href="index.html" class="brand">
+        <img src="assets/mufflon-mascot.png" alt="Mufflon Maskottchen">
+        Das__Mufflon
+      </a>
+      <button class="nav-toggle" aria-label="Menü öffnen">☰</button>
+      <nav class="main-nav">
+        <a href="index.html">Home</a>
+        <a href="news.html">News</a>
+        <a href="pflanze.html" class="active">Die Pflanze</a>
+        <a href="archiv.html">Archiv</a>
+        <a href="#" class="soon">Freundesbuch (bald)</a>
+      </nav>
+    </div>
+  </header>
+
+  <section style="padding-top:50px;">
+    <div class="section-head">
+      <span class="eyebrow">Unsere Streamingzeitung</span>
+      <h1>🌱 Die Pflanze</h1>
+      <p>Mehrmals die Woche frisch für dich gegossen: Die Pflanze ist unsere kleine Community-Zeitung rund um Stream, Community-Momente und alles, was gerade wächst. Jede Ausgabe besteht aus Titelseite und Innenseiten zum Nachlesen.</p>
+    </div>
+
+    <div class="ivy-divider"></div>
+
+    <div class="section-head">
+      <span class="eyebrow">Ganz frisch gewachsen</span>
+      <h2>Neueste Ausgabe</h2>
+    </div>
+
+    <div id="neueste-ausgabe" class="wrap" style="max-width:600px;">
+      <!-- wird per JavaScript aus pflanze-data.js befüllt -->
+    </div>
+
+    <div style="text-align:center; margin-top:36px;">
+      <a href="archiv.html" class="btn btn-primary">📚 Alle Ausgaben im Archiv</a>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-brand">Das__Mufflon 🐑</div>
+    <p><a href="https://twitch.tv/das__mufflon" target="_blank" rel="noopener">twitch.tv/das__mufflon</a></p>
+  </footer>
+
+  <script src="js/pflanze-data.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    const container = document.getElementById('neueste-ausgabe');
+
+    if (!PFLANZE_AUSGABEN || PFLANZE_AUSGABEN.length === 0) {
+      container.innerHTML = '<div class="empty-state">Die erste Ausgabe keimt noch — schau bald wieder vorbei! 🌱</div>';
+    } else {
+      const neueste = PFLANZE_AUSGABEN[0];
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <span class="tag terracotta">Ausgabe ${neueste.nummer}</span>
+        <h3>${neueste.titel}</h3>
+        <p style="color:#8a7660; font-size:0.9rem; margin-bottom:14px;">${formatiereDatum(neueste.datum)}</p>
+        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+          <a href="${neueste.teil1_url}" target="_blank" rel="noopener" class="btn btn-ghost">📄 ${neueste.teil1_label}</a>
+          <a href="${neueste.teil2_url}" target="_blank" rel="noopener" class="btn btn-ghost">📄 ${neueste.teil2_label}</a>
+        </div>
+      `;
+      container.appendChild(card);
+    }
+  </script>
+</body>
+</html>

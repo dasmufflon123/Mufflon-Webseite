@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Archiv — Das__Mufflon</title>
+  <link rel="icon" type="image/png" href="assets/mufflon-mascot.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="nav-inner">
+      <a href="index.html" class="brand">
+        <img src="assets/mufflon-mascot.png" alt="Mufflon Maskottchen">
+        Das__Mufflon
+      </a>
+      <button class="nav-toggle" aria-label="Menü öffnen">☰</button>
+      <nav class="main-nav">
+        <a href="index.html">Home</a>
+        <a href="news.html">News</a>
+        <a href="pflanze.html">Die Pflanze</a>
+        <a href="archiv.html" class="active">Archiv</a>
+        <a href="#" class="soon">Freundesbuch (bald)</a>
+      </nav>
+    </div>
+  </header>
+
+  <section style="padding-top:50px;">
+    <div class="section-head">
+      <span class="eyebrow">Alles, was je gewachsen ist</span>
+      <h1>📚 Archiv</h1>
+      <p>Hier findest du alle bisherigen Ausgaben von Die Pflanze — jeweils mit Titelseite und Innenseiten zum Öffnen.</p>
+    </div>
+
+    <div id="archiv-liste" class="wrap" style="display:flex; flex-direction:column; gap:16px; max-width:720px;">
+      <!-- wird per JavaScript aus pflanze-data.js befüllt -->
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-brand">Das__Mufflon 🐑</div>
+    <p><a href="https://twitch.tv/das__mufflon" target="_blank" rel="noopener">twitch.tv/das__mufflon</a></p>
+  </footer>
+
+  <script src="js/pflanze-data.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    const liste = document.getElementById('archiv-liste');
+
+    if (!PFLANZE_AUSGABEN || PFLANZE_AUSGABEN.length === 0) {
+      liste.innerHTML = '<div class="empty-state">Das Archiv wartet noch auf seine erste Ausgabe 🌱</div>';
+    } else {
+      PFLANZE_AUSGABEN.forEach(ausgabe => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.style.display = 'flex';
+        card.style.flexWrap = 'wrap';
+        card.style.alignItems = 'center';
+        card.style.justifyContent = 'space-between';
+        card.style.gap = '14px';
+        card.innerHTML = `
+          <div>
+            <span class="tag moss">Ausgabe ${ausgabe.nummer}</span>
+            <h3 style="margin-bottom:2px;">${ausgabe.titel}</h3>
+            <p style="color:#8a7660; font-size:0.9rem; margin:0;">${formatiereDatum(ausgabe.datum)}</p>
+          </div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <a href="${ausgabe.teil1_url}" target="_blank" rel="noopener" class="btn btn-ghost">📄 ${ausgabe.teil1_label}</a>
+            <a href="${ausgabe.teil2_url}" target="_blank" rel="noopener" class="btn btn-ghost">📄 ${ausgabe.teil2_label}</a>
+          </div>
+        `;
+        liste.appendChild(card);
+      });
+    }
+  </script>
+</body>
+</html>
