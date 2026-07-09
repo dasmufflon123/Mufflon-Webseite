@@ -7,7 +7,7 @@
 const NEWS_EINTRAEGE = [
   {
     datum: "09.07.2026",
-    titel: "Ibims 🐑",
+    titel: "I bims eins Muuuhuhuhufflon 🐑",
     text: "Moini.",
     tag: "Website"
   },  
