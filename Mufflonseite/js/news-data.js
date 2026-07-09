@@ -9,7 +9,7 @@ const NEWS_EINTRAEGE = [
     datum: "09.07.2026",
     titel: "EVENT: Goatclash 3 vs. Philbias!",
     text: "📅 Samstag, 25.07.2026
-🕑 Beginn: 14:00 Uhr.",
+      14:00 Uhr.",
     tag: "Website"
   },  
   {
