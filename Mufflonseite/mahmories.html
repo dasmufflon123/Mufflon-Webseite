@@ -50,22 +50,23 @@
 
       <div class="book-spine"></div>
 
-      <div class="flip-page" id="flipPage">
-        <div class="flip-face front" id="flipFront">
-          <div class="page-half left">
-            <img id="frontLeftImg" src="" alt="">
-          </div>
-          <div class="page-half right">
-            <img id="frontRightImg" src="" alt="">
-          </div>
+      <!-- Klappt beim Vorblaettern: rechte Seite -> legt sich auf die linke -->
+      <div class="flip-half right" id="flipRight">
+        <div class="flip-face front">
+          <img id="flipRightFrontImg" src="" alt="">
         </div>
-        <div class="flip-face back" id="flipBack">
-          <div class="page-half left">
-            <img id="backLeftImg" src="" alt="">
-          </div>
-          <div class="page-half right">
-            <img id="backRightImg" src="" alt="">
-          </div>
+        <div class="flip-face back">
+          <img id="flipRightBackImg" src="" alt="">
+        </div>
+      </div>
+
+      <!-- Klappt beim Zurueckblaettern: linke Seite -> legt sich auf die rechte -->
+      <div class="flip-half left" id="flipLeft">
+        <div class="flip-face front">
+          <img id="flipLeftFrontImg" src="" alt="">
+        </div>
+        <div class="flip-face back">
+          <img id="flipLeftBackImg" src="" alt="">
         </div>
       </div>
     </div>
@@ -88,31 +89,42 @@
     let currentIndex = 0;
     let isAnimating = false;
 
-    const flipPage = document.getElementById('flipPage');
+    const baseLeftImg = document.getElementById('baseLeftImg');
+    const baseRightImg = document.getElementById('baseRightImg');
+    const flipRight = document.getElementById('flipRight');
+    const flipLeft = document.getElementById('flipLeft');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
     const indicator = document.getElementById('pageIndicator');
 
-    function fillHalf(prefix, member) {
-      document.getElementById(prefix + 'LeftImg').src = member.seite_links;
-      document.getElementById(prefix + 'LeftImg').alt = member.name + ' — linke Seite';
-      document.getElementById(prefix + 'RightImg').src = member.seite_rechts;
-      document.getElementById(prefix + 'RightImg').alt = member.name + ' — rechte Seite';
+    function setImg(id, member, side) {
+      const el = document.getElementById(id);
+      el.src = side === 'links' ? member.seite_links : member.seite_rechts;
+      el.alt = member.name + ' — ' + side + ' Seite';
     }
 
-    function renderBase(index) {
-      fillHalf('base', MAHMORIES_MITGLIEDER[index]);
+    function renderBaseInstant(index) {
+      const m = MAHMORIES_MITGLIEDER[index];
+      baseLeftImg.src = m.seite_links;
+      baseLeftImg.alt = m.name + ' — linke Seite';
+      baseRightImg.src = m.seite_rechts;
+      baseRightImg.alt = m.name + ' — rechte Seite';
       indicator.textContent = (index + 1) + ' / ' + MAHMORIES_MITGLIEDER.length;
       prevBtn.disabled = index === 0;
       nextBtn.disabled = index === MAHMORIES_MITGLIEDER.length - 1;
+
+      // Beide ruhenden Klappen liegen deckungsgleich auf der Basis —
+      // sie muessen deshalb immer dasselbe Bild zeigen wie die Basis,
+      // sonst gibt's beim Stillstand einen sichtbaren Bildsprung.
+      setImg('flipRightFrontImg', m, 'rechts');
+      setImg('flipLeftFrontImg', m, 'links');
     }
 
-    function resetFlipPageInstant(transformValue) {
-      flipPage.style.transition = 'none';
-      flipPage.style.transform = transformValue;
-      // erzwingt Reflow, damit der nächste Übergang wieder animiert wird
-      void flipPage.offsetWidth;
-      flipPage.style.transition = '';
+    function resetFlapInstant(flap, transformValue) {
+      flap.style.transition = 'none';
+      flap.style.transform = transformValue;
+      void flap.offsetWidth; // Reflow erzwingen, damit der naechste Uebergang wieder animiert
+      flap.style.transition = '';
     }
 
     function turn(direction) {
@@ -125,29 +137,57 @@
       const target = MAHMORIES_MITGLIEDER[targetIndex];
 
       if (direction === 1) {
-        fillHalf('front', current);
-        fillHalf('back', target);
-        resetFlipPageInstant('rotateY(0deg)');
-        requestAnimationFrame(() => {
-          flipPage.style.transform = 'rotateY(-180deg)';
-        });
-      } else {
-        fillHalf('front', target);
-        fillHalf('back', current);
-        resetFlipPageInstant('rotateY(-180deg)');
-        requestAnimationFrame(() => {
-          flipPage.style.transform = 'rotateY(0deg)';
-        });
-      }
+        // Vorwaerts: rechte Seite klappt um und legt sich auf die linke.
+        setImg('flipRightFrontImg', current, 'rechts');   // deckt die Basis exakt zu (nahtlos)
+        setImg('flipRightBackImg', target, 'links');       // landet sichtbar auf der linken Haelfte
 
-      const onDone = () => {
-        flipPage.removeEventListener('transitionend', onDone);
-        currentIndex = targetIndex;
-        renderBase(currentIndex);
-        resetFlipPageInstant('rotateY(0deg)');
-        isAnimating = false;
-      };
-      flipPage.addEventListener('transitionend', onDone);
+        // Die rechte Basis-Seite wird sofort gewechselt — sie ist ja unter der
+        // Klappe verdeckt und wird erst sichtbar, sobald die Klappe sich hebt
+        // (genau wie bei einem echten Buch: die naechste Seite liegt schon da).
+        baseRightImg.src = target.seite_rechts;
+        baseRightImg.alt = target.name + ' — rechte Seite';
+
+        resetFlapInstant(flipRight, 'rotateY(0deg)');
+        requestAnimationFrame(() => {
+          flipRight.style.transform = 'rotateY(-180deg)';
+        });
+
+        flipRight.addEventListener('transitionend', function onDone() {
+          flipRight.removeEventListener('transitionend', onDone);
+          // Erst jetzt, wenn die Klappe die linke Seite komplett bedeckt hat,
+          // wird die linke Basis-Seite gewechselt — der Tausch ist unsichtbar,
+          // weil die Klappe optisch exakt an derselben Stelle liegt.
+          baseLeftImg.src = target.seite_links;
+          baseLeftImg.alt = target.name + ' — linke Seite';
+          resetFlapInstant(flipRight, 'rotateY(0deg)');
+          currentIndex = targetIndex;
+          renderBaseInstant(currentIndex);
+          isAnimating = false;
+        }, { once: true });
+
+      } else {
+        // Rueckwaerts: linke Seite klappt um und legt sich auf die rechte.
+        setImg('flipLeftFrontImg', current, 'links');
+        setImg('flipLeftBackImg', target, 'rechts');
+
+        baseLeftImg.src = target.seite_links;
+        baseLeftImg.alt = target.name + ' — linke Seite';
+
+        resetFlapInstant(flipLeft, 'rotateY(0deg)');
+        requestAnimationFrame(() => {
+          flipLeft.style.transform = 'rotateY(180deg)';
+        });
+
+        flipLeft.addEventListener('transitionend', function onDone() {
+          flipLeft.removeEventListener('transitionend', onDone);
+          baseRightImg.src = target.seite_rechts;
+          baseRightImg.alt = target.name + ' — rechte Seite';
+          resetFlapInstant(flipLeft, 'rotateY(0deg)');
+          currentIndex = targetIndex;
+          renderBaseInstant(currentIndex);
+          isAnimating = false;
+        }, { once: true });
+      }
     }
 
     prevBtn.addEventListener('click', () => turn(-1));
@@ -157,7 +197,7 @@
       if (e.key === 'ArrowLeft') turn(-1);
     });
 
-    renderBase(currentIndex);
+    renderBaseInstant(currentIndex);
   </script>
 </body>
 </html>
