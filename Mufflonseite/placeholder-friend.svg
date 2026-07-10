@@ -1,0 +1,6 @@
+<svg width="300" height="300" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="300" height="300" rx="18" fill="#EFE1CB"/>
+  <circle cx="150" cy="118" r="52" fill="#DD8A46" opacity="0.35"/>
+  <path d="M70 250c0-48 36-84 80-84s80 36 80 84" fill="#DD8A46" opacity="0.35"/>
+  <text x="150" y="270" text-anchor="middle" font-family="Nunito, sans-serif" font-size="15" fill="#6B5645">Foto folgt</text>
+</svg>
