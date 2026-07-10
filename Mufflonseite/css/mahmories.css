@@ -1,0 +1,120 @@
+/* ============================================================
+   MÄHMORIES — Flipbook-Styles
+   Jede Person hat 2 fertig gestaltete PNG-Seiten (links/rechts),
+   die randlos und eng aneinander wie ein aufgeschlagenes Buch
+   angezeigt werden.
+   ============================================================ */
+
+.book-stage {
+  padding: 20px 24px 70px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.book {
+  position: relative;
+  width: min(820px, 94vw);
+  aspect-ratio: 1860 / 1100; /* = 2 x Seitenverhaeltnis einer Einzelseite (930x1100) */
+  perspective: 2400px;
+}
+
+.book-base {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  background: var(--cream-soft);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lift);
+  overflow: hidden;
+}
+
+.page-half {
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.page-half img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* --- Die umblaetternde Seite (das ganze Blatt klappt um die Buchmitte) --- */
+.flip-page {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform-origin: left center;
+  transform-style: preserve-3d;
+  transition: transform 0.7s cubic-bezier(.45, .05, .28, 1);
+  pointer-events: none;
+  z-index: 5;
+}
+
+.flip-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  box-sizing: border-box;
+  display: flex;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-lift);
+  background: var(--cream-soft);
+}
+
+.flip-face.back {
+  transform: rotateY(180deg);
+}
+
+/* Ganz schmale Buchrille in der Mitte, fuer die Buch-Illusion */
+.book-spine {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  margin-left: -2px;
+  background: linear-gradient(to right, rgba(0,0,0,0.10), rgba(0,0,0,0.02), rgba(0,0,0,0.10));
+  z-index: 6;
+  pointer-events: none;
+}
+
+/* --- Steuerung --- */
+.book-controls {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  margin-top: 26px;
+}
+
+.book-nav-btn {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: none;
+  background: var(--terracotta);
+  color: var(--white);
+  font-size: 1.3rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-soft);
+  transition: transform 0.15s ease, background 0.15s ease, opacity 0.15s ease;
+}
+.book-nav-btn:hover:not(:disabled) { transform: translateY(-2px); background: var(--terracotta-dark); }
+.book-nav-btn:disabled { opacity: 0.35; cursor: default; }
+
+.book-page-indicator {
+  font-family: 'Baloo 2', sans-serif;
+  font-weight: 700;
+  color: var(--horn-brown);
+  min-width: 130px;
+  text-align: center;
+}
