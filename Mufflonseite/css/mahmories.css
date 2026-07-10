@@ -1,8 +1,9 @@
 /* ============================================================
-   MÄHMORIES — Flipbook-Styles
+   MAEHMORIES — Flipbook-Styles
    Jede Person hat 2 fertig gestaltete PNG-Seiten (links/rechts),
    die randlos und eng aneinander wie ein aufgeschlagenes Buch
-   angezeigt werden.
+   angezeigt werden. Die Seite, die man gerade umblaettert, klappt
+   exakt um die Buchmitte (Scharnier), wie bei einem echten Buch.
    ============================================================ */
 
 .book-stage {
@@ -42,36 +43,6 @@
   display: block;
 }
 
-/* --- Die umblaetternde Seite (das ganze Blatt klappt um die Buchmitte) --- */
-.flip-page {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  transform-origin: left center;
-  transform-style: preserve-3d;
-  transition: transform 0.7s cubic-bezier(.45, .05, .28, 1);
-  pointer-events: none;
-  z-index: 5;
-}
-
-.flip-face {
-  position: absolute;
-  inset: 0;
-  backface-visibility: hidden;
-  box-sizing: border-box;
-  display: flex;
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  box-shadow: var(--shadow-lift);
-  background: var(--cream-soft);
-}
-
-.flip-face.back {
-  transform: rotateY(180deg);
-}
-
 /* Ganz schmale Buchrille in der Mitte, fuer die Buch-Illusion */
 .book-spine {
   position: absolute;
@@ -83,6 +54,48 @@
   background: linear-gradient(to right, rgba(0,0,0,0.10), rgba(0,0,0,0.02), rgba(0,0,0,0.10));
   z-index: 6;
   pointer-events: none;
+}
+
+/* --- Die umblaetternde Seite: nur eine Haelfte, Scharnier an der Buchmitte --- */
+.flip-half {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.7s cubic-bezier(.45, .05, .28, 1);
+  pointer-events: none;
+  z-index: 5;
+}
+
+.flip-half.right {
+  right: 0;
+  transform-origin: left center; /* Scharnier an der Buchmitte */
+}
+
+.flip-half.left {
+  left: 0;
+  transform-origin: right center; /* Scharnier an der Buchmitte */
+}
+
+.flip-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  overflow: hidden;
+  background: var(--cream-soft);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.18);
+}
+
+.flip-face img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.flip-face.back {
+  transform: rotateY(180deg);
 }
 
 /* --- Steuerung --- */
