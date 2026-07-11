@@ -118,6 +118,54 @@
   }
   .card.todo-card h1{ color: #C1662E; text-shadow: none; }
 
+  .user-tag{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.88rem;
+    color: var(--cream-dim);
+    margin: -6px 0 14px;
+  }
+  .user-tag .who{ font-weight: 700; color: var(--cream); }
+  .user-tag button{
+    background: none;
+    border: none;
+    color: inherit;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: inherit;
+    padding: 0;
+  }
+  .user-tag .name-form{
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .user-tag .name-form input{
+    font-size: 0.88rem;
+    padding: 4px 8px;
+    border-radius: 8px;
+    border: 1px solid rgba(107,66,38,0.25);
+    background: #fff;
+    color: var(--text-dark);
+    width: 130px;
+  }
+  .user-tag .name-form button.save{
+    background: var(--terracotta);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 4px 10px;
+    cursor: pointer;
+    font-weight: 700;
+  }
+  .todo-author{
+    font-size: 0.78rem;
+    color: var(--cream-dim);
+    margin-left: 6px;
+    font-style: italic;
+  }
+
   h1{
     font-family:'Caveat', cursive;
     font-size: 2.6rem;
@@ -833,6 +881,8 @@
     <h1 style="font-size:2.1rem;">Meine Liste</h1>
     <div class="subtitle">für diese Runde</div>
 
+    <div class="user-tag" id="userTag"></div>
+
     <div class="mode-toggle">
       <button class="mode-chip active" id="modeTodoBtn" type="button">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
@@ -1009,9 +1059,94 @@
   // ---------- Todo list (Aufgaben + Gruppen) ----------
   // entry: { id, type: 'todo', text, done }
   //     or { id, type: 'group', title, collapsed, items: [{id, text, done}] }
+  const TODO_STORAGE_KEY = 'mufflon-pomodoro-todos';
   let entries = [];
   let nextId = 1;
   let addMode = 'todo'; // 'todo' | 'group'
+
+  function saveTodos() {
+    try {
+      localStorage.setItem(TODO_STORAGE_KEY, JSON.stringify({ entries, nextId }));
+    } catch (e) {
+      console.warn('Aufgaben konnten nicht gespeichert werden:', e);
+    }
+  }
+
+  function loadTodos() {
+    try {
+      const raw = localStorage.getItem(TODO_STORAGE_KEY);
+      if (raw) {
+        const data = JSON.parse(raw);
+        entries = Array.isArray(data.entries) ? data.entries : [];
+        nextId = typeof data.nextId === 'number' ? data.nextId : 1;
+      }
+    } catch (e) {
+      console.warn('Gespeicherte Aufgaben konnten nicht geladen werden:', e);
+      entries = [];
+      nextId = 1;
+    }
+  }
+
+  loadTodos();
+
+  // ---------- Nutzername (kein Login, nur ein gemerkter Name) ----------
+  const USER_STORAGE_KEY = 'mufflon-pomodoro-username';
+  let currentUser = localStorage.getItem(USER_STORAGE_KEY) || '';
+  const userTag = document.getElementById('userTag');
+
+  function saveUsername(name) {
+    currentUser = name.trim();
+    if (currentUser) {
+      localStorage.setItem(USER_STORAGE_KEY, currentUser);
+    } else {
+      localStorage.removeItem(USER_STORAGE_KEY);
+    }
+    renderUserTag();
+  }
+
+  function renderUserTag() {
+    userTag.innerHTML = '';
+    if (currentUser) {
+      const span = document.createElement('span');
+      span.innerHTML = 'Angemeldet als <span class="who">' + escapeHtml(currentUser) + '</span>';
+      const changeBtn = document.createElement('button');
+      changeBtn.textContent = '· ändern';
+      changeBtn.addEventListener('click', showNameForm);
+      userTag.appendChild(span);
+      userTag.appendChild(changeBtn);
+    } else {
+      showNameForm();
+    }
+  }
+
+  function showNameForm() {
+    userTag.innerHTML = '';
+    const form = document.createElement('div');
+    form.className = 'name-form';
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.maxLength = 24;
+    input.placeholder = 'Dein Name';
+    input.value = currentUser;
+    const btn = document.createElement('button');
+    btn.className = 'save';
+    btn.textContent = 'OK';
+    function submit() { saveUsername(input.value); }
+    btn.addEventListener('click', submit);
+    input.addEventListener('keydown', (e) => { if (e.key === 'Enter') submit(); });
+    form.appendChild(input);
+    form.appendChild(btn);
+    userTag.appendChild(form);
+    input.focus();
+  }
+
+  function escapeHtml(str) {
+    const d = document.createElement('div');
+    d.textContent = str;
+    return d.innerHTML;
+  }
+
+  renderUserTag();
 
   const todoList = document.getElementById('todoList');
   const todoInput = document.getElementById('todoInput');
@@ -1109,6 +1244,7 @@
   }
 
   function renderTodos() {
+    saveTodos();
     sortEntries();
     todoList.innerHTML = '';
     if (entries.length === 0) {
@@ -1146,6 +1282,12 @@
 
         li.appendChild(check);
         li.appendChild(text);
+        if (entry.author) {
+          const author = document.createElement('span');
+          author.className = 'todo-author';
+          author.textContent = '– ' + entry.author;
+          li.appendChild(author);
+        }
         li.appendChild(dots);
         li.appendChild(del);
         todoList.appendChild(li);
@@ -1220,6 +1362,12 @@
 
         subLi.appendChild(check);
         subLi.appendChild(text);
+        if (item.author) {
+          const author = document.createElement('span');
+          author.className = 'todo-author';
+          author.textContent = '– ' + item.author;
+          subLi.appendChild(author);
+        }
         subLi.appendChild(subDots);
         subLi.appendChild(subDel);
         subList.appendChild(subLi);
@@ -1237,7 +1385,7 @@
       function addSubtask() {
         const val = subInput.value.trim();
         if (!val) return;
-        entry.items.push({ id: nextId++, text: val, done: false, priority: 'low' });
+        entry.items.push({ id: nextId++, text: val, done: false, priority: 'low', author: currentUser });
         subInput.value = '';
         renderTodos();
       }
@@ -1256,9 +1404,9 @@
     const val = todoInput.value.trim();
     if (!val) return;
     if (addMode === 'todo') {
-      entries.push({ id: nextId++, type: 'todo', text: val, done: false, priority: 'low' });
+      entries.push({ id: nextId++, type: 'todo', text: val, done: false, priority: 'low', author: currentUser });
     } else {
-      entries.push({ id: nextId++, type: 'group', title: val, collapsed: false, items: [] });
+      entries.push({ id: nextId++, type: 'group', title: val, collapsed: false, items: [], author: currentUser });
     }
     todoInput.value = '';
     renderTodos();
