@@ -347,6 +347,70 @@
   }
   .custom-timer-popover button:hover{ transform: translateY(-1px); filter:brightness(1.06); }
 
+  /* ---------- Login-Overlay ---------- */
+  .login-backdrop{
+    position: fixed;
+    inset: 0;
+    background: rgba(20,12,8,0.55);
+    backdrop-filter: blur(2px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 20px;
+  }
+  .login-backdrop.open{ display: flex; }
+  .login-panel{
+    background: rgba(33,21,16,0.97);
+    border: 1px solid rgba(247,234,217,0.18);
+    border-radius: 18px;
+    padding: 26px 26px 22px;
+    width: 100%;
+    max-width: 280px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    text-align: center;
+  }
+  .login-panel .ctp-title{ font-size: 1.5rem; margin-bottom: 4px; }
+  .login-panel .login-sub{
+    font-size: 0.82rem;
+    color: var(--cream-dim);
+    margin-bottom: 16px;
+    line-height: 1.4;
+  }
+  .login-panel input{
+    width: 100%;
+    box-sizing: border-box;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(247,234,217,0.2);
+    border-radius: 10px;
+    padding: 9px 12px;
+    color: var(--cream);
+    font-family: 'Quicksand', sans-serif;
+    font-size: 0.92rem;
+    outline: none;
+    margin-bottom: 10px;
+  }
+  .login-panel input:focus{ border-color: var(--ember-soft); }
+  .login-panel button.login-submit{
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    padding: 10px;
+    background: linear-gradient(155deg, var(--ember-soft), var(--ember));
+    color: #2b1810;
+    font-weight: 700;
+    font-size: 0.92rem;
+    cursor: pointer;
+    transition: transform 0.15s ease, filter 0.15s ease;
+  }
+  .login-panel button.login-submit:hover{ transform: translateY(-1px); filter: brightness(1.06); }
+  .login-error{
+    color: #ff9d8a;
+    font-size: 0.8rem;
+    margin: -4px 0 10px;
+    min-height: 1em;
+  }
+
   .ring-center{
     position:absolute;
     inset:0;
@@ -906,6 +970,17 @@
 
 <div class="copyright">&copy; Das__Mufflon</div>
 
+<div class="login-backdrop" id="loginBackdrop">
+  <div class="login-panel">
+    <div class="ctp-title">Wer bist du? 🐑</div>
+    <div class="login-sub">Name + Passwort eingeben.<br>Neuer Name? Einfach ein eigenes Passwort vergeben.</div>
+    <input type="text" id="loginName" placeholder="Name" maxlength="24" autocomplete="off">
+    <input type="password" id="loginPassword" placeholder="Passwort" maxlength="40" autocomplete="off">
+    <div class="login-error" id="loginError"></div>
+    <button class="login-submit" id="loginSubmit" type="button">Los geht's</button>
+  </div>
+</div>
+
 </main>
 
 <footer class="site-footer">
@@ -1057,87 +1132,133 @@
   mascotImg.addEventListener('click', hideMascot);
 
   // ---------- Todo list (Aufgaben + Gruppen) ----------
+  // Jeder Name bekommt seine eigene, getrennte Liste.
   // entry: { id, type: 'todo', text, done }
   //     or { id, type: 'group', title, collapsed, items: [{id, text, done}] }
   const TODO_STORAGE_KEY = 'mufflon-pomodoro-todos';
+  const DEFAULT_USER = 'Allgemein';
+  let allData = { nextId: 1, users: {} };
   let entries = [];
-  let nextId = 1;
   let addMode = 'todo'; // 'todo' | 'group'
 
-  function saveTodos() {
+  function loadAllData() {
     try {
-      localStorage.setItem(TODO_STORAGE_KEY, JSON.stringify({ entries, nextId }));
+      const raw = localStorage.getItem(TODO_STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed && typeof parsed === 'object' && parsed.users) {
+          allData = parsed;
+          return;
+        }
+        // Alte Version (eine gemeinsame Liste ohne Namen) -> in "Allgemein" uebernehmen
+        if (Array.isArray(parsed.entries)) {
+          allData = { nextId: parsed.nextId || 1, users: { [DEFAULT_USER]: parsed.entries } };
+        }
+      }
+    } catch (e) {
+      console.warn('Gespeicherte Aufgaben konnten nicht geladen werden:', e);
+    }
+  }
+
+  function saveTodos() {
+    allData.users[currentUser || DEFAULT_USER] = entries;
+    try {
+      localStorage.setItem(TODO_STORAGE_KEY, JSON.stringify(allData));
     } catch (e) {
       console.warn('Aufgaben konnten nicht gespeichert werden:', e);
     }
   }
 
-  function loadTodos() {
-    try {
-      const raw = localStorage.getItem(TODO_STORAGE_KEY);
-      if (raw) {
-        const data = JSON.parse(raw);
-        entries = Array.isArray(data.entries) ? data.entries : [];
-        nextId = typeof data.nextId === 'number' ? data.nextId : 1;
-      }
-    } catch (e) {
-      console.warn('Gespeicherte Aufgaben konnten nicht geladen werden:', e);
-      entries = [];
-      nextId = 1;
-    }
+  function loadEntriesForCurrentUser() {
+    entries = allData.users[currentUser || DEFAULT_USER] || [];
   }
 
-  loadTodos();
+  function nextId() {
+    allData.nextId = (allData.nextId || 1) + 1;
+    return allData.nextId - 1;
+  }
 
-  // ---------- Nutzername (kein Login, nur ein gemerkter Name) ----------
+  loadAllData();
+
+  // ---------- Login (Name + Passwort, als kleines Overlay-Panel) ----------
+  // Hinweis: rein clientseitig, dient nur als Komfort-Schutz gegen versehentliches
+  // Wechseln/Verschreiben — keine echte, ausfallsichere Sicherheit.
   const USER_STORAGE_KEY = 'mufflon-pomodoro-username';
   let currentUser = localStorage.getItem(USER_STORAGE_KEY) || '';
   const userTag = document.getElementById('userTag');
+  const loginBackdrop = document.getElementById('loginBackdrop');
+  const loginName = document.getElementById('loginName');
+  const loginPassword = document.getElementById('loginPassword');
+  const loginError = document.getElementById('loginError');
+  const loginSubmit = document.getElementById('loginSubmit');
 
-  function saveUsername(name) {
-    currentUser = name.trim();
-    if (currentUser) {
-      localStorage.setItem(USER_STORAGE_KEY, currentUser);
-    } else {
-      localStorage.removeItem(USER_STORAGE_KEY);
-    }
-    renderUserTag();
+  async function hashPassword(pw) {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
   }
+
+  function openLogin() {
+    loginError.textContent = '';
+    loginName.value = currentUser || '';
+    loginPassword.value = '';
+    loginBackdrop.classList.add('open');
+    (currentUser ? loginPassword : loginName).focus();
+  }
+
+  function closeLogin() {
+    loginBackdrop.classList.remove('open');
+  }
+
+  async function attemptLogin() {
+    const name = loginName.value.trim();
+    const pw = loginPassword.value;
+    if (!name) { loginError.textContent = 'Bitte einen Namen eingeben.'; return; }
+    if (!pw) { loginError.textContent = 'Bitte ein Passwort eingeben.'; return; }
+
+    allData.passwords = allData.passwords || {};
+    const savedHash = allData.passwords[name];
+    const enteredHash = await hashPassword(pw);
+
+    if (savedHash && savedHash !== enteredHash) {
+      loginError.textContent = 'Falsches Passwort für "' + name + '".';
+      loginPassword.value = '';
+      loginPassword.focus();
+      return;
+    }
+    if (!savedHash) {
+      // Neuer Name -> Passwort wird jetzt vergeben
+      allData.passwords[name] = enteredHash;
+    }
+
+    currentUser = name;
+    localStorage.setItem(USER_STORAGE_KEY, currentUser);
+    loadEntriesForCurrentUser();
+    saveTodos();
+    closeLogin();
+    renderUserTag();
+    renderTodos();
+  }
+
+  loginSubmit.addEventListener('click', attemptLogin);
+  [loginName, loginPassword].forEach(el => {
+    el.addEventListener('keydown', (e) => { if (e.key === 'Enter') attemptLogin(); });
+  });
+
+  loadEntriesForCurrentUser();
 
   function renderUserTag() {
     userTag.innerHTML = '';
+    const span = document.createElement('span');
     if (currentUser) {
-      const span = document.createElement('span');
       span.innerHTML = 'Angemeldet als <span class="who">' + escapeHtml(currentUser) + '</span>';
-      const changeBtn = document.createElement('button');
-      changeBtn.textContent = '· ändern';
-      changeBtn.addEventListener('click', showNameForm);
-      userTag.appendChild(span);
-      userTag.appendChild(changeBtn);
     } else {
-      showNameForm();
+      span.textContent = 'Nicht angemeldet';
     }
-  }
-
-  function showNameForm() {
-    userTag.innerHTML = '';
-    const form = document.createElement('div');
-    form.className = 'name-form';
-    const input = document.createElement('input');
-    input.type = 'text';
-    input.maxLength = 24;
-    input.placeholder = 'Dein Name';
-    input.value = currentUser;
-    const btn = document.createElement('button');
-    btn.className = 'save';
-    btn.textContent = 'OK';
-    function submit() { saveUsername(input.value); }
-    btn.addEventListener('click', submit);
-    input.addEventListener('keydown', (e) => { if (e.key === 'Enter') submit(); });
-    form.appendChild(input);
-    form.appendChild(btn);
-    userTag.appendChild(form);
-    input.focus();
+    const changeBtn = document.createElement('button');
+    changeBtn.textContent = currentUser ? '· wechseln' : '· anmelden';
+    changeBtn.addEventListener('click', openLogin);
+    userTag.appendChild(span);
+    userTag.appendChild(changeBtn);
   }
 
   function escapeHtml(str) {
@@ -1147,6 +1268,7 @@
   }
 
   renderUserTag();
+  if (!currentUser) openLogin();
 
   const todoList = document.getElementById('todoList');
   const todoInput = document.getElementById('todoInput');
@@ -1282,12 +1404,6 @@
 
         li.appendChild(check);
         li.appendChild(text);
-        if (entry.author) {
-          const author = document.createElement('span');
-          author.className = 'todo-author';
-          author.textContent = '– ' + entry.author;
-          li.appendChild(author);
-        }
         li.appendChild(dots);
         li.appendChild(del);
         todoList.appendChild(li);
@@ -1362,12 +1478,6 @@
 
         subLi.appendChild(check);
         subLi.appendChild(text);
-        if (item.author) {
-          const author = document.createElement('span');
-          author.className = 'todo-author';
-          author.textContent = '– ' + item.author;
-          subLi.appendChild(author);
-        }
         subLi.appendChild(subDots);
         subLi.appendChild(subDel);
         subList.appendChild(subLi);
@@ -1385,7 +1495,7 @@
       function addSubtask() {
         const val = subInput.value.trim();
         if (!val) return;
-        entry.items.push({ id: nextId++, text: val, done: false, priority: 'low', author: currentUser });
+        entry.items.push({ id: nextId(), text: val, done: false, priority: 'low', author: currentUser });
         subInput.value = '';
         renderTodos();
       }
@@ -1404,9 +1514,9 @@
     const val = todoInput.value.trim();
     if (!val) return;
     if (addMode === 'todo') {
-      entries.push({ id: nextId++, type: 'todo', text: val, done: false, priority: 'low', author: currentUser });
+      entries.push({ id: nextId(), type: 'todo', text: val, done: false, priority: 'low', author: currentUser });
     } else {
-      entries.push({ id: nextId++, type: 'group', title: val, collapsed: false, items: [], author: currentUser });
+      entries.push({ id: nextId(), type: 'group', title: val, collapsed: false, items: [], author: currentUser });
     }
     todoInput.value = '';
     renderTodos();
