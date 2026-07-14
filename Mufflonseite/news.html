@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>News — Das__Mufflon</title>
+  <title>Content — Das__Mufflon</title>
   <link rel="icon" type="image/png" href="assets/mufflon-mascot.png">
   <link rel="stylesheet" href="css/style.css">
 </head>
@@ -12,26 +12,110 @@
   <header class="site-header">
     <div class="nav-inner">
       <a href="index.html" class="brand">
-        <img src="assets/mufflon-mascot.png" alt="Mufflon Maskottchen">
+        <img src="assets/mufflon-icon.svg" alt="Mufflon Maskottchen">
         Das__Mufflon
       </a>
       <button class="nav-toggle" aria-label="Menü öffnen">☰</button>
       <nav class="main-nav">
-        <a href="index.html">Home</a>
-        <a href="news.html" class="active">News</a>
+        <a href="index.html" class="nav-home"><img src="assets/mufflon-icon.svg" alt="Home"></a>
+        <a href="news.html" class="active">Content</a>
         <a href="pflanze.html">Opfanze</a>
-        <a href="archiv.html">Archiv</a>
+        <a href="archiv.html">Highlights</a>
         <a href="pomodoro.html">Pomodoro</a>
         <a href="mahmories.html">Mähmories</a>
       </nav>
     </div>
   </header>
 
+  <div class="social-dock">
+    <a href="https://twitch.tv/das__mufflon" target="_blank" rel="noopener" aria-label="Twitch" class="social-btn" style="animation-delay:0s">
+      <span class="social-float" style="animation-duration:3.2s; animation-delay:0.6s">
+        <img src="assets/social/social-twitch.png" alt="Twitch">
+      </span>
+    </a>
+    <a href="#" target="_blank" rel="noopener" aria-label="Discord" class="social-btn" style="animation-delay:0.15s">
+      <span class="social-float" style="animation-duration:3.6s; animation-delay:0.75s">
+        <img src="assets/social/social-discord.png" alt="Discord">
+      </span>
+    </a>
+    <a href="#" target="_blank" rel="noopener" aria-label="Instagram" class="social-btn" style="animation-delay:0.3s">
+      <span class="social-float" style="animation-duration:4.0s; animation-delay:0.9s">
+        <img src="assets/social/social-instagram.png" alt="Instagram">
+      </span>
+    </a>
+  </div>
+
   <section style="padding-top:50px;">
     <div class="section-head">
       <span class="eyebrow">Frisch aus dem Stall</span>
-      <h1>News</h1>
-      <p>Alles Neue rund um Stream, Commähnity und Projekte.</p>
+      <h1>Content</h1>
+      <p>Alles an einem Ort: wo du live dabei sein kannst, wo die Commähnity sich trifft, und die neuesten Shorts.</p>
+    </div>
+
+    <div class="content-social-row">
+      <a href="https://twitch.tv/das__mufflon" target="_blank" rel="noopener" aria-label="Twitch">
+        <img src="assets/social/social-twitch.png" alt="Twitch">
+      </a>
+      <a href="#" target="_blank" rel="noopener" aria-label="Discord">
+        <img src="assets/social/social-discord.png" alt="Discord">
+      </a>
+      <a href="#" target="_blank" rel="noopener" aria-label="YouTube">
+        <img src="assets/social/social-youtube.svg" alt="YouTube">
+      </a>
+    </div>
+  </section>
+
+  <div class="ivy-divider"></div>
+
+  <section>
+    <div class="section-head">
+      <span class="eyebrow">Gerade live?</span>
+      <h2>🔴 Stream</h2>
+    </div>
+    <div class="embed-wrap">
+      <!--
+        Hinweis fuer Angey: Falls die Website mal eine eigene Domain
+        bekommt (statt mufflon.pages.dev), muss hier zusaetzlich
+        &parent=deinedomain.de ergaenzt werden, sonst bleibt der
+        Stream-Player leer -- Twitch verlangt das aus Sicherheitsgruenden.
+      -->
+      <iframe
+        src="https://player.twitch.tv/?channel=das__mufflon&parent=mufflon.pages.dev&muted=true"
+        allowfullscreen>
+      </iframe>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="eyebrow">Kurz und knackig</span>
+      <h2>📱 Shorts</h2>
+      <p>Die neuesten Shorts vom Kanal.</p>
+    </div>
+    <div class="shorts-grid">
+      <!--
+        Hinweis fuer Angey: Hier fehlen noch deine echten YouTube-Video-IDs.
+        Ersetze "VIDEO_ID_1" etc. durch die ID aus deinem YouTube-Link
+        (z.B. bei youtube.com/shorts/AbCd1234efg ist "AbCd1234efg" die ID).
+      -->
+      <div class="embed-wrap">
+        <iframe src="https://www.youtube.com/embed/VIDEO_ID_1" allowfullscreen></iframe>
+      </div>
+      <div class="embed-wrap">
+        <iframe src="https://www.youtube.com/embed/VIDEO_ID_2" allowfullscreen></iframe>
+      </div>
+      <div class="embed-wrap">
+        <iframe src="https://www.youtube.com/embed/VIDEO_ID_3" allowfullscreen></iframe>
+      </div>
+    </div>
+  </section>
+
+  <div class="ivy-divider"></div>
+
+  <section>
+    <div class="section-head">
+      <span class="eyebrow">Was sonst noch los ist</span>
+      <h2>Neuigkeiten</h2>
     </div>
 
     <div id="news-liste" class="wrap" style="display:flex; flex-direction:column; gap:18px; max-width:720px;">
@@ -56,7 +140,7 @@
     const liste = document.getElementById('news-liste');
 
     if (!NEWS_EINTRAEGE || NEWS_EINTRAEGE.length === 0) {
-      liste.innerHTML = '<div class="empty-state">Hier ist gerade noch Wachstumspause — bald gibt es News! 🌱</div>';
+      liste.innerHTML = '<div class="empty-state">Hier ist gerade noch Wachstumspause — bald gibt es mehr! 🌱</div>';
     } else {
       NEWS_EINTRAEGE.forEach(eintrag => {
         const card = document.createElement('div');
