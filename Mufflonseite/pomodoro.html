@@ -904,7 +904,7 @@
     </a>
     <button class="nav-toggle" aria-label="Menü öffnen">☰</button>
     <nav class="main-nav">
-      <a href="index.html" class="nav-home"><img src="assets/mufflon-icon.svg" alt="Home"></a>
+      <a href="index.html" class="nav-home"><img src="assets/mufflon-icon.svg" alt="Stall" title="Stall"></a>
       <a href="news.html">Content</a>
       <a href="pflanze.html">Opfanze</a>
       <a href="archiv.html">Highlights</a>
@@ -1663,9 +1663,16 @@
       // Gruppe / Projekt
       const li = document.createElement('li');
       li.className = 'group-item' + (entry.collapsed ? ' collapsed' : '');
+      li.dataset.entryId = entry.id;
 
       const header = document.createElement('div');
       header.className = 'group-header';
+
+      const groupHandle = document.createElement('span');
+      groupHandle.className = 'drag-handle';
+      groupHandle.innerHTML = '⠿';
+      groupHandle.title = 'Zum Verschieben ziehen';
+      groupHandle.addEventListener('click', (e) => e.stopPropagation());
 
       const caret = document.createElement('div');
       caret.className = 'group-caret';
@@ -1694,6 +1701,7 @@
         renderTodos();
       });
 
+      header.appendChild(groupHandle);
       header.appendChild(caret);
       header.appendChild(title);
       header.appendChild(progress);
@@ -1780,6 +1788,7 @@
       li.appendChild(subAddRow);
 
       todoList.appendChild(li);
+      makeDraggable(li, todoList, entries);
     });
   }
 
