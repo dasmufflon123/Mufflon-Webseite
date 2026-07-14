@@ -516,7 +516,11 @@
     max-height: 480px;
     overflow-y:auto;
     padding-top: 34px;
+    padding-left: 8px;
+    padding-right: 8px;
     margin-top: -34px;
+    margin-left: -8px;
+    margin-right: -8px;
   }
   .todo-list::-webkit-scrollbar{ width:6px; }
   .todo-list::-webkit-scrollbar-thumb{ background: rgba(247,234,217,0.2); border-radius:4px; }
@@ -1495,28 +1499,36 @@
 
     handle.addEventListener('pointerdown', (e) => {
       e.preventDefault();
+      const items = Array.from(list.children).filter(el => el.dataset.entryId);
+      const startIndex = items.indexOf(li);
+      if (startIndex === -1) return;
       const startY = e.clientY;
-      const startRect = li.getBoundingClientRect();
-      const siblings = () => Array.from(list.children).filter(el => el !== li && el.dataset.entryId);
+      const rects = items.map(el => el.getBoundingClientRect());
+      const gap = items.length > 1 ? Math.max(0, rects[1].top - rects[0].bottom) : 0;
+      const stepHeight = rects[0].height + gap;
 
+      let currentIndex = startIndex;
       li.classList.add('dragging');
       li.setPointerCapture(e.pointerId);
+
+      function applyShift(target) {
+        items.forEach((el, i) => {
+          if (el === li) return;
+          let shift = 0;
+          if (target > startIndex && i > startIndex && i <= target) shift = -1;
+          else if (target < startIndex && i >= target && i < startIndex) shift = 1;
+          el.style.transform = shift ? `translateY(${shift * stepHeight}px)` : '';
+        });
+      }
 
       function onMove(ev) {
         const dy = ev.clientY - startY;
         li.style.transform = `translateY(${dy}px) scale(1.03)`;
-        const midY = startRect.top + startRect.height / 2 + dy;
-
-        for (const sib of siblings()) {
-          const r = sib.getBoundingClientRect();
-          const sibMid = r.top + r.height / 2;
-          if (dy < 0 && midY < sibMid && sib.previousElementSibling !== li) {
-            list.insertBefore(li, sib);
-            break;
-          } else if (dy > 0 && midY > sibMid && sib.nextElementSibling !== li) {
-            list.insertBefore(li, sib.nextElementSibling);
-            break;
-          }
+        const shift = Math.round(dy / stepHeight);
+        const target = Math.min(items.length - 1, Math.max(0, startIndex + shift));
+        if (target !== currentIndex) {
+          currentIndex = target;
+          applyShift(currentIndex);
         }
       }
 
@@ -1524,20 +1536,19 @@
         li.releasePointerCapture(e.pointerId);
         document.removeEventListener('pointermove', onMove);
         document.removeEventListener('pointerup', onUp);
-        const draggedId = Number(li.dataset.entryId);
+
         li.classList.remove('dragging');
         li.style.transform = '';
+        items.forEach(el => { if (el !== li) el.style.transform = ''; });
 
-        // Neue Reihenfolge aus dem DOM auslesen und auf die Daten uebertragen
-        const orderedIds = Array.from(list.children)
-          .filter(el => el.dataset.entryId)
-          .map(el => Number(el.dataset.entryId));
-        const total = orderedIds.length;
-        orderedIds.forEach((id, i) => {
-          const item = arr.find(x => x.id === id);
-          if (item) item.order = total - i;
-        });
+        if (currentIndex !== startIndex) {
+          const moved = arr.splice(startIndex, 1)[0];
+          arr.splice(currentIndex, 0, moved);
+          const total = arr.length;
+          arr.forEach((it, i) => { it.order = total - i; });
+        }
 
+        const draggedId = li.dataset.entryId;
         renderTodos();
         requestAnimationFrame(() => {
           const settled = document.querySelector('[data-entry-id="' + draggedId + '"]');
