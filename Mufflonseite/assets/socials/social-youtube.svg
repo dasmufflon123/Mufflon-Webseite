@@ -1,0 +1,12 @@
+<svg width="425" height="215" viewBox="0 0 425 215" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="ytGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF3B3B"/>
+      <stop offset="100%" stop-color="#CC0000"/>
+    </linearGradient>
+  </defs>
+  <rect x="8" y="8" width="409" height="199" rx="28" fill="url(#ytGrad)"/>
+  <rect x="70" y="80" width="66" height="46" rx="12" fill="#fff"/>
+  <path d="M116 96 L142 103 L116 110 Z" fill="url(#ytGrad)" transform="translate(-13,0)"/>
+  <text x="230" y="120" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="40" fill="#fff">YouTube</text>
+</svg>
