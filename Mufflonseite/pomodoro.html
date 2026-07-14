@@ -413,6 +413,94 @@
     min-height: 1em;
   }
 
+  /* ---------- Gelber Klebezettel ---------- */
+  .sticky-trigger{
+    position: absolute;
+    top: -10px;
+    right: 18px;
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(160deg, #FFF3A0, #FFE066);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.22);
+    border: none;
+    cursor: pointer;
+    transform: rotate(6deg);
+    animation: stickyWiggle 3.6s ease-in-out infinite;
+    z-index: 5;
+  }
+  .sticky-trigger::before{
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    right: -1px;
+    width: 12px;
+    height: 12px;
+    background: linear-gradient(135deg, transparent 50%, rgba(0,0,0,0.14) 50%);
+  }
+  .sticky-trigger:hover{ animation-play-state: paused; transform: rotate(0deg) scale(1.06); }
+
+  @keyframes stickyWiggle{
+    0%, 100% { transform: rotate(6deg); }
+    50%      { transform: rotate(-4deg); }
+  }
+
+  .sticky-note{
+    position: fixed;
+    width: 220px;
+    min-height: 200px;
+    background: linear-gradient(165deg, #FFF6B8, #FFE873);
+    box-shadow: 0 14px 34px rgba(0,0,0,0.32);
+    padding: 14px 14px 16px;
+    transform: rotate(-2deg);
+    z-index: 200;
+    display: none;
+    flex-direction: column;
+    font-family: 'Patrick Hand', 'Quicksand', sans-serif;
+  }
+  .sticky-note.open{ display: flex; }
+  .sticky-note::after{
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    width: 26px;
+    height: 26px;
+    background: linear-gradient(135deg, transparent 50%, rgba(0,0,0,0.14) 50%);
+  }
+  .sticky-drag-handle{
+    height: 18px;
+    margin: -14px -14px 8px;
+    cursor: grab;
+    touch-action: none;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 4px 6px 0 0;
+  }
+  .sticky-drag-handle:active{ cursor: grabbing; }
+  .sticky-close{
+    background: none;
+    border: none;
+    font-size: 1rem;
+    color: rgba(80, 65, 10, 0.55);
+    cursor: pointer;
+    line-height: 1;
+    padding: 2px 4px;
+  }
+  .sticky-close:hover{ color: rgba(80, 65, 10, 0.9); }
+  .sticky-note textarea{
+    flex: 1;
+    resize: none;
+    border: none;
+    background: transparent;
+    outline: none;
+    font-family: inherit;
+    font-size: 1.1rem;
+    line-height: 1.4;
+    color: #4a3c05;
+    min-height: 150px;
+  }
+
   .ring-center{
     position:absolute;
     inset:0;
@@ -467,6 +555,7 @@
     width: 460px;
     display:flex;
     flex-direction:column;
+    position: relative;
   }
 
   .add-row{
@@ -1066,6 +1155,7 @@
   </div>
 
   <div class="card todo-card">
+    <button class="sticky-trigger" id="stickyTrigger" title="Klebezettel" aria-label="Klebezettel öffnen"></button>
     <h1 style="font-size:2.1rem;">Meine Liste</h1>
     <div class="subtitle">für diese Runde</div>
 
@@ -1083,7 +1173,7 @@
     </div>
 
     <div class="add-row">
-      <input type="text" id="todoInput" placeholder="Was steht an?" maxlength="80">
+      <input type="text" id="todoInput" placeholder="Was steht an?" maxlength="160">
       <button class="add-btn" id="addBtn" title="Hinzufügen">+</button>
     </div>
 
@@ -1093,6 +1183,13 @@
 </div>
 
 <div class="copyright">&copy; Das__Mufflon</div>
+
+<div class="sticky-note" id="stickyNote">
+  <div class="sticky-drag-handle" id="stickyDragHandle">
+    <button class="sticky-close" id="stickyClose" title="Schließen" aria-label="Schließen">✕</button>
+  </div>
+  <textarea id="stickyText" placeholder="Notiz …" maxlength="500"></textarea>
+</div>
 
 <div class="login-backdrop" id="loginBackdrop">
   <div class="login-panel">
@@ -1361,6 +1458,7 @@
     closeLogin();
     renderUserTag();
     renderTodos();
+    restoreStickyNoteForCurrentUser();
   }
 
   loginSubmit.addEventListener('click', attemptLogin);
@@ -1393,6 +1491,106 @@
 
   renderUserTag();
   if (!currentUser) openLogin();
+
+  // ---------- Gelber Klebezettel ----------
+  const stickyTrigger = document.getElementById('stickyTrigger');
+  const stickyNote = document.getElementById('stickyNote');
+  const stickyDragHandle = document.getElementById('stickyDragHandle');
+  const stickyClose = document.getElementById('stickyClose');
+  const stickyText = document.getElementById('stickyText');
+
+  function getNoteState() {
+    allData.notes = allData.notes || {};
+    return allData.notes[currentUser || DEFAULT_USER] || null;
+  }
+
+  function saveNoteState(partial) {
+    allData.notes = allData.notes || {};
+    const key = currentUser || DEFAULT_USER;
+    allData.notes[key] = Object.assign({ text: '', x: null, y: null, open: false }, allData.notes[key], partial);
+    saveTodos();
+  }
+
+  function placeNoteNearTrigger() {
+    const rect = stickyTrigger.getBoundingClientRect();
+    let x = rect.left - 40;
+    let y = rect.bottom + 10;
+    x = Math.max(10, Math.min(x, window.innerWidth - 230));
+    y = Math.max(10, Math.min(y, window.innerHeight - 210));
+    stickyNote.style.left = x + 'px';
+    stickyNote.style.top = y + 'px';
+    return { x, y };
+  }
+
+  function openStickyNote() {
+    const state = getNoteState();
+    stickyText.value = state && state.text ? state.text : '';
+    if (state && state.x != null && state.y != null) {
+      stickyNote.style.left = state.x + 'px';
+      stickyNote.style.top = state.y + 'px';
+    } else {
+      placeNoteNearTrigger();
+    }
+    stickyNote.classList.add('open');
+    saveNoteState({ open: true, text: stickyText.value });
+  }
+
+  function closeStickyNote() {
+    stickyNote.classList.remove('open');
+    saveNoteState({ open: false, text: stickyText.value });
+  }
+
+  stickyTrigger.addEventListener('click', () => {
+    if (stickyNote.classList.contains('open')) {
+      closeStickyNote();
+    } else {
+      openStickyNote();
+    }
+  });
+
+  stickyClose.addEventListener('click', closeStickyNote);
+
+  stickyText.addEventListener('input', () => {
+    saveNoteState({ text: stickyText.value });
+  });
+
+  stickyDragHandle.addEventListener('pointerdown', (e) => {
+    e.preventDefault();
+    const rect = stickyNote.getBoundingClientRect();
+    const offsetX = e.clientX - rect.left;
+    const offsetY = e.clientY - rect.top;
+    stickyDragHandle.setPointerCapture(e.pointerId);
+
+    function onMove(ev) {
+      let x = ev.clientX - offsetX;
+      let y = ev.clientY - offsetY;
+      x = Math.max(4, Math.min(x, window.innerWidth - 224));
+      y = Math.max(4, Math.min(y, window.innerHeight - 40));
+      stickyNote.style.left = x + 'px';
+      stickyNote.style.top = y + 'px';
+    }
+    function onUp() {
+      stickyDragHandle.releasePointerCapture(e.pointerId);
+      document.removeEventListener('pointermove', onMove);
+      document.removeEventListener('pointerup', onUp);
+      const finalRect = stickyNote.getBoundingClientRect();
+      saveNoteState({ x: finalRect.left, y: finalRect.top });
+    }
+    document.addEventListener('pointermove', onMove);
+    document.addEventListener('pointerup', onUp);
+  });
+
+  // Zettel-Zustand beim Laden bzw. Nutzerwechsel wiederherstellen
+  function restoreStickyNoteForCurrentUser() {
+    const state = getNoteState();
+    if (state && state.open) {
+      openStickyNote();
+    } else {
+      stickyNote.classList.remove('open');
+      stickyText.value = state ? state.text : '';
+    }
+  }
+  restoreStickyNoteForCurrentUser();
 
   const todoList = document.getElementById('todoList');
   const todoInput = document.getElementById('todoInput');
@@ -1568,7 +1766,7 @@
     const input = document.createElement('input');
     input.type = 'text';
     input.className = 'todo-edit-input';
-    input.maxLength = 80;
+    input.maxLength = 160;
     input.value = getText();
 
     textEl.replaceWith(input);
@@ -1769,7 +1967,7 @@
       const subInput = document.createElement('input');
       subInput.type = 'text';
       subInput.placeholder = 'Unterpunkt hinzufügen …';
-      subInput.maxLength = 80;
+      subInput.maxLength = 160;
       const subBtn = document.createElement('button');
       subBtn.textContent = '+';
       function addSubtask() {
