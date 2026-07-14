@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Das__Mufflon</title>
-  <meta name="description" content="Die Homepage von Das__Mufflon — News, die Streamingzeitung Opfanze und die Mähmories der Commähnity.">
+  <meta name="description" content="Die Homepage von Das__Mufflon — Content, die Streamingzeitung Opfanze und die Mähmories der Commähnity.">
   <link rel="icon" type="image/png" href="assets/mufflon-mascot.png">
   <link rel="stylesheet" href="css/style.css">
 </head>
@@ -13,26 +13,44 @@
   <header class="site-header">
     <div class="nav-inner">
       <a href="index.html" class="brand">
-        <img src="assets/mufflon-mascot.png" alt="Mufflon Maskottchen">
+        <img src="assets/mufflon-icon.svg" alt="Mufflon Maskottchen">
         Das__Mufflon
       </a>
       <button class="nav-toggle" aria-label="Menü öffnen">☰</button>
       <nav class="main-nav">
-        <a href="index.html" class="active">Home</a>
-        <a href="news.html">News</a>
+        <a href="index.html" class="active nav-home"><img src="assets/mufflon-icon.svg" alt="Home"></a>
+        <a href="news.html">Content</a>
         <a href="pflanze.html">Opfanze</a>
-        <a href="archiv.html">Archiv</a>
+        <a href="archiv.html">Highlights</a>
         <a href="pomodoro.html">Pomodoro</a>
         <a href="mahmories.html">Mähmories</a>
       </nav>
     </div>
   </header>
 
+  <div class="social-dock">
+    <a href="https://twitch.tv/das__mufflon" target="_blank" rel="noopener" aria-label="Twitch" class="social-btn" style="animation-delay:0s">
+      <span class="social-float" style="animation-duration:3.2s; animation-delay:0.6s">
+        <img src="assets/social/social-twitch.png" alt="Twitch">
+      </span>
+    </a>
+    <a href="#" target="_blank" rel="noopener" aria-label="Discord" class="social-btn" style="animation-delay:0.15s">
+      <span class="social-float" style="animation-duration:3.6s; animation-delay:0.75s">
+        <img src="assets/social/social-discord.png" alt="Discord">
+      </span>
+    </a>
+    <a href="#" target="_blank" rel="noopener" aria-label="Instagram" class="social-btn" style="animation-delay:0.3s">
+      <span class="social-float" style="animation-duration:4.0s; animation-delay:0.9s">
+        <img src="assets/social/social-instagram.png" alt="Instagram">
+      </span>
+    </a>
+  </div>
+
   <div class="hero">
     <div class="hero-text">
       <span class="eyebrow">Willkommen im Stall ~</span>
       <h1>Hey, ich bin Angey —<br>das ist Das__Mufflon.</h1>
-      <p>Hier findest du alles rund um meine Commähnity: die neuesten News, das Archiv unserer Streamingzeitung <strong>Opfanze</strong> und unsere gemeinsamen Mähmories.</p>
+      <p>Hier findest du alles rund um meine Commähnity: den neuesten Content, das Archiv unserer Streamingzeitung <strong>Opfanze</strong> und unsere gemeinsamen Mähmories.</p>
       <div style="display:flex; gap:14px; flex-wrap:wrap; margin-top:22px;">
         <a href="pflanze.html" class="btn btn-primary">🌱 Opfanze entdecken</a>
         <a href="news.html" class="btn btn-ghost">Neuigkeiten ansehen</a>
@@ -53,9 +71,9 @@
     <div class="card-grid">
       <div class="card">
         <span class="icon">📰</span>
-        <h3>News</h3>
+        <h3>Content</h3>
         <p>Alle Neuigkeiten aus Stream und Commähnity an einem Ort.</p>
-        <a href="news.html" class="btn btn-ghost" style="margin-top:8px;">Zu den News</a>
+        <a href="news.html" class="btn btn-ghost" style="margin-top:8px;">Zum Content</a>
       </div>
       <div class="card">
         <span class="icon">🌱</span>
@@ -64,10 +82,10 @@
         <a href="pflanze.html" class="btn btn-ghost" style="margin-top:8px;">Mehr erfahren</a>
       </div>
       <div class="card">
-        <span class="icon">📚</span>
-        <h3>Archiv</h3>
-        <p>Alle bisherigen Ausgaben der Opfanze zum Nachlesen.</p>
-        <a href="archiv.html" class="btn btn-ghost" style="margin-top:8px;">Archiv öffnen</a>
+        <span class="icon">🎬</span>
+        <h3>Highlights</h3>
+        <p>Die besten Momente aus Stream und Community, sortiert nach Reihe.</p>
+        <a href="archiv.html" class="btn btn-ghost" style="margin-top:8px;">Highlights ansehen</a>
       </div>
       <div class="card">
         <span class="icon">💌</span>
