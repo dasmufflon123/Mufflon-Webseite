@@ -191,7 +191,14 @@
   .card.timer-card{
     position: relative;
     z-index: 2;
-    background: linear-gradient(160deg, rgba(217,165,111,0.92) 0%, rgba(192,127,77,0.92) 100%);
+    background:
+      radial-gradient(circle at 18% 12%, rgba(255,255,255,0.38), transparent 42%),
+      radial-gradient(circle at 88% 92%, rgba(120,70,45,0.28), transparent 55%),
+      linear-gradient(155deg,
+        rgba(246,210,168,0.92) 0%,
+        rgba(231,164,114,0.92) 32%,
+        rgba(217,138,92,0.92) 65%,
+        rgba(185,107,74,0.92) 100%);
     backdrop-filter: none;
     border: 1px solid rgba(255,238,220,0.3);
   }
@@ -218,7 +225,7 @@
   }
   .mascot.peek{
     opacity: 1;
-    transform: translate(-50%, 45%);
+    transform: translate(-50%, 0%);
   }
   .mascot-img{
     display:block;
@@ -242,6 +249,7 @@
     display:flex;
     flex-direction:column;
     align-items:center;
+    margin-top: 110px;
   }
 
   .ring-wrap{
@@ -999,6 +1007,7 @@
   @media (max-width: 640px){
     .app{ flex-direction:column; align-items:center; }
     .timer-card, .todo-card{ width: 100%; max-width: 540px; }
+    .timer-card{ margin-top: 90px; }
     .todo-list{ max-height: 55vh; }
     .pomodoro-main{ padding-bottom: 90px; }
   }
