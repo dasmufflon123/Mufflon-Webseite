@@ -1,177 +1,253 @@
-/* ============================================================
-   MAEHMORIES — Flipbook-Styles
-   Jede Person hat 2 fertig gestaltete PNG-Seiten (links/rechts),
-   die randlos und eng aneinander wie ein aufgeschlagenes Buch
-   angezeigt werden. Die Seite, die man gerade umblaettert, klappt
-   exakt um die Buchmitte (Scharnier), wie bei einem echten Buch.
-   ============================================================ */
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mähmories — Das__Mufflon</title>
+  <meta name="description" content="Mähmories — das digitale Erinnerungsbuch der Das__Mufflon Commähnity.">
+  <link rel="icon" type="image/png" href="assets/mufflon-mascot.png">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/mahmories.css">
+</head>
+<body>
 
-.book-stage {
-  padding: 20px 24px 70px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+  <header class="site-header">
+    <div class="nav-inner">
+      <a href="index.html" class="brand">
+        <img src="assets/mufflon-icon.svg" alt="Mufflon Maskottchen">
+        Das__Mufflon
+      </a>
+      <button class="nav-toggle" aria-label="Menü öffnen">☰</button>
+      <nav class="main-nav">
+        <a href="index.html" class="nav-home"><img src="assets/mufflon-icon.svg" alt="Stall" title="Stall"></a>
+        <a href="news.html">Content</a>
+        <a href="pflanze.html">Opfanze</a>
+        <a href="archiv.html">Highlights</a>
+        <a href="pomodoro.html">Pomodoro</a>
+        <a href="mahmories.html" class="active">Mähmories</a>
+      </nav>
+    </div>
+  </header>
 
-.book {
-  position: relative;
-  width: min(1040px, 96vw);
-  aspect-ratio: 1860 / 1100; /* = 2 x Seitenverhaeltnis einer Einzelseite (930x1100) */
-  perspective: 2400px;
-}
+  <div class="social-dock">
+    <a href="https://twitch.tv/das__mufflon" target="_blank" rel="noopener" aria-label="Twitch" class="social-btn" style="animation-delay:0s">
+      <span class="social-float" style="animation-duration:3.2s; animation-delay:0.6s">
+        <img src="assets/social/social-twitch.png" alt="Twitch">
+      </span>
+    </a>
+    <a href="#" target="_blank" rel="noopener" aria-label="Discord" class="social-btn" style="animation-delay:0.15s">
+      <span class="social-float" style="animation-duration:3.6s; animation-delay:0.75s">
+        <img src="assets/social/social-discord.png" alt="Discord">
+      </span>
+    </a>
+    <a href="#" target="_blank" rel="noopener" aria-label="Instagram" class="social-btn" style="animation-delay:0.3s">
+      <span class="social-float" style="animation-duration:4.0s; animation-delay:0.9s">
+        <img src="assets/social/social-instagram.png" alt="Instagram">
+      </span>
+    </a>
+  </div>
 
-.book-base {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  border-radius: var(--radius-md);
-  overflow: hidden;
-}
+  <section style="padding-top:22px; padding-bottom:0;">
+    <div class="section-head">
+      <span class="eyebrow">Unser Erinnerungsbuch</span>
+      <h1 style="font-size: clamp(1.5rem, 3vw, 2rem);">💌 Mähmories</h1>
+      <p>Ein Buch voller Gesichter und Worte aus unserer Commähnity. Blätter einfach durch!</p>
+    </div>
+  </section>
 
-.page-half {
-  width: 50%;
-  height: 100%;
-  overflow: hidden;
-}
+  <div class="book-stage">
+    <div class="book" id="book">
+      <div class="book-base" id="bookBase">
+        <div class="page-half left">
+          <img id="baseLeftImg" src="" alt="">
+        </div>
+        <div class="page-half right">
+          <img id="baseRightImg" src="" alt="">
+        </div>
+      </div>
 
-.page-half img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
+      <div class="book-spine"></div>
 
-/* Ganz schmale Buchrille in der Mitte, fuer die Buch-Illusion */
-.book-spine {
-  position: absolute;
-  left: 50%;
-  top: 0;
-  bottom: 0;
-  width: 4px;
-  margin-left: -2px;
-  background: linear-gradient(to right, rgba(0,0,0,0.10), rgba(0,0,0,0.02), rgba(0,0,0,0.10));
-  z-index: 6;
-  pointer-events: none;
-}
+      <!-- Klappt beim Vorblaettern: rechte Seite -> legt sich auf die linke -->
+      <div class="flip-half right" id="flipRight">
+        <div class="flip-face front">
+          <img id="flipRightFrontImg" src="" alt="">
+        </div>
+        <div class="flip-face back">
+          <img id="flipRightBackImg" src="" alt="">
+        </div>
+      </div>
 
-/* --- Die umblaetternde Seite: nur eine Haelfte, Scharnier an der Buchmitte --- */
-.flip-half {
-  position: absolute;
-  top: 0;
-  width: 50%;
-  height: 100%;
-  transform-style: preserve-3d;
-  transition: transform 0.7s cubic-bezier(.45, .05, .28, 1);
-  pointer-events: none;
-  z-index: 5;
-}
+      <!-- Klappt beim Zurueckblaettern: linke Seite -> legt sich auf die rechte -->
+      <div class="flip-half left" id="flipLeft">
+        <div class="flip-face front">
+          <img id="flipLeftFrontImg" src="" alt="">
+        </div>
+        <div class="flip-face back">
+          <img id="flipLeftBackImg" src="" alt="">
+        </div>
+      </div>
+    </div>
 
-.flip-half.right {
-  right: 0;
-  transform-origin: left center; /* Scharnier an der Buchmitte */
-}
+    <div class="book-controls">
+      <button class="book-nav-btn" id="prevBtn" aria-label="Vorherige Seite">←</button>
+      <div class="book-page-indicator" id="pageIndicator">1 / 10</div>
+      <button class="book-nav-btn" id="nextBtn" aria-label="Nächste Seite">→</button>
+      <div class="book-jump">
+        <input type="number" id="pageJumpInput" min="1" placeholder="Seite …" aria-label="Zu Seite springen">
+        <button id="pageJumpBtn" aria-label="Springen">Los</button>
+      </div>
+    </div>
+  </div>
 
-.flip-half.left {
-  left: 0;
-  transform-origin: right center; /* Scharnier an der Buchmitte */
-}
+  <footer class="site-footer">
+    <div class="footer-brand">Das__Mufflon 🐑</div>
+    <p><a href="https://twitch.tv/das__mufflon" target="_blank" rel="noopener">twitch.tv/das__mufflon</a></p>
+  </footer>
 
-.flip-face {
-  position: absolute;
-  inset: 0;
-  backface-visibility: hidden;
-  overflow: hidden;
-}
+  <script src="js/mahmories-data.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    let currentIndex = 0;
+    let isAnimating = false;
 
-.flip-face img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
+    const baseLeftImg = document.getElementById('baseLeftImg');
+    const baseRightImg = document.getElementById('baseRightImg');
+    const flipRight = document.getElementById('flipRight');
+    const flipLeft = document.getElementById('flipLeft');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const indicator = document.getElementById('pageIndicator');
 
-.flip-face.back {
-  transform: rotateY(180deg);
-}
+    function setImg(id, member, side) {
+      const el = document.getElementById(id);
+      el.src = side === 'links' ? member.seite_links : member.seite_rechts;
+      el.alt = member.name + ' — ' + side + ' Seite';
+    }
 
-/* --- Steuerung --- */
-.book-controls {
-  display: flex;
-  align-items: center;
-  gap: 22px;
-  margin-top: 26px;
-}
+    function renderBaseInstant(index) {
+      const m = MAHMORIES_MITGLIEDER[index];
+      baseLeftImg.src = m.seite_links;
+      baseLeftImg.alt = m.name + ' — linke Seite';
+      baseRightImg.src = m.seite_rechts;
+      baseRightImg.alt = m.name + ' — rechte Seite';
+      indicator.textContent = (index + 1) + ' / ' + MAHMORIES_MITGLIEDER.length;
+      prevBtn.disabled = index === 0;
+      nextBtn.disabled = index === MAHMORIES_MITGLIEDER.length - 1;
 
-.book-nav-btn {
-  width: 46px;
-  height: 46px;
-  border-radius: 50%;
-  border: none;
-  background: var(--terracotta);
-  color: var(--white);
-  font-size: 1.3rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: var(--shadow-soft);
-  transition: transform 0.15s ease, background 0.15s ease, opacity 0.15s ease;
-}
-.book-nav-btn:hover:not(:disabled) { transform: translateY(-2px); background: var(--terracotta-dark); }
-.book-nav-btn:disabled { opacity: 0.35; cursor: default; }
+      // Beide ruhenden Klappen liegen deckungsgleich auf der Basis —
+      // sie muessen deshalb immer dasselbe Bild zeigen wie die Basis,
+      // sonst gibt's beim Stillstand einen sichtbaren Bildsprung.
+      setImg('flipRightFrontImg', m, 'rechts');
+      setImg('flipLeftFrontImg', m, 'links');
+    }
 
-.book-page-indicator {
-  font-family: 'Baloo 2', sans-serif;
-  font-weight: 700;
-  color: var(--horn-brown);
-  min-width: 130px;
-  text-align: center;
-}
+    function resetFlapInstant(flap, transformValue) {
+      flap.style.transition = 'none';
+      flap.style.transform = transformValue;
+      void flap.offsetWidth; // Reflow erzwingen, damit der naechste Uebergang wieder animiert
+      flap.style.transition = '';
+    }
 
-.book-jump {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-left: 10px;
-}
-.book-jump input{
-  width: 74px;
-  padding: 8px 10px;
-  border-radius: 999px;
-  border: 1px solid rgba(107, 66, 38, 0.25);
-  background: var(--cream-soft);
-  color: var(--text);
-  font-family: 'Nunito', sans-serif;
-  font-size: 0.92rem;
-  text-align: center;
-}
-.book-jump input:focus{ outline: none; border-color: var(--terracotta); }
-.book-jump button{
-  border: none;
-  background: var(--terracotta);
-  color: #fff;
-  font-family: 'Baloo 2', sans-serif;
-  font-weight: 700;
-  font-size: 0.88rem;
-  padding: 9px 16px;
-  border-radius: 999px;
-  cursor: pointer;
-  transition: background 0.15s ease, transform 0.15s ease;
-}
-.book-jump button:hover{ background: var(--terracotta-dark); transform: translateY(-1px); }
+    function turn(direction) {
+      if (isAnimating) return;
+      const targetIndex = currentIndex + direction;
+      if (targetIndex < 0 || targetIndex >= MAHMORIES_MITGLIEDER.length) return;
+      isAnimating = true;
 
-@media (max-width: 640px) {
-  .book-controls{ flex-wrap: wrap; justify-content: center; row-gap: 12px; }
-  .book-jump{ margin-left: 0; width: 100%; justify-content: center; }
-}
+      const current = MAHMORIES_MITGLIEDER[currentIndex];
+      const target = MAHMORIES_MITGLIEDER[targetIndex];
 
-@media (max-width: 640px) {
-  /* Auf schmalen Screens wuerde 'cover' oben/unten Text abschneiden -> lieber 'contain' */
-  .page-half img,
-  .flip-face img {
-    object-fit: contain;
-  }
-  .book { width: 96vw; }
-  .book-controls { gap: 16px; margin-top: 20px; }
-  .book-nav-btn { width: 42px; height: 42px; }
-}
+      if (direction === 1) {
+        // Vorwaerts: rechte Seite klappt um und legt sich auf die linke.
+        flipRight.style.zIndex = '10';
+        flipLeft.style.zIndex = '4';
+
+        setImg('flipRightFrontImg', current, 'rechts');   // deckt die Basis exakt zu (nahtlos)
+        setImg('flipRightBackImg', target, 'links');       // landet sichtbar auf der linken Haelfte
+
+        // Die rechte Basis-Seite wird sofort gewechselt — sie ist ja unter der
+        // Klappe verdeckt und wird erst sichtbar, sobald die Klappe sich hebt
+        // (genau wie bei einem echten Buch: die naechste Seite liegt schon da).
+        baseRightImg.src = target.seite_rechts;
+        baseRightImg.alt = target.name + ' — rechte Seite';
+
+        resetFlapInstant(flipRight, 'rotateY(0deg)');
+        requestAnimationFrame(() => {
+          flipRight.style.transform = 'rotateY(-180deg)';
+        });
+
+        flipRight.addEventListener('transitionend', function onDone() {
+          flipRight.removeEventListener('transitionend', onDone);
+          // Erst jetzt, wenn die Klappe die linke Seite komplett bedeckt hat,
+          // wird die linke Basis-Seite gewechselt — der Tausch ist unsichtbar,
+          // weil die Klappe optisch exakt an derselben Stelle liegt.
+          baseLeftImg.src = target.seite_links;
+          baseLeftImg.alt = target.name + ' — linke Seite';
+          resetFlapInstant(flipRight, 'rotateY(0deg)');
+          flipRight.style.zIndex = '';
+          flipLeft.style.zIndex = '';
+          currentIndex = targetIndex;
+          renderBaseInstant(currentIndex);
+          isAnimating = false;
+        }, { once: true });
+
+      } else {
+        // Rueckwaerts: linke Seite klappt um und legt sich auf die rechte.
+        flipLeft.style.zIndex = '10';
+        flipRight.style.zIndex = '4';
+
+        setImg('flipLeftFrontImg', current, 'links');
+        setImg('flipLeftBackImg', target, 'rechts');
+
+        baseLeftImg.src = target.seite_links;
+        baseLeftImg.alt = target.name + ' — linke Seite';
+
+        resetFlapInstant(flipLeft, 'rotateY(0deg)');
+        requestAnimationFrame(() => {
+          flipLeft.style.transform = 'rotateY(180deg)';
+        });
+
+        flipLeft.addEventListener('transitionend', function onDone() {
+          flipLeft.removeEventListener('transitionend', onDone);
+          baseRightImg.src = target.seite_rechts;
+          baseRightImg.alt = target.name + ' — rechte Seite';
+          resetFlapInstant(flipLeft, 'rotateY(0deg)');
+          flipLeft.style.zIndex = '';
+          flipRight.style.zIndex = '';
+          currentIndex = targetIndex;
+          renderBaseInstant(currentIndex);
+          isAnimating = false;
+        }, { once: true });
+      }
+    }
+
+    prevBtn.addEventListener('click', () => turn(-1));
+    nextBtn.addEventListener('click', () => turn(1));
+
+    const pageJumpInput = document.getElementById('pageJumpInput');
+    const pageJumpBtn = document.getElementById('pageJumpBtn');
+
+    function jumpToPage(num) {
+      if (isAnimating || isNaN(num)) return;
+      const target = Math.min(Math.max(1, num), MAHMORIES_MITGLIEDER.length) - 1;
+      currentIndex = target;
+      renderBaseInstant(currentIndex);
+      pageJumpInput.value = '';
+    }
+
+    pageJumpBtn.addEventListener('click', () => {
+      jumpToPage(parseInt(pageJumpInput.value, 10));
+    });
+    pageJumpInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') jumpToPage(parseInt(pageJumpInput.value, 10));
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') turn(1);
+      if (e.key === 'ArrowLeft') turn(-1);
+    });
+
+    renderBaseInstant(currentIndex);
+  </script>
+</body>
+</html>
