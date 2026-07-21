@@ -77,7 +77,7 @@
 .flip-face {
   position: absolute;
   inset: 0;
-  backface-visibility: visible !important; /* <- DAS HAT GEFEHLT! */
+  backface-visibility: hidden;
   overflow: hidden;
 }
 
@@ -92,7 +92,6 @@
   transform: rotateY(180deg);
 }
 
-/* --- Steuerung --- */
 .book-controls {
   display: flex;
   align-items: center;
