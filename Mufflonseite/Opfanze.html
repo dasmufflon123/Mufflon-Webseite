@@ -468,7 +468,7 @@
   </footer>
 
   <!-- ============================================================
-       DATENBANK LADEN — HIER STEHT DIE ZEILE, DIE GEFEHLT HAT!
+       JAVASCRIPT – SO HAT ES FUNKTIONIERT
        ============================================================ -->
   <script src="js/Opfanze-data.js"></script>
   <script src="js/main.js"></script>
@@ -476,19 +476,6 @@
     // ============================================================
     // OPFANZE KIOSK — JavaScript
     // ============================================================
-
-    // Sortierung: nach Nummer (höchste zuerst)
-    function sortByNumber(arr) {
-      return [...arr].sort((a, b) => {
-        const numA = parseInt(a.nummer, 10);
-        const numB = parseInt(b.nummer, 10);
-        return numB - numA;
-      });
-    }
-
-    function getAllAusgaben() {
-      return sortByNumber(OPFANZE_AUSGABEN);
-    }
 
     // ---- DOM-Elemente ----
     const grid = document.getElementById('kioskGrid');
@@ -499,15 +486,27 @@
     let currentFilter = 'alle';
     let currentSearch = '';
 
-    // ---- Render-Funktion ----
+    // ---- Sortierfunktion (höchste Nummer zuerst) ----
+    function sortByNumber(arr) {
+      return [...arr].sort((a, b) => {
+        const numA = parseInt(a.nummer, 10);
+        const numB = parseInt(b.nummer, 10);
+        return numB - numA;
+      });
+    }
+
+    // ---- Render-Funktion (genau wie vorher, nur mit Sortierung) ----
     function render() {
-      const alle = getAllAusgaben();
-      
+      // Daten holen und sortieren
+      const alle = sortByNumber(OPFANZE_AUSGABEN);
+
+      // Filtern
       let gefiltert = alle.filter(ausgabe => {
         if (currentFilter === 'alle') return true;
         return ausgabe.typ === currentFilter;
       });
 
+      // Suche
       if (currentSearch.trim()) {
         const query = currentSearch.toLowerCase().trim();
         gefiltert = gefiltert.filter(ausgabe => {
@@ -518,6 +517,7 @@
         });
       }
 
+      // Hervorgehobene Ausgabe: erste (neueste) aus der gefilterten Liste
       let featured = null;
       let rest = [];
       if (gefiltert.length > 0) {
@@ -525,14 +525,21 @@
         rest = gefiltert.slice(1);
       }
 
+      // Featured rendern
       renderFeatured(featured);
+
+      // Grid rendern
       renderGrid(rest);
     }
 
     // ---- Featured rendern ----
     function renderFeatured(ausgabe) {
       if (!ausgabe) {
-        featuredContainer.innerHTML = `<div class="kiosk-empty">Keine Ausgabe gefunden 🌿</div>`;
+        featuredContainer.innerHTML = `
+          <div style="text-align:center; padding:20px; color:var(--text-soft);">
+            <p style="font-family:'Patrick Hand',cursive; font-size:1.1rem;">Keine Ausgabe gefunden 🌿</p>
+          </div>
+        `;
         return;
       }
 
