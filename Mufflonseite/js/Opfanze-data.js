@@ -92,10 +92,10 @@ const OPFANZE_AUSGABEN = [
   // ============================================================
   {
     typ: "Extrablatt",
-    nummer: "0592026",
+    nummer: "00592026",
     titel: "Käferplage und rollende Steine beim Mufflon",
     datum: "2026-04-25",
-    pfad: "assets/Opfanze_assets/Extrablatt 2/Extrablatt, 0592026, Käferplage und rollende Steine beim Mufflon, 20260425.pdf"
+    pfad: "assets/Opfanze_assets/Extrablatt 2/Extrablatt, 00592026, Käferplage und rollende Steine beim Mufflon, 20260425.pdf"
   },
   {
     typ: "Extrablatt",
