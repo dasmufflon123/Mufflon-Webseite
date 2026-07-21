@@ -6,6 +6,146 @@
   <title>Content — Das__Mufflon</title>
   <link rel="icon" type="image/png" href="assets/mufflon-mascot.png">
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ============================================================
+       CONTENT — Anpassungen für Stream + Shorts
+       ============================================================ */
+
+    /* Weniger Platz oben */
+    .content-header {
+      padding-top: 10px !important;
+      padding-bottom: 10px !important;
+    }
+    .content-header .section-head {
+      margin-bottom: 16px !important;
+    }
+    .content-header .section-head h1 {
+      font-size: clamp(1.6rem, 2.5vw, 2.2rem) !important;
+    }
+    .content-header .section-head .eyebrow {
+      font-size: 0.95rem !important;
+    }
+
+    /* Stream + Shorts nebeneinander */
+    .stream-layout {
+      display: flex;
+      gap: 24px;
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 24px 30px;
+      align-items: flex-start;
+    }
+
+    .stream-main {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .stream-main .embed-wrap {
+      aspect-ratio: 16 / 9;
+      max-width: 100%;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-lift);
+      background: #1c1210;
+    }
+    .stream-main .embed-wrap iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    /* Shorts-Sidebar (rechts) */
+    .shorts-sidebar {
+      flex: 0 0 200px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .shorts-sidebar .short-item {
+      aspect-ratio: 9 / 16;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-soft);
+      background: #1c1210;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+    .shorts-sidebar .short-item:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: var(--shadow-lift);
+    }
+    .shorts-sidebar .short-item iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    /* Social-Buttons (kompakt) */
+    .content-social-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      max-width: 720px;
+      margin: 0 auto 14px;
+    }
+    .content-social-row a {
+      display: block;
+      width: 140px;
+      transition: transform 0.15s ease, filter 0.15s ease;
+    }
+    .content-social-row a:hover { transform: translateY(-3px); }
+    .content-social-row img {
+      width: 100%;
+      display: block;
+      filter: drop-shadow(0 4px 10px rgba(62,44,30,0.18));
+      border-radius: 12px;
+    }
+
+    /* Neuigkeiten-Bereich (kompakter) */
+    .news-section {
+      padding-top: 10px !important;
+      padding-bottom: 30px !important;
+    }
+    .news-section .section-head {
+      margin-bottom: 16px !important;
+    }
+    .news-section .section-head h2 {
+      font-size: clamp(1.3rem, 2vw, 1.8rem) !important;
+    }
+
+    /* Responsive */
+    @media (max-width: 780px) {
+      .stream-layout {
+        flex-direction: column;
+      }
+      .shorts-sidebar {
+        flex: 1;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .shorts-sidebar .short-item {
+        flex: 0 0 140px;
+        aspect-ratio: 9 / 16;
+      }
+      .content-social-row a {
+        width: 110px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .shorts-sidebar .short-item {
+        flex: 0 0 100px;
+      }
+      .content-social-row a {
+        width: 80px;
+      }
+    }
+  </style>
 </head>
 <body>
 
@@ -27,7 +167,7 @@
     </div>
   </header>
 
-   <div class="social-dock">
+  <div class="social-dock">
     <a href="https://twitch.tv/das__mufflon" target="_blank" rel="noopener" aria-label="Twitch" class="social-btn" style="animation-delay:0s">
       <span class="social-float" style="animation-duration:3.2s; animation-delay:0.6s">
         <img src="assets/social/twitch.png" alt="Twitch">
@@ -43,66 +183,110 @@
         <img src="assets/social/insta.png" alt="Instagram">
       </span>
     </a>
-  <a href="https://www.youtube.com/@dasmufflon" target="_blank" rel="noopener" aria-label="YouTube" class="social-btn" style="animation-delay:0.45s">
-  <span class="social-float" style="animation-duration:3.8s; animation-delay:1.05s">
-    <img src="assets/social/yt.png" alt="YouTube">
-  </span>
-</a>
-   </div>
+  </div>
 
-  <section style="padding-top:50px;">
-    <div class="section-head">
-      <span class="eyebrow">Frisch aus dem Stall</span>
-      <h1>Content</h1>
-      <p>Alles an einem Ort: wo du live dabei sein kannst, wo die Commähnity sich trifft, und die neuesten Shorts.</p>
-    </div>
-
-    <div class="content-social-row">
-      <a href="https://twitch.tv/das__mufflon" target="_blank" rel="noopener" aria-label="Twitch">
-        <img src="assets/social/twitch.png" alt="Twitch">
-      </a>
+  <!-- ============================================================
+       HEADER (kleiner gemacht)
+       ============================================================ -->
+  <section class="content-header" style="padding-top:10px; padding-bottom:10px;">
+    <div class="section-head" style="margin-bottom:16px;">
+      <span class="eyebrow" style="font-size:0.95rem;">Frisch aus dem Stall</span>
+      <h1 style="font-size:clamp(1.6rem, 2.5vw, 2.2rem);">Content</h1>
+      <p style="font-size:0.95rem; margin-bottom:0;">Live-Stream, Shorts und Neuigkeiten.</p>
     </div>
   </section>
 
-  <div class="ivy-divider"></div>
+  <!-- Social-Buttons (kompakt) -->
+  <div class="content-social-row">
+    <a href="https://twitch.tv/das__mufflon" target="_blank" rel="noopener" aria-label="Twitch">
+      <img src="assets/social/twitch.png" alt="Twitch">
+    </a>
+    <a href="https://discord.gg/mzW9Hh96S" target="_blank" rel="noopener" aria-label="Discord">
+      <img src="assets/social/dc.png" alt="Discord">
+    </a>
+    <a href="https://www.instagram.com/das__mufflon/" target="_blank" rel="noopener" aria-label="Instagram">
+      <img src="assets/social/insta.png" alt="Instagram">
+    </a>
+  </div>
 
-  <section>
-    <div class="section-head">
-      <span class="eyebrow">Gerade live?</span>
-      <h2>🔴 Stream</h2>
+  <!-- ============================================================
+       STREAM + SHORTS (nebeneinander)
+       ============================================================ -->
+  <div class="stream-layout">
+
+    <!-- Stream (links, groß) -->
+    <div class="stream-main">
+      <div class="embed-wrap">
+        <iframe
+          src="https://player.twitch.tv/?channel=das__mufflon&parent=mufflon.pages.dev&muted=true"
+          allowfullscreen>
+        </iframe>
+      </div>
     </div>
-    <div class="embed-wrap">
-      <iframe
-        src="https://player.twitch.tv/?channel=das__mufflon&parent=mufflon.pages.dev&muted=true"
-        allowfullscreen>
-      </iframe>
+
+    <!-- Shorts (rechts, 3 Stück untereinander) -->
+    <div class="shorts-sidebar">
+      <div class="short-item">
+        <iframe
+          src="https://www.youtube.com/embed/JzgkwUYSpWQ?origin=https%3A%2F%2Fmufflon.pages.dev"
+          title="YouTube Short 1"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen>
+        </iframe>
+      </div>
+      <div class="short-item">
+        <iframe src="https://www.youtube.com/embed/gR-jdmmPnbg" allowfullscreen></iframe>
+      </div>
+      <div class="short-item">
+        <iframe src="https://www.youtube.com/embed/LAhdkQ4w1wQ" allowfullscreen></iframe>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============================================================
+       NEUIGKEITEN
+       ============================================================ -->
+  <section class="news-section" style="padding-top:10px; padding-bottom:30px;">
+    <div class="section-head" style="margin-bottom:16px;">
+      <span class="eyebrow">Aus der Commähnity</span>
+      <h2 style="font-size:clamp(1.3rem, 2vw, 1.8rem);">📰 Neuigkeiten</h2>
+    </div>
+    <div id="news-container" class="wrap" style="max-width:720px;">
+      <!-- wird per JavaScript aus content-data.js befüllt -->
     </div>
   </section>
 
-  <section>
-    <div class="section-head">
-      <span class="eyebrow">Kurz und knackig</span>
-      <h2>📱 Shorts</h2>
-      <p>Die neuesten Shorts vom Kanal.</p>
-    </div>
-    <div class="shorts-grid">
-  <div class="embed-wrap">
-  <iframe
-  src="https://www.youtube.com/embed/JzgkwUYSpWQ?origin=https%3A%2F%2Fmufflon.pages.dev"
-  title="YouTube Short 1"
-  frameborder="0"
-  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-  referrerpolicy="strict-origin-when-cross-origin"
-  allowfullscreen>
-</iframe>
-</div>
+  <footer class="site-footer">
+    <div class="footer-brand">Das__Mufflon 🐑</div>
+    <p><a href="https://twitch.tv/das__mufflon" target="_blank" rel="noopener">twitch.tv/das__mufflon</a></p>
+  </footer>
 
-<div class="embed-wrap">
-  <iframe src="https://www.youtube.com/embed/gR-jdmmPnbg" allowfullscreen></iframe>
-</div>
+  <!-- ============================================================
+       JAVASCRIPT
+       ============================================================ -->
+  <script src="js/content-data.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    const container = document.getElementById('news-container');
 
-<div class="embed-wrap">
-  <iframe src="https://www.youtube.com/embed/LAhdkQ4w1wQ" allowfullscreen></iframe>
-</div>
-
-  <div class="ivy-divider"></div>
+    if (!CONTENT_EINTRAEGE || CONTENT_EINTRAEGE.length === 0) {
+      container.innerHTML = '<div class="empty-state">Noch keine Neuigkeiten — schau bald wieder vorbei! 🌿</div>';
+    } else {
+      CONTENT_EINTRAEGE.forEach(entry => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <span class="tag">${entry.tag || 'Neu'}</span>
+          <h3 style="margin-top:4px;">${entry.titel}</h3>
+          <p style="color:#8a7660; font-size:0.85rem; margin-bottom:10px;">${entry.datum}</p>
+          <p style="margin-bottom:0;">${entry.text}</p>
+        `;
+        container.appendChild(card);
+      });
+    }
+  </script>
+</body>
+</html>
