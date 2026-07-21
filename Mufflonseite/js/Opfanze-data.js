@@ -89,7 +89,6 @@ const OPFANZE_AUSGABEN = [
 
   // ============================================================
   // EXTRA-BLÄTTER (neueste zuerst)
-  // ACHTUNG: Der Ordner heißt "Extrablast 2" (mit "a")!
   // ============================================================
   {
     typ: "Extrablatt",
@@ -134,3 +133,13 @@ const OPFANZE_AUSGABEN = [
     pfad: "assets/Opfanze_assets/Extrablast 2/Extrablast, 032206, Horro-Campingausflug, 20260228.pdf"
   }
 ];
+
+// ------------------------------------------------------------
+// HILFSFUNKTIONEN (nicht ändern!)
+// ------------------------------------------------------------
+
+function formatiereDatum(isoDatum) {
+  const monate = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
+  const [jahr, monat, tag] = isoDatum.split("-").map(Number);
+  return `${tag}. ${monate[monat - 1]} ${jahr}`;
+}
