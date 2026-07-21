@@ -1,9 +1,5 @@
 /* ============================================================
    MAEHMORIES — Flipbook-Styles
-   Jede Person hat 2 fertig gestaltete PNG-Seiten (links/rechts),
-   die randlos und eng aneinander wie ein aufgeschlagenes Buch
-   angezeigt werden. Die Seite, die man gerade umblaettert, klappt
-   exakt um die Buchmitte (Scharnier), wie bei einem echten Buch.
    ============================================================ */
 
 .book-stage {
@@ -92,6 +88,14 @@
   transform: rotateY(180deg);
 }
 
+/* ============================================================
+   DAS IST DIE NEUE REGEL - NUR DAS EINFÜGEN!
+   ============================================================ */
+.flip-face.back {
+  backface-visibility: visible !important;
+}
+
+/* --- Steuerung --- */
 .book-controls {
   display: flex;
   align-items: center;
@@ -170,7 +174,4 @@
   .book { width: 96vw; }
   .book-controls { gap: 16px; margin-top: 20px; }
   .book-nav-btn { width: 42px; height: 42px; }
-}
-.flip-face.back {
-  backface-visibility: visible !important;
 }
