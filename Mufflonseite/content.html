@@ -123,15 +123,15 @@
     <p><a href="https://twitch.tv/das__mufflon" target="_blank" rel="noopener">twitch.tv/das__mufflon</a></p>
   </footer>
 
-<script src="js/Content-data.js"></script>
+  <script src="js/Content-data.js"></script>
   <script src="js/main.js"></script>
   <script>
     const container = document.getElementById('news-container');
 
-    if (!NEWS_EINTRAEGE || NEWS_EINTRAEGE.length === 0) {
+    if (!CONTENT_EINTRAEGE || CONTENT_EINTRAEGE.length === 0) {
       container.innerHTML = '<div class="empty-state">Noch keine Neuigkeiten — schau bald wieder vorbei! 🌿</div>';
     } else {
-      NEWS_EINTRAEGE.forEach(entry => {
+      CONTENT_EINTRAEGE.forEach(entry => {
         const card = document.createElement('div');
         card.className = 'card';
         card.innerHTML = `
