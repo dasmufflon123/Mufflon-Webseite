@@ -171,3 +171,6 @@
   .book-controls { gap: 16px; margin-top: 20px; }
   .book-nav-btn { width: 42px; height: 42px; }
 }
+.flip-face.back {
+  backface-visibility: visible !important;
+}
