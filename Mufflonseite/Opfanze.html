@@ -28,16 +28,6 @@
       border-radius: var(--radius-lg);
     }
 
-    /* ---- Slogan unter dem Banner ---- */
-    .opfanze-slogan {
-      text-align: center;
-      font-family: 'Patrick Hand', cursive;
-      font-size: 1.2rem;
-      color: var(--terracotta-dark);
-      margin: -10px 0 30px;
-      letter-spacing: 0.06em;
-    }
-
     /* ---- Kiosk-Hero ---- */
     .kiosk-hero {
       padding: 40px 24px 30px;
@@ -292,61 +282,70 @@
       margin-top: 6px;
     }
 
-    /* ---- Zeitungsrolle (Deko links) ---- */
-    .opfanze-rolle {
-      position: fixed;
-      left: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 60px;
-      z-index: 30;
-      opacity: 0.6;
-      pointer-events: none;
-      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.1));
-    }
-    .opfanze-rolle img {
-      width: 100%;
-      display: block;
-    }
-
-    /* ---- Herausgeber-Box (mit Maggus) ---- */
+    /* ---- Herausgeber-Box (Maggus links, Text rechts) ---- */
     .herausgeber-box {
-      max-width: 600px;
+      max-width: 900px;
       margin: 40px auto 20px;
       padding: 0 24px;
-      text-align: center;
+      display: flex;
+      align-items: center;
+      gap: 30px;
       background: var(--cream-soft);
       border-radius: var(--radius-lg);
       border: 2px solid rgba(107,66,38,0.08);
       box-shadow: var(--shadow-soft);
-      padding: 30px 30px 20px;
+      padding: 30px 35px;
     }
+
     .herausgeber-box .herausgeber-bild {
-      width: 120px;
-      height: 120px;
+      width: 160px;
+      height: 160px;
       border-radius: 50%;
       object-fit: cover;
-      margin: 0 auto 12px;
-      display: block;
+      flex-shrink: 0;
       border: 4px solid var(--terracotta);
       box-shadow: var(--shadow-soft);
     }
+
+    .herausgeber-box .herausgeber-info {
+      flex: 1;
+      text-align: left;
+    }
+
     .herausgeber-box .herausgeber-name {
       font-family: 'Baloo 2', sans-serif;
-      font-size: 1.3rem;
+      font-size: 1.5rem;
       color: var(--horn-brown);
       margin-bottom: 2px;
     }
+
     .herausgeber-box .herausgeber-rolle {
       font-family: 'Patrick Hand', cursive;
       color: var(--text-soft);
-      font-size: 0.95rem;
+      font-size: 1rem;
+      margin-bottom: 8px;
     }
+
     .herausgeber-box .herausgeber-text {
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       color: var(--text-soft);
-      margin-top: 10px;
-      line-height: 1.5;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    @media (max-width: 640px) {
+      .herausgeber-box {
+        flex-direction: column;
+        text-align: center;
+        padding: 24px 20px;
+      }
+      .herausgeber-box .herausgeber-info {
+        text-align: center;
+      }
+      .herausgeber-box .herausgeber-bild {
+        width: 120px;
+        height: 120px;
+      }
     }
 
     /* ---- Leerer Zustand ---- */
@@ -365,7 +364,6 @@
       .kiosk-toolbar { flex-direction: column; align-items: stretch; }
       .kiosk-toolbar .filter-tabs { justify-content: center; }
       .featured-info .btn { width: 100%; justify-content: center; }
-      .opfanze-rolle { width: 30px; opacity: 0.3; }
     }
     @media (max-width: 480px) {
       .kiosk-grid { grid-template-columns: 1fr 1fr; }
@@ -416,14 +414,6 @@
   <div class="opfanze-banner">
     <img src="assets/Opfanze_assets/Opfanze Header.png" alt="Opfanze Header">
   </div>
-  <div class="opfanze-slogan">Die Zeitung die aufklärt</div>
-
-  <!-- ============================================================
-       ZEITUNGSROLLE (Deko links)
-       ============================================================ -->
-  <div class="opfanze-rolle">
-    <img src="assets/Opfanze_assets/opfanze rolle.png" alt="Zeitungsrolle">
-  </div>
 
   <!-- ============================================================
        KIOSK-BEREICH
@@ -460,16 +450,18 @@
   </div>
 
   <!-- ============================================================
-       HERAUSGEBER-BOX (mit Maggus)
+       HERAUSGEBER-BOX (Maggus links, Text rechts)
        ============================================================ -->
   <div class="herausgeber-box">
     <img src="assets/Opfanze_assets/Maggus OPfanze.png" alt="Maggus" class="herausgeber-bild">
-    <div class="herausgeber-name">Maggus</div>
-    <div class="herausgeber-rolle">✍️ Herausgeber der Opfanze</div>
-    <p class="herausgeber-text">
-      Seit der ersten Ausgabe schreibt, illustriert, produziert und schnubbt Maggus jede Opfanze persönlich. 
-      Danke für deine wöchentlichen Geschichten aus dem Stall! ♥
-    </p>
+    <div class="herausgeber-info">
+      <div class="herausgeber-name">Maggus</div>
+      <div class="herausgeber-rolle">✍️ Herausgeber der Opfanze</div>
+      <p class="herausgeber-text">
+        Seit der ersten Ausgabe schreibt, illustriert, produziert und schnubbt Maggus jede Opfanze persönlich. 
+        Danke für deine wöchentlichen Geschichten aus dem Stall! ♥
+      </p>
+    </div>
   </div>
 
   <footer class="site-footer">
