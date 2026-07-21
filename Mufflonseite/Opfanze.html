@@ -28,38 +28,48 @@
       border-radius: var(--radius-lg);
     }
 
-    /* ---- Herausgeber-Box (Maggus) ---- */
-    .herausgeber-box {
-      max-width: 1080px;
-      margin: 0 auto 30px;
-      padding: 0 24px;
+    /* ---- Hauptbereich: Kiosk links, Maggus rechts ---- */
+    .opfanze-layout {
       display: flex;
-      align-items: center;
-      gap: 35px;
+      gap: 30px;
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 24px;
+      align-items: flex-start;
+    }
+
+    /* ---- Kiosk-Bereich (links) ---- */
+    .kiosk-main {
+      flex: 1;
+      min-width: 0;
+    }
+
+    /* ---- Herausgeber-Box (Maggus, rechts, hochkant) ---- */
+    .herausgeber-box {
+      flex: 0 0 220px;
       background: var(--cream-soft);
       border-radius: var(--radius-lg);
       border: 2px solid rgba(107,66,38,0.08);
       box-shadow: var(--shadow-soft);
-      padding: 25px 35px;
+      padding: 24px 20px;
+      text-align: center;
+      position: sticky;
+      top: 100px;
+      align-self: flex-start;
     }
 
     .herausgeber-box .herausgeber-bild {
-      width: 160px;
+      width: 100%;
       height: auto;
-      flex-shrink: 0;
       border-radius: var(--radius-md);
       box-shadow: var(--shadow-soft);
       display: block;
-    }
-
-    .herausgeber-box .herausgeber-info {
-      flex: 1;
-      text-align: left;
+      margin-bottom: 16px;
     }
 
     .herausgeber-box .herausgeber-name {
       font-family: 'Baloo 2', sans-serif;
-      font-size: 1.5rem;
+      font-size: 1.3rem;
       color: var(--horn-brown);
       margin-bottom: 2px;
     }
@@ -67,41 +77,27 @@
     .herausgeber-box .herausgeber-rolle {
       font-family: 'Patrick Hand', cursive;
       color: var(--text-soft);
-      font-size: 1rem;
-      margin-bottom: 8px;
+      font-size: 0.9rem;
+      margin-bottom: 10px;
     }
 
     .herausgeber-box .herausgeber-text {
-      font-size: 0.95rem;
+      font-size: 0.85rem;
       color: var(--text-soft);
       line-height: 1.6;
       margin: 0;
     }
 
-    @media (max-width: 640px) {
-      .herausgeber-box {
-        flex-direction: column;
-        text-align: center;
-        padding: 24px 20px;
-      }
-      .herausgeber-box .herausgeber-info {
-        text-align: center;
-      }
-      .herausgeber-box .herausgeber-bild {
-        width: 120px;
-      }
-    }
-
     /* ---- Kiosk-Hero ---- */
     .kiosk-hero {
-      padding: 40px 24px 30px;
-      max-width: 1080px;
-      margin: 0 auto;
-      position: relative;
+      padding: 20px 0 10px;
     }
 
     .kiosk-hero .section-head {
-      margin-bottom: 30px;
+      margin-bottom: 20px;
+    }
+    .kiosk-hero .section-head h1 {
+      font-size: clamp(1.8rem, 3vw, 2.5rem);
     }
 
     /* ---- Hervorgehobene Ausgabe ---- */
@@ -109,16 +105,16 @@
       background: var(--cream-soft);
       border: 3px solid var(--terracotta);
       border-radius: var(--radius-lg);
-      padding: 30px 35px;
+      padding: 24px 28px;
       box-shadow: var(--shadow-lift);
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 30px;
+      gap: 24px;
       transition: transform 0.2s ease;
       position: relative;
       overflow: hidden;
-      margin-bottom: 40px;
+      margin-bottom: 30px;
     }
     .featured-card::before {
       content: "";
@@ -137,14 +133,14 @@
 
     .featured-badge {
       position: absolute;
-      top: 16px;
-      right: 16px;
+      top: 14px;
+      right: 14px;
       background: var(--terracotta);
       color: var(--white);
       font-family: 'Baloo 2', sans-serif;
       font-weight: 700;
-      font-size: 0.85rem;
-      padding: 5px 16px;
+      font-size: 0.75rem;
+      padding: 4px 14px;
       border-radius: 999px;
       letter-spacing: 0.04em;
       box-shadow: 0 2px 8px rgba(221,138,70,0.3);
@@ -152,57 +148,57 @@
 
     .featured-info {
       flex: 1;
-      min-width: 200px;
+      min-width: 180px;
       z-index: 1;
     }
     .featured-info .typ-badge {
       display: inline-block;
       font-family: 'Baloo 2', sans-serif;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       font-weight: 700;
-      padding: 3px 12px;
+      padding: 2px 12px;
       border-radius: 999px;
       background: var(--moss);
       color: var(--white);
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
     .featured-info .typ-badge.event { background: var(--twilight); }
     .featured-info h2 {
-      font-size: clamp(1.5rem, 2.5vw, 2.2rem);
-      margin: 0 0 4px;
+      font-size: clamp(1.3rem, 2vw, 1.8rem);
+      margin: 0 0 2px;
     }
     .featured-info .meta {
       color: var(--text-soft);
-      font-size: 0.9rem;
-      margin-bottom: 14px;
+      font-size: 0.85rem;
+      margin-bottom: 10px;
     }
     .featured-info .btn {
-      font-size: 1.05rem;
-      padding: 12px 28px;
+      font-size: 0.95rem;
+      padding: 10px 22px;
     }
     .featured-info .btn svg {
-      width: 18px;
-      height: 18px;
-      margin-right: 6px;
+      width: 16px;
+      height: 16px;
+      margin-right: 4px;
     }
 
     .featured-number {
       font-family: 'Baloo 2', sans-serif;
-      font-size: 4rem;
+      font-size: 3.5rem;
       font-weight: 800;
       color: var(--terracotta);
       line-height: 1;
-      opacity: 0.15;
+      opacity: 0.12;
       position: absolute;
-      bottom: 10px;
-      right: 30px;
+      bottom: 6px;
+      right: 20px;
       pointer-events: none;
       user-select: none;
     }
     @media (max-width: 600px) {
-      .featured-number { font-size: 2.5rem; bottom: 6px; right: 16px; }
-      .featured-card { padding: 24px 20px; }
-      .featured-badge { top: 10px; right: 10px; font-size: 0.7rem; padding: 4px 12px; }
+      .featured-number { font-size: 2.2rem; bottom: 4px; right: 12px; }
+      .featured-card { padding: 18px 16px; }
+      .featured-badge { top: 8px; right: 8px; font-size: 0.65rem; padding: 3px 10px; }
     }
 
     /* ---- Such- und Filterleiste ---- */
@@ -210,25 +206,23 @@
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 14px 20px;
-      max-width: 1080px;
-      margin: 0 auto 30px;
-      padding: 0 24px;
+      gap: 12px 16px;
+      margin-bottom: 24px;
     }
     .kiosk-toolbar .search-wrap {
       flex: 1;
-      min-width: 180px;
+      min-width: 160px;
       position: relative;
     }
     .kiosk-toolbar .search-wrap input {
       width: 100%;
-      padding: 10px 16px 10px 40px;
+      padding: 8px 14px 8px 36px;
       border-radius: 999px;
       border: 2px solid rgba(107,66,38,0.15);
       background: var(--cream-soft);
       color: var(--text);
       font-family: 'Nunito', sans-serif;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       transition: border-color 0.2s ease, box-shadow 0.2s ease;
       outline: none;
     }
@@ -238,27 +232,27 @@
     }
     .kiosk-toolbar .search-wrap .search-icon {
       position: absolute;
-      left: 14px;
+      left: 12px;
       top: 50%;
       transform: translateY(-50%);
       color: var(--text-soft);
       opacity: 0.5;
-      font-size: 1.1rem;
+      font-size: 1rem;
       pointer-events: none;
     }
 
     .kiosk-toolbar .filter-tabs {
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
+      gap: 4px;
     }
     .kiosk-toolbar .filter-tabs button {
       border: none;
       background: transparent;
       font-family: 'Baloo 2', sans-serif;
       font-weight: 600;
-      font-size: 0.92rem;
-      padding: 6px 16px;
+      font-size: 0.85rem;
+      padding: 5px 14px;
       border-radius: 999px;
       color: var(--text-soft);
       cursor: pointer;
@@ -281,18 +275,16 @@
     /* ---- Kachel-Raster ---- */
     .kiosk-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 20px;
-      max-width: 1080px;
-      margin: 0 auto 40px;
-      padding: 0 24px;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 18px;
+      padding-bottom: 20px;
     }
 
     .kiosk-card {
       background: var(--cream-soft);
       border: 2px solid rgba(107,66,38,0.08);
       border-radius: var(--radius-md);
-      padding: 18px 20px 20px;
+      padding: 16px 18px 18px;
       box-shadow: var(--shadow-soft);
       transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
       cursor: pointer;
@@ -309,7 +301,7 @@
     }
     .kiosk-card .card-typ {
       font-family: 'Baloo 2', sans-serif;
-      font-size: 0.65rem;
+      font-size: 0.6rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.06em;
@@ -318,14 +310,14 @@
       background: var(--moss);
       color: var(--white);
       display: inline-block;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       align-self: flex-start;
     }
     .kiosk-card .card-typ.event { background: var(--twilight); }
 
     .kiosk-card .card-nummer {
       font-family: 'Baloo 2', sans-serif;
-      font-size: 1.6rem;
+      font-size: 1.4rem;
       font-weight: 800;
       color: var(--horn-brown);
       line-height: 1.1;
@@ -334,37 +326,68 @@
     .kiosk-card .card-titel {
       font-family: 'Baloo 2', sans-serif;
       font-weight: 600;
-      font-size: 1rem;
+      font-size: 0.95rem;
       color: var(--text);
       margin-bottom: 4px;
       line-height: 1.3;
       flex: 1;
     }
     .kiosk-card .card-datum {
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       color: var(--text-soft);
-      margin-top: 6px;
+      margin-top: 4px;
     }
 
     /* ---- Leerer Zustand ---- */
     .kiosk-empty {
       text-align: center;
-      padding: 60px 20px;
+      padding: 40px 20px;
       color: var(--text-soft);
       font-family: 'Patrick Hand', cursive;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       grid-column: 1 / -1;
     }
 
-    /* ---- Responsive ---- */
-    @media (max-width: 640px) {
-      .kiosk-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px; }
+    /* ---- Responsive: Maggus-Box unterhalb bei kleinen Bildschirmen ---- */
+    @media (max-width: 820px) {
+      .opfanze-layout {
+        flex-direction: column;
+      }
+      .herausgeber-box {
+        flex: 1;
+        width: 100%;
+        position: static;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 20px;
+        text-align: left;
+        padding: 20px 24px;
+      }
+      .herausgeber-box .herausgeber-bild {
+        width: 100px;
+        flex-shrink: 0;
+        margin-bottom: 0;
+      }
+      .herausgeber-box .herausgeber-info {
+        flex: 1;
+      }
+      .herausgeber-box .herausgeber-text {
+        font-size: 0.9rem;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .kiosk-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
       .kiosk-toolbar { flex-direction: column; align-items: stretch; }
       .kiosk-toolbar .filter-tabs { justify-content: center; }
       .featured-info .btn { width: 100%; justify-content: center; }
+      .opfanze-banner { padding: 0 12px; }
     }
     @media (max-width: 480px) {
       .kiosk-grid { grid-template-columns: 1fr 1fr; }
+      .herausgeber-box { flex-direction: column; text-align: center; }
+      .herausgeber-box .herausgeber-bild { width: 120px; }
     }
   </style>
 </head>
@@ -414,52 +437,59 @@
   </div>
 
   <!-- ============================================================
-       HERAUSGEBER-BOX (Maggus)
+       LAYOUT: Kiosk links, Maggus rechts
        ============================================================ -->
-  <div class="herausgeber-box">
-    <img src="assets/Opfanze_assets/Maggus OPfanze.png" alt="Maggus" class="herausgeber-bild">
-    <div class="herausgeber-info">
-      <div class="herausgeber-name">Maggus</div>
-      <div class="herausgeber-rolle">✍️ Herausgeber der Opfanze</div>
-      <p class="herausgeber-text">
-        Seit der ersten Ausgabe schreibt, illustriert, produziert und schnubbt Maggus jede Opfanze persönlich.
-        Danke für deine wöchentlichen Geschichten aus dem Stall! ♥
-      </p>
-    </div>
-  </div>
+  <div class="opfanze-layout">
 
-  <!-- ============================================================
-       KIOSK-BEREICH (Alle Ausgaben)
-       ============================================================ -->
-  <div class="kiosk-hero">
-    <div class="section-head">
-      <span class="eyebrow">Der Opfanze-Kiosk</span>
-      <h1>📰 Alle Ausgaben</h1>
-      <p>Das Neueste zuerst – blättere durch das Archiv.</p>
-    </div>
-  </div>
+    <!-- -------- KIOSK (links) -------- -->
+    <div class="kiosk-main">
 
-  <!-- Toolbar: Suche + Filter -->
-  <div class="kiosk-toolbar">
-    <div class="search-wrap">
-      <span class="search-icon">🔍</span>
-      <input type="text" id="kioskSearch" placeholder="Ausgabe oder Titel suchen …" aria-label="Ausgaben durchsuchen">
-    </div>
-    <div class="filter-tabs" id="filterTabs">
-      <button class="active" data-filter="alle">Alle</button>
-      <button data-filter="Extrablatt">📄 Extrablätter</button>
-      <button data-filter="Eventblatt">🎪 Eventblätter</button>
-    </div>
-  </div>
+      <div class="kiosk-hero">
+        <div class="section-head">
+          <span class="eyebrow">Der Opfanze-Kiosk</span>
+          <h1>📰 Alle Ausgaben</h1>
+          <p>Das Neueste zuerst – blättere durch das Archiv.</p>
+        </div>
+      </div>
 
-  <!-- Hervorgehobene Ausgabe -->
-  <div class="kiosk-hero" id="featuredContainer">
-    <!-- wird per JavaScript befüllt -->
-  </div>
+      <!-- Toolbar: Suche + Filter -->
+      <div class="kiosk-toolbar">
+        <div class="search-wrap">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="kioskSearch" placeholder="Ausgabe oder Titel suchen …" aria-label="Ausgaben durchsuchen">
+        </div>
+        <div class="filter-tabs" id="filterTabs">
+          <button class="active" data-filter="alle">Alle</button>
+          <button data-filter="Extrablatt">📄 Extrablätter</button>
+          <button data-filter="Eventblatt">🎪 Eventblätter</button>
+        </div>
+      </div>
 
-  <!-- Kachel-Raster -->
-  <div class="kiosk-grid" id="kioskGrid">
-    <!-- wird per JavaScript befüllt -->
+      <!-- Hervorgehobene Ausgabe -->
+      <div id="featuredContainer">
+        <!-- wird per JavaScript befüllt -->
+      </div>
+
+      <!-- Kachel-Raster -->
+      <div class="kiosk-grid" id="kioskGrid">
+        <!-- wird per JavaScript befüllt -->
+      </div>
+
+    </div>
+
+    <!-- -------- MAGGGUS-BOX (rechts, hochkant) -------- -->
+    <aside class="herausgeber-box">
+      <img src="assets/Opfanze_assets/Maggus OPfanze.png" alt="Maggus" class="herausgeber-bild">
+      <div class="herausgeber-info">
+        <div class="herausgeber-name">Maggus</div>
+        <div class="herausgeber-rolle">✍️ Herausgeber der Opfanze</div>
+        <p class="herausgeber-text">
+          Seit der ersten Ausgabe schreibt, illustriert, produziert und schnubbt Maggus jede Opfanze persönlich.
+          Danke für deine wöchentlichen Geschichten aus dem Stall! ♥
+        </p>
+      </div>
+    </aside>
+
   </div>
 
   <footer class="site-footer">
@@ -468,7 +498,7 @@
   </footer>
 
   <!-- ============================================================
-       JAVASCRIPT – SO HAT ES FUNKTIONIERT
+       JAVASCRIPT – lädt Datenbank und rendert Kacheln
        ============================================================ -->
   <script src="js/Opfanze-data.js"></script>
   <script src="js/main.js"></script>
@@ -495,18 +525,15 @@
       });
     }
 
-    // ---- Render-Funktion (genau wie vorher, nur mit Sortierung) ----
+    // ---- Render-Funktion ----
     function render() {
-      // Daten holen und sortieren
       const alle = sortByNumber(OPFANZE_AUSGABEN);
 
-      // Filtern
       let gefiltert = alle.filter(ausgabe => {
         if (currentFilter === 'alle') return true;
         return ausgabe.typ === currentFilter;
       });
 
-      // Suche
       if (currentSearch.trim()) {
         const query = currentSearch.toLowerCase().trim();
         gefiltert = gefiltert.filter(ausgabe => {
@@ -517,7 +544,6 @@
         });
       }
 
-      // Hervorgehobene Ausgabe: erste (neueste) aus der gefilterten Liste
       let featured = null;
       let rest = [];
       if (gefiltert.length > 0) {
@@ -525,10 +551,7 @@
         rest = gefiltert.slice(1);
       }
 
-      // Featured rendern
       renderFeatured(featured);
-
-      // Grid rendern
       renderGrid(rest);
     }
 
@@ -537,7 +560,7 @@
       if (!ausgabe) {
         featuredContainer.innerHTML = `
           <div style="text-align:center; padding:20px; color:var(--text-soft);">
-            <p style="font-family:'Patrick Hand',cursive; font-size:1.1rem;">Keine Ausgabe gefunden 🌿</p>
+            <p style="font-family:'Patrick Hand',cursive; font-size:1rem;">Keine Ausgabe gefunden 🌿</p>
           </div>
         `;
         return;
@@ -554,7 +577,7 @@
           <div class="featured-info">
             <span class="typ-badge ${typClass}">${typLabel}</span>
             <h2>Ausgabe ${anzeigeNummer}</h2>
-            <p style="font-size:1.1rem; font-weight:600; color:var(--text); margin:0 0 2px;">${ausgabe.titel}</p>
+            <p style="font-size:1.05rem; font-weight:600; color:var(--text); margin:0 0 2px;">${ausgabe.titel}</p>
             <p class="meta">${datumFormatiert}</p>
             <span class="btn btn-primary">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
