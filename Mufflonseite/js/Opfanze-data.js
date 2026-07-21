@@ -2,10 +2,21 @@
    OPFANZE — Kiosk-Datenbank
    ============================================================
    Hier sind ALLE Ausgaben eingetragen.
-   Die Sortierung erfolgt automatisch nach der Nummer (höchste zuerst).
+   Die neueste Ausgabe steht GANZ OBEN!
    ============================================================ */
 
 const OPFANZE_AUSGABEN = [
+  // ============================================================
+  // NEUSTE AUSGABEN (GANZ OBEN!)
+  // ============================================================
+  {
+    typ: "Extrablatt",
+    nummer: "0872026",
+    titel: "Mufflon auf der Flucht",
+    datum: "2026-07-17",
+    pfad: "assets/Opfanze_assets/Extrablatt 2/Extrablatt, 0872026, Mufflon auf der Flucht, 20260717.pdf"
+  },
+
   // ============================================================
   // EVENTBLÄTTER
   // ============================================================
@@ -88,14 +99,14 @@ const OPFANZE_AUSGABEN = [
   },
 
   // ============================================================
-  // EXTRA-BLÄTTER (Ordner: Extrablatt 2)
+  // EXTRA-BLÄTTER
   // ============================================================
   {
     typ: "Extrablatt",
-    nummer: "00592026",
+    nummer: "0592026",
     titel: "Käferplage und rollende Steine beim Mufflon",
     datum: "2026-04-25",
-    pfad: "assets/Opfanze_assets/Extrablatt 2/Extrablatt, 00592026, Käferplage und rollende Steine beim Mufflon, 20260425.pdf"
+    pfad: "assets/Opfanze_assets/Extrablatt 2/Extrablatt, 0592026, Käferplage und rollende Steine beim Mufflon, 20260425.pdf"
   },
   {
     typ: "Extrablatt",
