@@ -12,9 +12,9 @@ const OPFANZE_AUSGABEN = [
   {
     typ: "Eventblatt",
     nummer: "112",
-    titel: "Der Sommerhit der Commähntity wurde gefunden",
+    titel: "Der Sommerhit der Commähnity wurde gefunden",
     datum: "2026-07-12",
-    pfad: "assets/Opfanze_assets/Eventblatt/Eventblatt, 112026, Der Sommerhit der Commähntity wurde gefunden, 20260712.pdf"
+    pfad: "assets/Opfanze_assets/Eventblatt/Eventblatt, 112026, Der Sommerhit der Commähnity wurde gefunden, 20260712.pdf"
   },
   {
     typ: "Eventblatt",
