@@ -4,7 +4,7 @@
    Neue Meldung = neuen Eintrag GANZ OBEN einfügen (neueste zuerst).
    ============================================================ */
 
-const NEWS_EINTRAEGE = [
+const CONTENT_EINTRAEGE = [
   {
     datum: "2026-07-09",
     titel: "Die Mufflon-Website ist online! 🐑",
