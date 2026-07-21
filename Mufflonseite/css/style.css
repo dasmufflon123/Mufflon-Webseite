@@ -378,7 +378,7 @@ footer.site-footer .footer-brand {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 18px;
+  gap: 10px;
   max-width: 720px;
   margin: 0 auto 10px;
 }
