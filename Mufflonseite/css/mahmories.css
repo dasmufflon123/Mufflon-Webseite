@@ -77,8 +77,16 @@
 .flip-face {
   position: absolute;
   inset: 0;
-  backface-visibility: hidden;
   overflow: hidden;
+}
+
+.flip-face.front {
+  backface-visibility: hidden;
+}
+
+.flip-face.back {
+  transform: rotateY(180deg);
+  backface-visibility: visible;
 }
 
 .flip-face img {
@@ -86,17 +94,6 @@
   height: 100%;
   object-fit: cover;
   display: block;
-}
-
-.flip-face.back {
-  transform: rotateY(180deg);
-}
-
-/* ============================================================
-   DAS IST DIE NEUE REGEL - NUR DAS EINFÜGEN!
-   ============================================================ */
-.flip-face.back {
-  backface-visibility: visible !important;
 }
 
 /* --- Steuerung --- */
