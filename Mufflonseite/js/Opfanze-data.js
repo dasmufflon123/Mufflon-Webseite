@@ -1,13 +1,14 @@
+  <script src="js/Opfanze-data.js"></script>
+  <script src="js/main.js"></script>
   <script>
     // ============================================================
-    // OPFANZE KIOSK — JavaScript
+    // OPFANZE KIOSK — JavaScript (KORRIGIERT)
     // ============================================================
 
     // Sortierung: nach Nummer (höchste zuerst)
     // Die Nummer ist z.B. "112026" – wir sortieren nach der gesamten Zahl
     function sortByNumber(arr) {
       return [...arr].sort((a, b) => {
-        // Nummer als Zahl vergleichen (höhere Zahl = neuer)
         const numA = parseInt(a.nummer, 10);
         const numB = parseInt(b.nummer, 10);
         return numB - numA;
