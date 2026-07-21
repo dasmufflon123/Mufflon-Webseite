@@ -1,0 +1,9 @@
+# Weiterleitungen für die umbenannten Seiten
+/Content.html /Content.html 200
+/Opfanze.html /Opfanze.html 200
+/Highlights.html /Highlights.html 200
+
+# Falls jemand die alten URLs aufruft -> weiterleiten auf die neuen
+/news.html /Content.html 301
+/pflanze.html /Opfanze.html 301
+/archiv.html /Highlights.html 301
