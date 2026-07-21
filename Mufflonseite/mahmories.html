@@ -18,7 +18,7 @@
         Das__Mufflon
       </a>
       <button class="nav-toggle" aria-label="Menü öffnen">☰</button>
-           <nav class="main-nav">
+      <nav class="main-nav">
         <a href="index.html" class="nav-home"><img src="assets/mufflon-mascot.png" alt="Stall" title="Stall"></a>
         <a href="Content.html">Content</a>
         <a href="Opfanze.html">Opfanze</a>
@@ -51,7 +51,7 @@
     <div class="section-head">
       <span class="eyebrow">Unser Erinnerungsbuch</span>
       <h1 style="font-size: clamp(1.5rem, 3vw, 2rem);">💌 Mähmories</h1>
-      <p>Ein Buch voller Mufflons und Worte aus unserer Commähnity. Blätter einfach durch!</p>
+      <p>Ein Buch voller Gesichter und Worte aus unserer Commähnity. Blätter einfach durch!</p>
     </div>
   </section>
 
@@ -135,9 +135,6 @@
       prevBtn.disabled = index === 0;
       nextBtn.disabled = index === MAHMORIES_MITGLIEDER.length - 1;
 
-      // Beide ruhenden Klappen liegen deckungsgleich auf der Basis —
-      // sie muessen deshalb immer dasselbe Bild zeigen wie die Basis,
-      // sonst gibt's beim Stillstand einen sichtbaren Bildsprung.
       setImg('flipRightFrontImg', m, 'rechts');
       setImg('flipLeftFrontImg', m, 'links');
     }
@@ -145,7 +142,7 @@
     function resetFlapInstant(flap, transformValue) {
       flap.style.transition = 'none';
       flap.style.transform = transformValue;
-      void flap.offsetWidth; // Reflow erzwingen, damit der naechste Uebergang wieder animiert
+      void flap.offsetWidth;
       flap.style.transition = '';
     }
 
@@ -159,16 +156,12 @@
       const target = MAHMORIES_MITGLIEDER[targetIndex];
 
       if (direction === 1) {
-        // Vorwaerts: rechte Seite klappt um und legt sich auf die linke.
         flipRight.style.zIndex = '10';
         flipLeft.style.zIndex = '4';
 
-        setImg('flipRightFrontImg', current, 'rechts');   // deckt die Basis exakt zu (nahtlos)
-        setImg('flipRightBackImg', target, 'links');       // landet sichtbar auf der linken Haelfte
+        setImg('flipRightFrontImg', current, 'rechts');
+        setImg('flipRightBackImg', target, 'links');
 
-        // Die rechte Basis-Seite wird sofort gewechselt — sie ist ja unter der
-        // Klappe verdeckt und wird erst sichtbar, sobald die Klappe sich hebt
-        // (genau wie bei einem echten Buch: die naechste Seite liegt schon da).
         baseRightImg.src = target.seite_rechts;
         baseRightImg.alt = target.name + ' — rechte Seite';
 
@@ -179,9 +172,6 @@
 
         flipRight.addEventListener('transitionend', function onDone() {
           flipRight.removeEventListener('transitionend', onDone);
-          // Erst jetzt, wenn die Klappe die linke Seite komplett bedeckt hat,
-          // wird die linke Basis-Seite gewechselt — der Tausch ist unsichtbar,
-          // weil die Klappe optisch exakt an derselben Stelle liegt.
           baseLeftImg.src = target.seite_links;
           baseLeftImg.alt = target.name + ' — linke Seite';
           resetFlapInstant(flipRight, 'rotateY(0deg)');
@@ -193,7 +183,6 @@
         }, { once: true });
 
       } else {
-        // Rueckwaerts: linke Seite klappt um und legt sich auf die rechte.
         flipLeft.style.zIndex = '10';
         flipRight.style.zIndex = '4';
 
@@ -212,4 +201,42 @@
           flipLeft.removeEventListener('transitionend', onDone);
           baseRightImg.src = target.seite_rechts;
           baseRightImg.alt = target.name + ' — rechte Seite';
-          resetFlapInstant(flipLeft, 'rotateY(0
+          resetFlapInstant(flipLeft, 'rotateY(0deg)');
+          flipLeft.style.zIndex = '';
+          flipRight.style.zIndex = '';
+          currentIndex = targetIndex;
+          renderBaseInstant(currentIndex);
+          isAnimating = false;
+        }, { once: true });
+      }
+    }
+
+    prevBtn.addEventListener('click', () => turn(-1));
+    nextBtn.addEventListener('click', () => turn(1));
+
+    const pageJumpInput = document.getElementById('pageJumpInput');
+    const pageJumpBtn = document.getElementById('pageJumpBtn');
+
+    function jumpToPage(num) {
+      if (isAnimating || isNaN(num)) return;
+      const target = Math.min(Math.max(1, num), MAHMORIES_MITGLIEDER.length) - 1;
+      currentIndex = target;
+      renderBaseInstant(currentIndex);
+      pageJumpInput.value = '';
+    }
+
+    pageJumpBtn.addEventListener('click', () => {
+      jumpToPage(parseInt(pageJumpInput.value, 10));
+    });
+    pageJumpInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') jumpToPage(parseInt(pageJumpInput.value, 10));
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') turn(1);
+      if (e.key === 'ArrowLeft') turn(-1);
+    });
+
+    renderBaseInstant(currentIndex);
+  </script>
+</body>
+</html>
