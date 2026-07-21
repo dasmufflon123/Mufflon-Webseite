@@ -18,9 +18,9 @@
       <button class="nav-toggle" aria-label="Menü öffnen">☰</button>
       <nav class="main-nav">
         <a href="index.html" class="nav-home"><img src="assets/mufflon-mascot.png" alt="Stall" title="Stall"></a>
-        <a href="news.html">Content</a>
-        <a href="pflanze.html" class="active">Opfanze</a>
-        <a href="archiv.html">Highlights</a>
+        <a href="Content.html">Content</a>
+        <a href="Opfanze.html" class="active">Opfanze</a>
+        <a href="Highlights.html">Highlights</a>
         <a href="pomodoro.html">Pomodoro</a>
         <a href="mahmories.html">Mähmories</a>
       </nav>
@@ -60,7 +60,7 @@
     </div>
 
     <div id="neueste-ausgabe" class="wrap" style="max-width:600px;">
-      <!-- wird per JavaScript aus pflanze-data.js befüllt -->
+      <!-- wird per JavaScript aus Opfanze-data.js befüllt -->
     </div>
 
   </section>
@@ -70,15 +70,15 @@
     <p><a href="https://twitch.tv/das__mufflon" target="_blank" rel="noopener">twitch.tv/das__mufflon</a></p>
   </footer>
 
-  <script src="js/pflanze-data.js"></script>
+  <script src="js/Opfanze-data.js"></script>
   <script src="js/main.js"></script>
   <script>
     const container = document.getElementById('neueste-ausgabe');
 
-    if (!PFLANZE_AUSGABEN || PFLANZE_AUSGABEN.length === 0) {
+    if (!OPFANZE_AUSGABEN || OPFANZE_AUSGABEN.length === 0) {
       container.innerHTML = '<div class="empty-state">Die erste Ausgabe keimt noch — schau bald wieder vorbei! 🌱</div>';
     } else {
-      const neueste = PFLANZE_AUSGABEN[0];
+      const neueste = OPFANZE_AUSGABEN[0];
       const card = document.createElement('div');
       card.className = 'card';
       card.innerHTML = `
