@@ -175,3 +175,24 @@
   .book-controls { gap: 16px; margin-top: 20px; }
   .book-nav-btn { width: 42px; height: 42px; }
 }
+/* Temporärer Fix: Bilder immer sichtbar machen */
+.flip-face {
+  backface-visibility: visible !important;
+  transform: none !important;
+}
+
+.page-half img,
+.flip-face img {
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: block !important;
+}
+
+.flip-half {
+  transform: none !important;
+  pointer-events: none !important;
+}
+
+.flip-face.back {
+  transform: none !important;
+}
