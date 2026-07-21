@@ -20,9 +20,9 @@
       <button class="nav-toggle" aria-label="Menü öffnen">☰</button>
       <nav class="main-nav">
         <a href="index.html" class="nav-home"><img src="assets/mufflon-mascot.png" alt="Stall" title="Stall"></a>
-        <a href="news.html">Content</a>
-        <a href="pflanze.html">Opfanze</a>
-        <a href="archiv.html">Highlights</a>
+        <a href="Content.html">Content</a>
+        <a href="Opfanze.html">Opfanze</a>
+        <a href="Highlights.html">Highlights</a>
         <a href="pomodoro.html">Pomodoro</a>
         <a href="mahmories.html" class="active">Mähmories</a>
       </nav>
@@ -212,42 +212,4 @@
           flipLeft.removeEventListener('transitionend', onDone);
           baseRightImg.src = target.seite_rechts;
           baseRightImg.alt = target.name + ' — rechte Seite';
-          resetFlapInstant(flipLeft, 'rotateY(0deg)');
-          flipLeft.style.zIndex = '';
-          flipRight.style.zIndex = '';
-          currentIndex = targetIndex;
-          renderBaseInstant(currentIndex);
-          isAnimating = false;
-        }, { once: true });
-      }
-    }
-
-    prevBtn.addEventListener('click', () => turn(-1));
-    nextBtn.addEventListener('click', () => turn(1));
-
-    const pageJumpInput = document.getElementById('pageJumpInput');
-    const pageJumpBtn = document.getElementById('pageJumpBtn');
-
-    function jumpToPage(num) {
-      if (isAnimating || isNaN(num)) return;
-      const target = Math.min(Math.max(1, num), MAHMORIES_MITGLIEDER.length) - 1;
-      currentIndex = target;
-      renderBaseInstant(currentIndex);
-      pageJumpInput.value = '';
-    }
-
-    pageJumpBtn.addEventListener('click', () => {
-      jumpToPage(parseInt(pageJumpInput.value, 10));
-    });
-    pageJumpInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') jumpToPage(parseInt(pageJumpInput.value, 10));
-    });
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowRight') turn(1);
-      if (e.key === 'ArrowLeft') turn(-1);
-    });
-
-    renderBaseInstant(currentIndex);
-  </script>
-</body>
-</html>
+          resetFlapInstant(flipLeft, 'rotateY(0
