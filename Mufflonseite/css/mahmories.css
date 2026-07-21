@@ -16,7 +16,7 @@
 .book {
   position: relative;
   width: min(1040px, 96vw);
-  aspect-ratio: 1860 / 1100; /* = 2 x Seitenverhaeltnis einer Einzelseite (930x1100) */
+  aspect-ratio: 1860 / 1100;
   perspective: 2400px;
 }
 
@@ -41,7 +41,6 @@
   display: block;
 }
 
-/* Ganz schmale Buchrille in der Mitte, fuer die Buch-Illusion */
 .book-spine {
   position: absolute;
   left: 50%;
@@ -54,7 +53,6 @@
   pointer-events: none;
 }
 
-/* --- Die umblaetternde Seite: nur eine Haelfte, Scharnier an der Buchmitte --- */
 .flip-half {
   position: absolute;
   top: 0;
@@ -68,18 +66,18 @@
 
 .flip-half.right {
   right: 0;
-  transform-origin: left center; /* Scharnier an der Buchmitte */
+  transform-origin: left center;
 }
 
 .flip-half.left {
   left: 0;
-  transform-origin: right center; /* Scharnier an der Buchmitte */
+  transform-origin: right center;
 }
 
 .flip-face {
   position: absolute;
   inset: 0;
-  backface-visibility: hidden;
+  backface-visibility: visible !important; /* <- DAS HAT GEFEHLT! */
   overflow: hidden;
 }
 
@@ -166,7 +164,6 @@
 }
 
 @media (max-width: 640px) {
-  /* Auf schmalen Screens wuerde 'cover' oben/unten Text abschneiden -> lieber 'contain' */
   .page-half img,
   .flip-face img {
     object-fit: contain;
@@ -174,25 +171,4 @@
   .book { width: 96vw; }
   .book-controls { gap: 16px; margin-top: 20px; }
   .book-nav-btn { width: 42px; height: 42px; }
-}
-/* Temporärer Fix: Bilder immer sichtbar machen */
-.flip-face {
-  backface-visibility: visible !important;
-  transform: none !important;
-}
-
-.page-half img,
-.flip-face img {
-  opacity: 1 !important;
-  visibility: visible !important;
-  display: block !important;
-}
-
-.flip-half {
-  transform: none !important;
-  pointer-events: none !important;
-}
-
-.flip-face.back {
-  transform: none !important;
 }
