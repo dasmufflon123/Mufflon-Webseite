@@ -114,9 +114,9 @@ const OPFANZE_AUSGABEN = [
   {
     typ: "Extrablatt",
     nummer: "0352026",
-    titel: "Capybara-Mishandlung auf Ferieninsel",
+    titel: "Capybaramisshandlung auf Ferieninsel",
     datum: "2026-03-05",
-    pfad: "assets/Opfanze_assets/Extrablatt 2/Extrablatt, 0352026, Capybara-Mishandlung auf Ferieninsel, 20260305.pdf"
+    pfad: "assets/Opfanze_assets/Extrablatt 2/Extrablatt, 0352026, Capybaramisshandlung auf Ferieninsel, 20260305.pdf"
   },
   {
     typ: "Extrablatt",
