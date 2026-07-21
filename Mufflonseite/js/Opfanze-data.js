@@ -1,615 +1,144 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Opfanze — Das__Mufflon</title>
-  <link rel="icon" type="image/png" href="assets/mufflon-mascot.png">
-  <link rel="stylesheet" href="css/style.css">
-  <style>
-    /* ============================================================
-       OPFANZE KIOSK — Eigene Styles
-       ============================================================ */
+/* ============================================================
+   OPFANZE — Kiosk-Datenbank
+   ============================================================
+   Hier sind ALLE Ausgaben eingetragen.
+   Die Sortierung erfolgt automatisch nach der Nummer (höchste zuerst).
+   ============================================================ */
 
-    /* ---- Opfanze-Header (Banner) ---- */
-    .opfanze-banner {
-      width: 100%;
-      max-width: 1080px;
-      margin: 0 auto 20px;
-      padding: 0 24px;
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      box-shadow: var(--shadow-soft);
-    }
-    .opfanze-banner img {
-      width: 100%;
-      height: auto;
-      display: block;
-      border-radius: var(--radius-lg);
-    }
+const OPFANZE_AUSGABEN = [
+  // ============================================================
+  // EVENTBLÄTTER
+  // ============================================================
+  {
+    typ: "Eventblatt",
+    nummer: "112026",
+    titel: "Der Sommerhit der Commähnity wurde gefunden",
+    datum: "2026-07-12",
+    pfad: "assets/Opfanze_assets/Eventblatt/Eventblatt, 112026, Der Sommerhit der Commähnity wurde gefunden, 20260712.pdf"
+  },
+  {
+    typ: "Eventblatt",
+    nummer: "102026",
+    titel: "Sommerhit-Songbattle",
+    datum: "2026-07-02",
+    pfad: "assets/Opfanze_assets/Eventblatt/Eventblatt, 102026, Sommerhit-Songbattle, 20260702.pdf"
+  },
+  {
+    typ: "Eventblatt",
+    nummer: "092026",
+    titel: "Schock-Absage beim GOAT-Clash 3",
+    datum: "2026-06-28",
+    pfad: "assets/Opfanze_assets/Eventblatt/Eventblatt, 092026, Schock-Absage beim GOAT-Clash 3, 20260628.pdf"
+  },
+  {
+    typ: "Eventblatt",
+    nummer: "082026",
+    titel: "Letzte Chance auf Ruhm und Ehre",
+    datum: "2026-06-25",
+    pfad: "assets/Opfanze_assets/Eventblatt/Eventblatt, 082026, Letzte Chance auf Ruhm und Ehre, 20260625.pdf"
+  },
+  {
+    typ: "Eventblatt",
+    nummer: "072026",
+    titel: "Der Mäh Ess Zeh",
+    datum: "2026-06-11",
+    pfad: "assets/Opfanze_assets/Eventblatt/Eventblatt, 072026, Der Mäh Ess Zeh, 20260611.pdf"
+  },
+  {
+    typ: "Eventblatt",
+    nummer: "062026",
+    titel: "Sieger der Hufgames 2026",
+    datum: "2026-05-31",
+    pfad: "assets/Opfanze_assets/Eventblatt/Eventblatt, 062026, Sieger der Hufgames 2026, 20260531.pdf"
+  },
+  {
+    typ: "Eventblatt",
+    nummer: "052026",
+    titel: "Hufgames 2026",
+    datum: "2026-05-03",
+    pfad: "assets/Opfanze_assets/Eventblatt/Eventblatt, 052026, Hufgames 2026, 20260503.pdf"
+  },
+  {
+    typ: "Eventblatt",
+    nummer: "042026",
+    titel: "Huf-Beben und Musik-Drama am zweiten Streamgeburtstag",
+    datum: "2026-04-23",
+    pfad: "assets/Opfanze_assets/Eventblatt/Eventblatt, 042026, Huf-Beben und Musik-Drama am zweiten Streamgeburtstag, 20260423.pdf"
+  },
+  {
+    typ: "Eventblatt",
+    nummer: "032026",
+    titel: "2 Jahre Das Mufflon auf Twitch",
+    datum: "2026-04-14",
+    pfad: "assets/Opfanze_assets/Eventblatt/Eventblatt, 032026, 2 Jahre Das Mufflon auf Twitch, 20260414.pdf"
+  },
+  {
+    typ: "Eventblatt",
+    nummer: "022026",
+    titel: "Skandal beim Mufflongeburtstag",
+    datum: "2026-04-07",
+    pfad: "assets/Opfanze_assets/Eventblatt/Eventblatt, 022026, Skandal beim Mufflongeburtstag, 20260407.pdf"
+  },
+  {
+    typ: "Eventblatt",
+    nummer: "012026",
+    titel: "Mufflon zerrt ihre Herde vor das Geburtstagsgericht",
+    datum: "2026-03-29",
+    pfad: "assets/Opfanze_assets/Eventblatt/Eventblatt, 012026, Mufflon zerrt ihre Herde vor das Geburtstagsgericht, 20260329.pdf"
+  },
 
-    /* ---- Herausgeber-Box (Maggus) ---- */
-    .herausgeber-box {
-      max-width: 1080px;
-      margin: 0 auto 30px;
-      padding: 0 24px;
-      display: flex;
-      align-items: center;
-      gap: 35px;
-      background: var(--cream-soft);
-      border-radius: var(--radius-lg);
-      border: 2px solid rgba(107,66,38,0.08);
-      box-shadow: var(--shadow-soft);
-      padding: 25px 35px;
-    }
+  // ============================================================
+  // EXTRA-BLÄTTER
+  // ============================================================
+  {
+    typ: "Extrablatt",
+    nummer: "00592026",
+    titel: "Käferplage und rollende Steine beim Mufflon",
+    datum: "2026-04-25",
+    pfad: "assets/Opfanze_assets/Extrablast 2/Extrablast, 00592026, Käferplage und rollende Steine beim Mufflon, 20260425.pdf"
+  },
+  {
+    typ: "Extrablatt",
+    nummer: "037206",
+    titel: "Raub und Zerstörung in der neuen Welt",
+    datum: "2026-03-07",
+    pfad: "assets/Opfanze_assets/Extrablast 2/Extrablast, 037206, Raub und Zerstörung in der neuen Welt, 20260307.pdf"
+  },
+  {
+    typ: "Extrablatt",
+    nummer: "036206",
+    titel: "Alles brennt",
+    datum: "2026-03-06",
+    pfad: "assets/Opfanze_assets/Extrablast 2/Extrablast, 036206, Alles brennt, 20260306.pdf"
+  },
+  {
+    typ: "Extrablatt",
+    nummer: "035206",
+    titel: "Capybara-Mishandlung auf Ferieninsel",
+    datum: "2026-03-05",
+    pfad: "assets/Opfanze_assets/Extrablast 2/Extrablast, 035206, CapybaraMishandlung auf Ferieninsel, 20260305.pdf"
+  },
+  {
+    typ: "Extrablatt",
+    nummer: "034206",
+    titel: "Alpaka-Adoption",
+    datum: "2026-03-03",
+    pfad: "assets/Opfanze_assets/Extrablast 2/Extrablast, 034206, Alpaka-Adoption, 20260303.pdf"
+  },
+  {
+    typ: "Extrablatt",
+    nummer: "032206",
+    titel: "Horror-Campingausflug",
+    datum: "2026-02-28",
+    pfad: "assets/Opfanze_assets/Extrablast 2/Extrablast, 032206, Horro-Campingausflug, 20260228.pdf"
+  }
+];
 
-    .herausgeber-box .herausgeber-bild {
-      width: 160px;
-      height: auto;
-      flex-shrink: 0;
-      border-radius: var(--radius-md);
-      box-shadow: var(--shadow-soft);
-      display: block;
-    }
-
-    .herausgeber-box .herausgeber-info {
-      flex: 1;
-      text-align: left;
-    }
-
-    .herausgeber-box .herausgeber-name {
-      font-family: 'Baloo 2', sans-serif;
-      font-size: 1.5rem;
-      color: var(--horn-brown);
-      margin-bottom: 2px;
-    }
-
-    .herausgeber-box .herausgeber-rolle {
-      font-family: 'Patrick Hand', cursive;
-      color: var(--text-soft);
-      font-size: 1rem;
-      margin-bottom: 8px;
-    }
-
-    .herausgeber-box .herausgeber-text {
-      font-size: 0.95rem;
-      color: var(--text-soft);
-      line-height: 1.6;
-      margin: 0;
-    }
-
-    @media (max-width: 640px) {
-      .herausgeber-box {
-        flex-direction: column;
-        text-align: center;
-        padding: 24px 20px;
-      }
-      .herausgeber-box .herausgeber-info {
-        text-align: center;
-      }
-      .herausgeber-box .herausgeber-bild {
-        width: 120px;
-      }
-    }
-
-    /* ---- Kiosk-Hero ---- */
-    .kiosk-hero {
-      padding: 40px 24px 30px;
-      max-width: 1080px;
-      margin: 0 auto;
-      position: relative;
-    }
-
-    .kiosk-hero .section-head {
-      margin-bottom: 30px;
-    }
-
-    /* ---- Hervorgehobene Ausgabe ---- */
-    .featured-card {
-      background: var(--cream-soft);
-      border: 3px solid var(--terracotta);
-      border-radius: var(--radius-lg);
-      padding: 30px 35px;
-      box-shadow: var(--shadow-lift);
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 30px;
-      transition: transform 0.2s ease;
-      position: relative;
-      overflow: hidden;
-      margin-bottom: 40px;
-    }
-    .featured-card::before {
-      content: "";
-      position: absolute;
-      top: -50%;
-      right: -20%;
-      width: 300px;
-      height: 300px;
-      background: radial-gradient(circle, rgba(221,138,70,0.08), transparent 70%);
-      border-radius: 50%;
-      pointer-events: none;
-    }
-    .featured-card:hover {
-      transform: translateY(-3px);
-    }
-
-    .featured-badge {
-      position: absolute;
-      top: 16px;
-      right: 16px;
-      background: var(--terracotta);
-      color: var(--white);
-      font-family: 'Baloo 2', sans-serif;
-      font-weight: 700;
-      font-size: 0.85rem;
-      padding: 5px 16px;
-      border-radius: 999px;
-      letter-spacing: 0.04em;
-      box-shadow: 0 2px 8px rgba(221,138,70,0.3);
-    }
-
-    .featured-info {
-      flex: 1;
-      min-width: 200px;
-      z-index: 1;
-    }
-    .featured-info .typ-badge {
-      display: inline-block;
-      font-family: 'Baloo 2', sans-serif;
-      font-size: 0.75rem;
-      font-weight: 700;
-      padding: 3px 12px;
-      border-radius: 999px;
-      background: var(--moss);
-      color: var(--white);
-      margin-bottom: 8px;
-    }
-    .featured-info .typ-badge.event { background: var(--twilight); }
-    .featured-info h2 {
-      font-size: clamp(1.5rem, 2.5vw, 2.2rem);
-      margin: 0 0 4px;
-    }
-    .featured-info .meta {
-      color: var(--text-soft);
-      font-size: 0.9rem;
-      margin-bottom: 14px;
-    }
-    .featured-info .btn {
-      font-size: 1.05rem;
-      padding: 12px 28px;
-    }
-    .featured-info .btn svg {
-      width: 18px;
-      height: 18px;
-      margin-right: 6px;
-    }
-
-    .featured-number {
-      font-family: 'Baloo 2', sans-serif;
-      font-size: 4rem;
-      font-weight: 800;
-      color: var(--terracotta);
-      line-height: 1;
-      opacity: 0.15;
-      position: absolute;
-      bottom: 10px;
-      right: 30px;
-      pointer-events: none;
-      user-select: none;
-    }
-    @media (max-width: 600px) {
-      .featured-number { font-size: 2.5rem; bottom: 6px; right: 16px; }
-      .featured-card { padding: 24px 20px; }
-      .featured-badge { top: 10px; right: 10px; font-size: 0.7rem; padding: 4px 12px; }
-    }
-
-    /* ---- Such- und Filterleiste ---- */
-    .kiosk-toolbar {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 14px 20px;
-      max-width: 1080px;
-      margin: 0 auto 30px;
-      padding: 0 24px;
-    }
-    .kiosk-toolbar .search-wrap {
-      flex: 1;
-      min-width: 180px;
-      position: relative;
-    }
-    .kiosk-toolbar .search-wrap input {
-      width: 100%;
-      padding: 10px 16px 10px 40px;
-      border-radius: 999px;
-      border: 2px solid rgba(107,66,38,0.15);
-      background: var(--cream-soft);
-      color: var(--text);
-      font-family: 'Nunito', sans-serif;
-      font-size: 0.95rem;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease;
-      outline: none;
-    }
-    .kiosk-toolbar .search-wrap input:focus {
-      border-color: var(--terracotta);
-      box-shadow: 0 0 0 3px rgba(221,138,70,0.15);
-    }
-    .kiosk-toolbar .search-wrap .search-icon {
-      position: absolute;
-      left: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-soft);
-      opacity: 0.5;
-      font-size: 1.1rem;
-      pointer-events: none;
-    }
-
-    .kiosk-toolbar .filter-tabs {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-    .kiosk-toolbar .filter-tabs button {
-      border: none;
-      background: transparent;
-      font-family: 'Baloo 2', sans-serif;
-      font-weight: 600;
-      font-size: 0.92rem;
-      padding: 6px 16px;
-      border-radius: 999px;
-      color: var(--text-soft);
-      cursor: pointer;
-      transition: background 0.15s ease, color 0.15s ease;
-      border: 2px solid transparent;
-    }
-    .kiosk-toolbar .filter-tabs button:hover {
-      background: rgba(107,66,38,0.06);
-      color: var(--text);
-    }
-    .kiosk-toolbar .filter-tabs button.active {
-      background: var(--terracotta);
-      color: var(--white);
-      border-color: var(--terracotta);
-    }
-    .kiosk-toolbar .filter-tabs button.active:hover {
-      background: var(--terracotta-dark);
-    }
-
-    /* ---- Kachel-Raster ---- */
-    .kiosk-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 20px;
-      max-width: 1080px;
-      margin: 0 auto 40px;
-      padding: 0 24px;
-    }
-
-    .kiosk-card {
-      background: var(--cream-soft);
-      border: 2px solid rgba(107,66,38,0.08);
-      border-radius: var(--radius-md);
-      padding: 18px 20px 20px;
-      box-shadow: var(--shadow-soft);
-      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
-      cursor: pointer;
-      text-decoration: none;
-      color: inherit;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-    }
-    .kiosk-card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-lift);
-      border-color: var(--terracotta);
-    }
-    .kiosk-card .card-typ {
-      font-family: 'Baloo 2', sans-serif;
-      font-size: 0.65rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      padding: 2px 10px;
-      border-radius: 999px;
-      background: var(--moss);
-      color: var(--white);
-      display: inline-block;
-      margin-bottom: 8px;
-      align-self: flex-start;
-    }
-    .kiosk-card .card-typ.event { background: var(--twilight); }
-
-    .kiosk-card .card-nummer {
-      font-family: 'Baloo 2', sans-serif;
-      font-size: 1.6rem;
-      font-weight: 800;
-      color: var(--horn-brown);
-      line-height: 1.1;
-      margin-bottom: 2px;
-    }
-    .kiosk-card .card-titel {
-      font-family: 'Baloo 2', sans-serif;
-      font-weight: 600;
-      font-size: 1rem;
-      color: var(--text);
-      margin-bottom: 4px;
-      line-height: 1.3;
-      flex: 1;
-    }
-    .kiosk-card .card-datum {
-      font-size: 0.78rem;
-      color: var(--text-soft);
-      margin-top: 6px;
-    }
-
-    /* ---- Leerer Zustand ---- */
-    .kiosk-empty {
-      text-align: center;
-      padding: 60px 20px;
-      color: var(--text-soft);
-      font-family: 'Patrick Hand', cursive;
-      font-size: 1.2rem;
-      grid-column: 1 / -1;
-    }
-
-    /* ---- Responsive ---- */
-    @media (max-width: 640px) {
-      .kiosk-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px; }
-      .kiosk-toolbar { flex-direction: column; align-items: stretch; }
-      .kiosk-toolbar .filter-tabs { justify-content: center; }
-      .featured-info .btn { width: 100%; justify-content: center; }
-    }
-    @media (max-width: 480px) {
-      .kiosk-grid { grid-template-columns: 1fr 1fr; }
-    }
-  </style>
-</head>
-<body>
-
-  <header class="site-header">
-    <div class="nav-inner">
-      <a href="index.html" class="brand">
-        <img src="assets/mufflon-mascot.png" alt="Mufflon Maskottchen">
-        Das__Mufflon
-      </a>
-      <button class="nav-toggle" aria-label="Menü öffnen">☰</button>
-      <nav class="main-nav">
-        <a href="index.html" class="nav-home"><img src="assets/mufflon-mascot.png" alt="Stall" title="Stall"></a>
-        <a href="Content.html">Content</a>
-        <a href="Opfanze.html" class="active">Opfanze</a>
-        <a href="Highlights.html">Highlights</a>
-        <a href="pomodoro.html">Pomodoro</a>
-        <a href="mahmories.html">Mähmories</a>
-      </nav>
-    </div>
-  </header>
-
-  <div class="social-dock">
-    <a href="https://twitch.tv/das__mufflon" target="_blank" rel="noopener" aria-label="Twitch" class="social-btn" style="animation-delay:0s">
-      <span class="social-float" style="animation-duration:3.2s; animation-delay:0.6s">
-        <img src="assets/social/twitch.png" alt="Twitch">
-      </span>
-    </a>
-    <a href="https://discord.gg/mzW9Hh96S" target="_blank" rel="noopener" aria-label="Discord" class="social-btn" style="animation-delay:0.15s">
-      <span class="social-float" style="animation-duration:3.6s; animation-delay:0.75s">
-        <img src="assets/social/dc.png" alt="Discord">
-      </span>
-    </a>
-    <a href="https://www.instagram.com/das__mufflon/" target="_blank" rel="noopener" aria-label="Instagram" class="social-btn" style="animation-delay:0.3s">
-      <span class="social-float" style="animation-duration:4.0s; animation-delay:0.9s">
-        <img src="assets/social/insta.png" alt="Instagram">
-      </span>
-    </a>
-  </div>
-
-  <!-- ============================================================
-       OPFANZE-BANNER (Header-Bild)
-       ============================================================ -->
-  <div class="opfanze-banner">
-    <img src="assets/Opfanze_assets/Opfanze Header.png" alt="Opfanze Header">
-  </div>
-
-  <!-- ============================================================
-       HERAUSGEBER-BOX (Maggus)
-       ============================================================ -->
-  <div class="herausgeber-box">
-    <img src="assets/Opfanze_assets/Maggus OPfanze.png" alt="Maggus" class="herausgeber-bild">
-    <div class="herausgeber-info">
-      <div class="herausgeber-name">Maggus</div>
-      <div class="herausgeber-rolle">✍️ Herausgeber der Opfanze</div>
-      <p class="herausgeber-text">
-        Seit der ersten Ausgabe schreibt, illustriert, produziert und schnubbt Maggus jede Opfanze persönlich.
-        Danke für deine wöchentlichen Geschichten aus dem Stall! ♥
-      </p>
-    </div>
-  </div>
-
-  <!-- ============================================================
-       KIOSK-BEREICH (Alle Ausgaben)
-       ============================================================ -->
-  <div class="kiosk-hero">
-    <div class="section-head">
-      <span class="eyebrow">Der Opfanze-Kiosk</span>
-      <h1>📰 Alle Ausgaben</h1>
-      <p>Das Neueste zuerst – blättere durch das Archiv.</p>
-    </div>
-  </div>
-
-  <!-- Toolbar: Suche + Filter -->
-  <div class="kiosk-toolbar">
-    <div class="search-wrap">
-      <span class="search-icon">🔍</span>
-      <input type="text" id="kioskSearch" placeholder="Ausgabe oder Titel suchen …" aria-label="Ausgaben durchsuchen">
-    </div>
-    <div class="filter-tabs" id="filterTabs">
-      <button class="active" data-filter="alle">Alle</button>
-      <button data-filter="Extrablatt">📄 Extrablätter</button>
-      <button data-filter="Eventblatt">🎪 Eventblätter</button>
-    </div>
-  </div>
-
-  <!-- Hervorgehobene Ausgabe -->
-  <div class="kiosk-hero" id="featuredContainer">
-    <!-- wird per JavaScript befüllt -->
-  </div>
-
-  <!-- Kachel-Raster -->
-  <div class="kiosk-grid" id="kioskGrid">
-    <!-- wird per JavaScript befüllt -->
-  </div>
-
-  <footer class="site-footer">
-    <div class="footer-brand">Das__Mufflon 🐑</div>
-    <p><a href="https://twitch.tv/das__mufflon" target="_blank" rel="noopener">twitch.tv/das__mufflon</a></p>
-  </footer>
-
-  <!-- ============================================================
-       JAVASCRIPT – SO HAT ES FUNKTIONIERT
-       ============================================================ -->
-  <script src="js/Opfanze-data.js"></script>
-  <script src="js/main.js"></script>
-  <script>
-    // ============================================================
-    // OPFANZE KIOSK — JavaScript
-    // ============================================================
-
-    // ---- DOM-Elemente ----
-    const grid = document.getElementById('kioskGrid');
-    const featuredContainer = document.getElementById('featuredContainer');
-    const searchInput = document.getElementById('kioskSearch');
-    const filterButtons = document.querySelectorAll('#filterTabs button');
-
-    let currentFilter = 'alle';
-    let currentSearch = '';
-
-    // ---- Sortierfunktion (höchste Nummer zuerst) ----
-    function sortByNumber(arr) {
-      return [...arr].sort((a, b) => {
-        const numA = parseInt(a.nummer, 10);
-        const numB = parseInt(b.nummer, 10);
-        return numB - numA;
-      });
-    }
-
-    // ---- Render-Funktion (genau wie vorher, nur mit Sortierung) ----
-    function render() {
-      // Daten holen und sortieren
-      const alle = sortByNumber(OPFANZE_AUSGABEN);
-
-      // Filtern
-      let gefiltert = alle.filter(ausgabe => {
-        if (currentFilter === 'alle') return true;
-        return ausgabe.typ === currentFilter;
-      });
-
-      // Suche
-      if (currentSearch.trim()) {
-        const query = currentSearch.toLowerCase().trim();
-        gefiltert = gefiltert.filter(ausgabe => {
-          const nummerMatch = ausgabe.nummer && ausgabe.nummer.includes(query);
-          const titelMatch = ausgabe.titel && ausgabe.titel.toLowerCase().includes(query);
-          const typMatch = ausgabe.typ && ausgabe.typ.toLowerCase().includes(query);
-          return nummerMatch || titelMatch || typMatch;
-        });
-      }
-
-      // Hervorgehobene Ausgabe: erste (neueste) aus der gefilterten Liste
-      let featured = null;
-      let rest = [];
-      if (gefiltert.length > 0) {
-        featured = gefiltert[0];
-        rest = gefiltert.slice(1);
-      }
-
-      // Featured rendern
-      renderFeatured(featured);
-
-      // Grid rendern
-      renderGrid(rest);
-    }
-
-    // ---- Featured rendern ----
-    function renderFeatured(ausgabe) {
-      if (!ausgabe) {
-        featuredContainer.innerHTML = `
-          <div style="text-align:center; padding:20px; color:var(--text-soft);">
-            <p style="font-family:'Patrick Hand',cursive; font-size:1.1rem;">Keine Ausgabe gefunden 🌿</p>
-          </div>
-        `;
-        return;
-      }
-
-      const anzeigeNummer = ausgabe.nummer.slice(0, 2);
-      const typLabel = ausgabe.typ;
-      const typClass = ausgabe.typ === 'Eventblatt' ? 'event' : '';
-      const datumFormatiert = ausgabe.datum ? formatiereDatum(ausgabe.datum) : '';
-
-      featuredContainer.innerHTML = `
-        <a href="${ausgabe.pfad}" target="_blank" rel="noopener" class="featured-card" style="text-decoration:none; color:inherit; display:flex;">
-          <span class="featured-badge">⭐ Neueste Ausgabe</span>
-          <div class="featured-info">
-            <span class="typ-badge ${typClass}">${typLabel}</span>
-            <h2>Ausgabe ${anzeigeNummer}</h2>
-            <p style="font-size:1.1rem; font-weight:600; color:var(--text); margin:0 0 2px;">${ausgabe.titel}</p>
-            <p class="meta">${datumFormatiert}</p>
-            <span class="btn btn-primary">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-              Jetzt lesen
-            </span>
-          </div>
-          <div class="featured-number">#${anzeigeNummer}</div>
-        </a>
-      `;
-    }
-
-    // ---- Grid rendern ----
-    function renderGrid(ausgaben) {
-      if (ausgaben.length === 0) {
-        grid.innerHTML = `<div class="kiosk-empty">Keine Ausgaben gefunden 🌿</div>`;
-        return;
-      }
-
-      let html = '';
-      ausgaben.forEach(ausgabe => {
-        const anzeigeNummer = ausgabe.nummer.slice(0, 2);
-        const typLabel = ausgabe.typ;
-        const typClass = ausgabe.typ === 'Eventblatt' ? 'event' : '';
-        const datumFormatiert = ausgabe.datum ? formatiereDatum(ausgabe.datum) : '';
-
-        html += `
-          <a href="${ausgabe.pfad}" target="_blank" rel="noopener" class="kiosk-card">
-            <span class="card-typ ${typClass}">${typLabel}</span>
-            <div class="card-nummer">#${anzeigeNummer}</div>
-            <div class="card-titel">${ausgabe.titel}</div>
-            <div class="card-datum">${datumFormatiert}</div>
-          </a>
-        `;
-      });
-
-      grid.innerHTML = html;
-    }
-
-    // ---- Event-Listener ----
-    searchInput.addEventListener('input', (e) => {
-      currentSearch = e.target.value;
-      render();
-    });
-
-    filterButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        filterButtons.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        currentFilter = btn.dataset.filter;
-        render();
-      });
-    });
-
-    // ---- Initialer Render ----
-    render();
-  </script>
-</body>
-</html>
+// ------------------------------------------------------------
+// HILFSFUNKTION (wird in Opfanze.html verwendet)
+// ------------------------------------------------------------
+function formatiereDatum(isoDatum) {
+  const monate = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
+  const [jahr, monat, tag] = isoDatum.split("-").map(Number);
+  return `${tag}. ${monate[monat - 1]} ${jahr}`;
+}
