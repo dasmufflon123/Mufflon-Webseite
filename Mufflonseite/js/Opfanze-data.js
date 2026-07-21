@@ -88,49 +88,49 @@ const OPFANZE_AUSGABEN = [
   },
 
   // ============================================================
-  // EXTRA-BLÄTTER
+  // EXTRA-BLÄTTER (Ordner: Extrablatt 2)
   // ============================================================
   {
     typ: "Extrablatt",
     nummer: "0592026",
     titel: "Käferplage und rollende Steine beim Mufflon",
     datum: "2026-04-25",
-    pfad: "assets/Opfanze_assets/Extrablatt/Extrablatt, 0592026, Käferplage und rollende Steine beim Mufflon, 20260425.pdf"
+    pfad: "assets/Opfanze_assets/Extrablatt 2/Extrablatt, 0592026, Käferplage und rollende Steine beim Mufflon, 20260425.pdf"
   },
   {
     typ: "Extrablatt",
     nummer: "0372026",
     titel: "Raub und Zerstörung in der neuen Welt",
     datum: "2026-03-07",
-    pfad: "assets/Opfanze_assets/Extrablatt/Extrablatt, 0372026, Raub und Zerstörung in der neuen Welt, 20260307.pdf"
+    pfad: "assets/Opfanze_assets/Extrablatt 2/Extrablatt, 0372026, Raub und Zerstörung in der neuen Welt, 20260307.pdf"
   },
   {
     typ: "Extrablatt",
     nummer: "0362026",
     titel: "Alles brennt",
     datum: "2026-03-06",
-    pfad: "assets/Opfanze_assets/Extrablatt/Extrablatt, 0362026, Alles brennt, 20260306.pdf"
+    pfad: "assets/Opfanze_assets/Extrablatt 2/Extrablatt, 0362026, Alles brennt, 20260306.pdf"
   },
   {
     typ: "Extrablatt",
     nummer: "0352026",
     titel: "Capybara-Mishandlung auf Ferieninsel",
     datum: "2026-03-05",
-    pfad: "assets/Opfanze_assets/Extrablatt/Extrablatt, 0352026, Capybara-Mishandlung auf Ferieninsel, 20260305.pdf"
+    pfad: "assets/Opfanze_assets/Extrablatt 2/Extrablatt, 0352026, Capybara-Mishandlung auf Ferieninsel, 20260305.pdf"
   },
   {
     typ: "Extrablatt",
     nummer: "0342026",
     titel: "Alpaka-Adoption",
     datum: "2026-03-03",
-    pfad: "assets/Opfanze_assets/Extrablatt/Extrablatt, 0342026, Alpaka-Adoption, 20260303.pdf"
+    pfad: "assets/Opfanze_assets/Extrablatt 2/Extrablatt, 0342026, Alpaka-Adoption, 20260303.pdf"
   },
   {
     typ: "Extrablatt",
     nummer: "0322026",
     titel: "Horror-Campingausflug",
     datum: "2026-02-28",
-    pfad: "assets/Opfanze_assets/Extrablatt/Extrablatt, 0322026, Horror-Campingausflug, 20260228.pdf"
+    pfad: "assets/Opfanze_assets/Extrablatt 2/Extrablatt, 0322026, Horror-Campingausflug, 20260228.pdf"
   }
 ];
 
