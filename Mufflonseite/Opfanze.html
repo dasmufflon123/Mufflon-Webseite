@@ -28,6 +28,70 @@
       border-radius: var(--radius-lg);
     }
 
+    /* ---- Herausgeber-Box (Maggus) ---- */
+    .herausgeber-box {
+      max-width: 1080px;
+      margin: 0 auto 30px;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      gap: 35px;
+      background: var(--cream-soft);
+      border-radius: var(--radius-lg);
+      border: 2px solid rgba(107,66,38,0.08);
+      box-shadow: var(--shadow-soft);
+      padding: 25px 35px;
+    }
+
+    .herausgeber-box .herausgeber-bild {
+      width: 160px;
+      height: auto;
+      flex-shrink: 0;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-soft);
+      display: block;
+    }
+
+    .herausgeber-box .herausgeber-info {
+      flex: 1;
+      text-align: left;
+    }
+
+    .herausgeber-box .herausgeber-name {
+      font-family: 'Baloo 2', sans-serif;
+      font-size: 1.5rem;
+      color: var(--horn-brown);
+      margin-bottom: 2px;
+    }
+
+    .herausgeber-box .herausgeber-rolle {
+      font-family: 'Patrick Hand', cursive;
+      color: var(--text-soft);
+      font-size: 1rem;
+      margin-bottom: 8px;
+    }
+
+    .herausgeber-box .herausgeber-text {
+      font-size: 0.95rem;
+      color: var(--text-soft);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    @media (max-width: 640px) {
+      .herausgeber-box {
+        flex-direction: column;
+        text-align: center;
+        padding: 24px 20px;
+      }
+      .herausgeber-box .herausgeber-info {
+        text-align: center;
+      }
+      .herausgeber-box .herausgeber-bild {
+        width: 120px;
+      }
+    }
+
     /* ---- Kiosk-Hero ---- */
     .kiosk-hero {
       padding: 40px 24px 30px;
@@ -282,72 +346,6 @@
       margin-top: 6px;
     }
 
-    /* ---- Herausgeber-Box (Maggus links, Text rechts) ---- */
-    .herausgeber-box {
-      max-width: 900px;
-      margin: 40px auto 20px;
-      padding: 0 24px;
-      display: flex;
-      align-items: center;
-      gap: 30px;
-      background: var(--cream-soft);
-      border-radius: var(--radius-lg);
-      border: 2px solid rgba(107,66,38,0.08);
-      box-shadow: var(--shadow-soft);
-      padding: 30px 35px;
-    }
-
-    .herausgeber-box .herausgeber-bild {
-      width: 160px;
-      height: 160px;
-      border-radius: 50%;
-      object-fit: cover;
-      flex-shrink: 0;
-      border: 4px solid var(--terracotta);
-      box-shadow: var(--shadow-soft);
-    }
-
-    .herausgeber-box .herausgeber-info {
-      flex: 1;
-      text-align: left;
-    }
-
-    .herausgeber-box .herausgeber-name {
-      font-family: 'Baloo 2', sans-serif;
-      font-size: 1.5rem;
-      color: var(--horn-brown);
-      margin-bottom: 2px;
-    }
-
-    .herausgeber-box .herausgeber-rolle {
-      font-family: 'Patrick Hand', cursive;
-      color: var(--text-soft);
-      font-size: 1rem;
-      margin-bottom: 8px;
-    }
-
-    .herausgeber-box .herausgeber-text {
-      font-size: 0.95rem;
-      color: var(--text-soft);
-      line-height: 1.6;
-      margin: 0;
-    }
-
-    @media (max-width: 640px) {
-      .herausgeber-box {
-        flex-direction: column;
-        text-align: center;
-        padding: 24px 20px;
-      }
-      .herausgeber-box .herausgeber-info {
-        text-align: center;
-      }
-      .herausgeber-box .herausgeber-bild {
-        width: 120px;
-        height: 120px;
-      }
-    }
-
     /* ---- Leerer Zustand ---- */
     .kiosk-empty {
       text-align: center;
@@ -416,7 +414,22 @@
   </div>
 
   <!-- ============================================================
-       KIOSK-BEREICH
+       HERAUSGEBER-BOX (Maggus)
+       ============================================================ -->
+  <div class="herausgeber-box">
+    <img src="assets/Opfanze_assets/Maggus OPfanze.png" alt="Maggus" class="herausgeber-bild">
+    <div class="herausgeber-info">
+      <div class="herausgeber-name">Maggus</div>
+      <div class="herausgeber-rolle">✍️ Herausgeber der Opfanze</div>
+      <p class="herausgeber-text">
+        Seit der ersten Ausgabe schreibt, illustriert, produziert und schnubbt Maggus jede Opfanze persönlich.
+        Danke für deine wöchentlichen Geschichten aus dem Stall! ♥
+      </p>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       KIOSK-BEREICH (Alle Ausgaben)
        ============================================================ -->
   <div class="kiosk-hero">
     <div class="section-head">
@@ -449,28 +462,13 @@
     <!-- wird per JavaScript befüllt -->
   </div>
 
-  <!-- ============================================================
-       HERAUSGEBER-BOX (Maggus links, Text rechts)
-       ============================================================ -->
-  <div class="herausgeber-box">
-    <img src="assets/Opfanze_assets/Maggus OPfanze.png" alt="Maggus" class="herausgeber-bild">
-    <div class="herausgeber-info">
-      <div class="herausgeber-name">Maggus</div>
-      <div class="herausgeber-rolle">✍️ Herausgeber der Opfanze</div>
-      <p class="herausgeber-text">
-        Seit der ersten Ausgabe schreibt, illustriert, produziert und schnubbt Maggus jede Opfanze persönlich. 
-        Danke für deine wöchentlichen Geschichten aus dem Stall! ♥
-      </p>
-    </div>
-  </div>
-
   <footer class="site-footer">
     <div class="footer-brand">Das__Mufflon 🐑</div>
     <p><a href="https://twitch.tv/das__mufflon" target="_blank" rel="noopener">twitch.tv/das__mufflon</a></p>
   </footer>
 
   <!-- ============================================================
-       WICHTIG: Hier wird die RICHTIGE Datenbank geladen!
+       WICHTIG: Datenbank laden!
        ============================================================ -->
   <script src="js/Opfanze-data.js"></script>
   <script src="js/main.js"></script>
@@ -479,13 +477,17 @@
     // OPFANZE KIOSK — JavaScript
     // ============================================================
 
-    // Sortierung: neueste zuerst (nach Datum)
-    function sortByDate(arr) {
-      return [...arr].sort((a, b) => new Date(b.datum) - new Date(a.datum));
+    // Sortierung: nach Nummer (höchste zuerst)
+    function sortByNumber(arr) {
+      return [...arr].sort((a, b) => {
+        const numA = parseInt(a.nummer, 10);
+        const numB = parseInt(b.nummer, 10);
+        return numB - numA;
+      });
     }
 
     function getAllAusgaben() {
-      return sortByDate(OPFANZE_AUSGABEN);
+      return sortByNumber(OPFANZE_AUSGABEN);
     }
 
     // ---- DOM-Elemente ----
@@ -501,13 +503,11 @@
     function render() {
       const alle = getAllAusgaben();
       
-      // Filtern
       let gefiltert = alle.filter(ausgabe => {
         if (currentFilter === 'alle') return true;
         return ausgabe.typ === currentFilter;
       });
 
-      // Suche
       if (currentSearch.trim()) {
         const query = currentSearch.toLowerCase().trim();
         gefiltert = gefiltert.filter(ausgabe => {
@@ -518,7 +518,6 @@
         });
       }
 
-      // Hervorgehobene Ausgabe: erste (neueste) aus der gefilterten Liste
       let featured = null;
       let rest = [];
       if (gefiltert.length > 0) {
@@ -526,24 +525,18 @@
         rest = gefiltert.slice(1);
       }
 
-      // Featured rendern
       renderFeatured(featured);
-
-      // Grid rendern
       renderGrid(rest);
     }
 
     // ---- Featured rendern ----
     function renderFeatured(ausgabe) {
       if (!ausgabe) {
-        featuredContainer.innerHTML = `
-          <div style="text-align:center; padding:20px; color:var(--text-soft);">
-            <p style="font-family:'Patrick Hand',cursive; font-size:1.1rem;">Keine Ausgabe gefunden 🌿</p>
-          </div>
-        `;
+        featuredContainer.innerHTML = `<div class="kiosk-empty">Keine Ausgabe gefunden 🌿</div>`;
         return;
       }
 
+      const anzeigeNummer = ausgabe.nummer.slice(0, 2);
       const typLabel = ausgabe.typ;
       const typClass = ausgabe.typ === 'Eventblatt' ? 'event' : '';
       const datumFormatiert = ausgabe.datum ? formatiereDatum(ausgabe.datum) : '';
@@ -553,7 +546,7 @@
           <span class="featured-badge">⭐ Neueste Ausgabe</span>
           <div class="featured-info">
             <span class="typ-badge ${typClass}">${typLabel}</span>
-            <h2>Ausgabe ${ausgabe.nummer}</h2>
+            <h2>Ausgabe ${anzeigeNummer}</h2>
             <p style="font-size:1.1rem; font-weight:600; color:var(--text); margin:0 0 2px;">${ausgabe.titel}</p>
             <p class="meta">${datumFormatiert}</p>
             <span class="btn btn-primary">
@@ -561,7 +554,7 @@
               Jetzt lesen
             </span>
           </div>
-          <div class="featured-number">#${ausgabe.nummer}</div>
+          <div class="featured-number">#${anzeigeNummer}</div>
         </a>
       `;
     }
@@ -575,6 +568,7 @@
 
       let html = '';
       ausgaben.forEach(ausgabe => {
+        const anzeigeNummer = ausgabe.nummer.slice(0, 2);
         const typLabel = ausgabe.typ;
         const typClass = ausgabe.typ === 'Eventblatt' ? 'event' : '';
         const datumFormatiert = ausgabe.datum ? formatiereDatum(ausgabe.datum) : '';
@@ -582,7 +576,7 @@
         html += `
           <a href="${ausgabe.pfad}" target="_blank" rel="noopener" class="kiosk-card">
             <span class="card-typ ${typClass}">${typLabel}</span>
-            <div class="card-nummer">#${ausgabe.nummer}</div>
+            <div class="card-nummer">#${anzeigeNummer}</div>
             <div class="card-titel">${ausgabe.titel}</div>
             <div class="card-datum">${datumFormatiert}</div>
           </a>
