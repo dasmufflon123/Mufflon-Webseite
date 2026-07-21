@@ -1,62 +1,78 @@
 /* ============================================================
-   DIE PFLANZE — Ausgaben-Datenbank
+   OPFANZE — Kiosk-Datenbank
    ============================================================
-   Hier trägst du jede neue Ausgabe ein. Das ist die EINZIGE
-   Datei, die du für neue Ausgaben bearbeiten musst — sowohl
-   die Archiv-Seite als auch die Opfanze-Seite (die dort immer
-   die neueste Ausgabe zeigt) lesen automatisch aus dieser Liste.
-
+   Hier trägst du ALLE Ausgaben ein.
+   
    SO FÜGST DU EINE NEUE AUSGABE HINZU:
    Kopiere einen Eintrag, füge ihn GANZ OBEN in die Liste ein
    (neueste zuerst) und passe die Werte an:
 
    {
-     nummer: 12,                          // fortlaufende Ausgaben-Nummer
-     datum: "2026-07-09",                 // Format: JJJJ-MM-TT
-     titel: "Ausgabe 12",                 // frei wählbarer Titel
-     teil1_label: "Titelseite",           // Beschriftung für PDF 1
-     teil1_url: "https://.../datei1.pdf", // Link zu PDF 1 (später aus Cloudflare R2)
-     teil2_label: "Innenseiten",          // Beschriftung für PDF 2
-     teil2_url: "https://.../datei2.pdf"  // Link zu PDF 2
+     typ: "Extrablatt",            // "Extrablatt" oder "Eventblatt"
+     nummer: "086",                // Ausgabenummer (als String, für die Anzeige)
+     titel: "Das Mufflon macht Dinge",
+     datum: "2026-07-17",          // Format: JJJJ-MM-TT
+     pfad: "assets/Opfanze_assets/Extrablatt 2/Extrablatt, 086, Das Mufflon macht Dinge, 20260717.pdf"
    }
 
-   Sobald Cloudflare R2 eingerichtet ist, ersetzt du die
-   Platzhalter-Links unten durch die echten R2-Links.
+   TIP: Die neueste Ausgabe sollte GANZ OBEN stehen!
    ============================================================ */
 
-const PFLANZE_AUSGABEN = [
+const OPFANZE_AUSGABEN = [
+  // ============================================================
+  // NEUSTE AUSGABEN (hier nach unten einfügen)
+  // ============================================================
+  
+  // --- Extrablätter ---
   {
-    nummer: 3,
-    datum: "2026-07-08",
-    titel: "Ausgabe 3 — Beispiel",
-    teil1_label: "Titelseite",
-    teil1_url: "#",
-    teil2_label: "Innenseiten",
-    teil2_url: "#"
+    typ: "Extrablatt",
+    nummer: "086",
+    titel: "Das Mufflon macht Dinge",
+    datum: "2026-07-17",
+    pfad: "assets/Opfanze_assets/Extrablatt 2/Extrablatt, 086, Das Mufflon macht Dinge, 20260717.pdf"
   },
   {
-    nummer: 2,
-    datum: "2026-07-06",
-    titel: "Ausgabe 2 — Beispiel",
-    teil1_label: "Titelseite",
-    teil1_url: "#",
-    teil2_label: "Innenseiten",
-    teil2_url: "#"
+    typ: "Extrablatt",
+    nummer: "085",
+    titel: "Mufflon auf dem elektrischen Stuhl",
+    datum: "2026-07-10",
+    pfad: "assets/Opfanze_assets/Extrablatt 2/Extrablatt, 085, Mufflon auf dem elektrischen Stuhl, 20260710.pdf"
+  },
+  
+  // --- Eventblätter ---
+  {
+    typ: "Eventblatt",
+    nummer: "052",
+    titel: "Hufgames 2026",
+    datum: "2026-05-03",
+    pfad: "assets/Opfanze_assets/Eventblatt/Eventblatt, 052, Hufgames 2026, 20260503.pdf"
   },
   {
-    nummer: 1,
-    datum: "2026-07-04",
-    titel: "Ausgabe 1 — Beispiel",
-    teil1_label: "Titelseite",
-    teil1_url: "#",
-    teil2_label: "Innenseiten",
-    teil2_url: "#"
-  }
+    typ: "Eventblatt",
+    nummer: "032",
+    titel: "2 Jahre Das Mufflon auf Twitch",
+    datum: "2026-04-14",
+    pfad: "assets/Opfanze_assets/Eventblatt/Eventblatt, 032, 2 Jahre Das Mufflon auf Twitch, 20260414.pdf"
+  },
+
+  // ============================================================
+  // WEITERE AUSGABEN (füge hier deine bestehenden Ausgaben ein)
+  // ============================================================
+  // ... weitere Einträge hier ...
 ];
 
-// Hilfsfunktion: Datum hübsch auf Deutsch formatieren
+// ------------------------------------------------------------
+// HILFSFUNKTIONEN (nicht ändern!)
+// ------------------------------------------------------------
+
 function formatiereDatum(isoDatum) {
   const monate = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
   const [jahr, monat, tag] = isoDatum.split("-").map(Number);
   return `${tag}. ${monate[monat - 1]} ${jahr}`;
+}
+
+function getOrdnerFuerTyp(typ) {
+  if (typ === "Extrablatt") return "Extrablatt 2";
+  if (typ === "Eventblatt") return "Eventblatt";
+  return "";
 }
