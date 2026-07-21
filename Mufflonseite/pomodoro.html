@@ -1,0 +1,2171 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pomodoro — Das__Mufflon</title>
+<link rel="icon" type="image/png" href="assets/mufflon-mascot.png">
+<link rel="stylesheet" href="css/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-deep: #241b15;
+    --bg-mid: #3d2b20;
+    --bg-warm: #4d392b;
+    --cream: #f7ead9;
+    --cream-dim: #d9c4a9;
+    --ember: #ef8a5c;
+    --ember-soft: #f5a96b;
+    --peach-glow: #ffbf8a;
+    --rust: #c1666b;
+    --rust-dark: #a34e53;
+    --sage: #8fa681;
+    --sage-dark: #6d8560;
+    --prio-high: #d9635e;
+    --prio-medium: #e3a548;
+    --prio-low: #8fa681;
+    --glass: rgba(255, 221, 189, 0.14);
+    --glass-border: rgba(255, 224, 196, 0.28);
+    --text-dark: #3E2C1E;
+  }
+
+  * { box-sizing: border-box; }
+
+  body{
+    margin:0;
+    min-height:100vh;
+    font-family:'Quicksand', sans-serif;
+    background:
+      radial-gradient(circle at 10% 12%, rgba(124, 148, 115, 0.10), transparent 38%),
+      radial-gradient(circle at 18% 94%, rgba(255, 179, 138, 0.40), transparent 55%),
+      radial-gradient(circle at 82% 98%, rgba(246, 184, 196, 0.42), transparent 55%),
+      radial-gradient(circle at 50% 102%, rgba(255, 200, 176, 0.30), transparent 60%),
+      linear-gradient(180deg, #F6ECDC 0%, #F6ECDC 58%, #FBDBC7 80%, #F6C7D1 100%);
+    color: var(--text-dark);
+    overflow-x:hidden;
+    position:relative;
+  }
+
+  /* Zentriert den Timer-Bereich unterhalb vom Mufflon-Header */
+  .pomodoro-main{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding: 32px 16px;
+    min-height: calc(100vh - 76px);
+  }
+
+  /* Fireflies */
+  .firefly{
+    position:fixed;
+    width:4px; height:4px;
+    border-radius:50%;
+    background: var(--ember-soft);
+    box-shadow: 0 0 6px 2px rgba(242,193,78,0.7);
+    opacity:0;
+    pointer-events:none;
+    animation: drift linear infinite, twinkle ease-in-out infinite;
+  }
+  @keyframes drift{
+    from { transform: translateY(0) translateX(0); }
+    to   { transform: translateY(-120px) translateX(30px); }
+  }
+  @keyframes twinkle{
+    0%, 100% { opacity: 0; }
+    50% { opacity: 0.9; }
+  }
+
+  /* Window vine decoration */
+  .vine{
+    position:fixed;
+    top:0; left:0;
+    width:120px;
+    height:100vh;
+    opacity:0.55;
+    pointer-events:none;
+    z-index:1;
+    filter: drop-shadow(0 2px 3px rgba(0,0,0,0.25));
+  }
+  .vine.right{ left:auto; right:0; transform: scaleX(-1); }
+
+  .app{
+    position:relative;
+    z-index:2;
+    display:flex;
+    flex-wrap:wrap;
+    gap:28px;
+    align-items:flex-start;
+    justify-content:center;
+    max-width: 1080px;
+    width:100%;
+  }
+
+  .card{
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 28px;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.04);
+    padding: 28px 30px 32px;
+  }
+
+  /* Todo-Card sitzt jetzt auf hellem Untergrund -> eigene helle Kartenfarbe + dunkler Text */
+  .card.todo-card{
+    --cream: #3E2C1E;
+    --cream-dim: #6B5645;
+    background: rgba(251, 245, 234, 0.92);
+    border: 1px solid rgba(107, 66, 38, 0.14);
+    box-shadow: 0 16px 40px rgba(107, 66, 38, 0.14);
+  }
+  .card.todo-card h1{ color: #C1662E; text-shadow: none; }
+
+  .user-tag{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.88rem;
+    color: var(--cream-dim);
+    margin: -6px 0 14px;
+  }
+  .user-tag .who{ font-weight: 700; color: var(--cream); }
+  .user-tag button{
+    background: none;
+    border: none;
+    color: inherit;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: inherit;
+    padding: 0;
+  }
+  .user-tag .name-form{
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .user-tag .name-form input{
+    font-size: 0.88rem;
+    padding: 4px 8px;
+    border-radius: 8px;
+    border: 1px solid rgba(107,66,38,0.25);
+    background: #fff;
+    color: var(--text-dark);
+    width: 130px;
+  }
+  .user-tag .name-form button.save{
+    background: var(--terracotta);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 4px 10px;
+    cursor: pointer;
+    font-weight: 700;
+  }
+  .todo-author{
+    font-size: 0.78rem;
+    color: var(--cream-dim);
+    margin-left: 6px;
+    font-style: italic;
+  }
+
+  h1{
+    font-family:'Caveat', cursive;
+    font-size: 2.6rem;
+    margin: 0 0 4px;
+    color: var(--ember-soft);
+    text-shadow: 0 0 18px rgba(242,193,78,0.35);
+    text-align:center;
+  }
+  .subtitle{
+    text-align:center;
+    color: var(--cream-dim);
+    font-size:0.85rem;
+    letter-spacing:0.04em;
+    margin-bottom: 18px;
+  }
+
+  /* Timer card */
+  .timer-wrap{
+    position: relative;
+  }
+  .card.timer-card{
+    position: relative;
+    z-index: 2;
+    background:
+      radial-gradient(circle at 18% 12%, rgba(255,255,255,0.38), transparent 42%),
+      radial-gradient(circle at 88% 92%, rgba(120,70,45,0.28), transparent 55%),
+      linear-gradient(155deg,
+        rgba(246,210,168,0.92) 0%,
+        rgba(231,164,114,0.92) 32%,
+        rgba(217,138,92,0.92) 65%,
+        rgba(185,107,74,0.92) 100%);
+    backdrop-filter: none;
+    border: 1px solid rgba(255,238,220,0.3);
+  }
+  .card.timer-card h1{
+    color: #5c3319;
+    text-shadow: 0 1px 1px rgba(255,255,255,0.35);
+  }
+  .card.timer-card .subtitle,
+  .card.timer-card .status{
+    color: rgba(58,32,16,0.72);
+  }
+  .card.timer-card .time{
+    color: #3d2313;
+  }
+    .mascot{
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    width: 150px;
+    z-index: 1;
+    opacity: 0;
+    transform: translate(-50%, 0%);
+    transition: transform 0.7s cubic-bezier(.32, 1.3, .38, 1), opacity 0.35s ease;
+    margin-bottom: -20px;
+  }
+  .mascot.peek{
+    opacity: 1;
+    transform: translate(-50%, 0%);
+  }
+  .mascot-img{
+    display:block;
+    width: 100%;
+    cursor: pointer;
+    transform-origin: center center;
+    filter: drop-shadow(0 12px 16px rgba(0,0,0,0.35));
+    animation: mascotPulse 4s ease-in-out infinite;
+    animation-play-state: paused;
+  }
+  .mascot.peek .mascot-img{
+    animation-play-state: running;
+  }
+  @keyframes mascotPulse{
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.045); }
+  }
+
+  .timer-card{
+    width: 300px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    margin-top: 110px;
+  }
+
+  .ring-wrap{
+    position:relative;
+    width: 220px;
+    height: 220px;
+    margin: 6px 0 22px;
+  }
+  .ring-wrap svg{ transform: rotate(-90deg); overflow: visible; }
+  .ring-bg{ fill:none; stroke: rgba(70,40,18,0.14); stroke-width: 10; }
+  .ring-progress{
+    fill:none;
+    stroke: url(#emberGradient);
+    stroke-width: 10;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.4s linear;
+    filter: url(#ringGlow);
+  }
+
+  .custom-timer-btn{
+    position:absolute;
+    left: -14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: #3d2313;
+    color: #f5dcc0;
+    border: 2px solid rgba(255,255,255,0.25);
+    font-size: 1.15rem;
+    font-weight: 700;
+    line-height:1;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.35);
+    z-index: 5;
+    transition: transform 0.15s ease;
+  }
+  .custom-timer-btn:hover{ transform: translateY(-50%) scale(1.1); }
+
+  .custom-timer-popover{
+    position:absolute;
+    left: -14px;
+    top: 50%;
+    transform: translate(-100%, -50%) scale(0.95);
+    margin-left: -10px;
+    background: rgba(33,21,16,0.96);
+    border: 1px solid rgba(247,234,217,0.18);
+    border-radius: 14px;
+    padding: 12px 14px 14px;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    width: 140px;
+    opacity:0;
+    pointer-events:none;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    z-index: 6;
+    box-shadow: 0 10px 24px rgba(0,0,0,0.4);
+  }
+  .custom-timer-popover.open{
+    opacity:1;
+    pointer-events:auto;
+    transform: translate(-100%, -50%) scale(1);
+  }
+  .ctp-title{
+    font-family:'Caveat', cursive;
+    font-size: 1.2rem;
+    color: var(--ember-soft);
+    text-align:center;
+    margin-bottom:2px;
+  }
+  .custom-timer-popover .field-row{
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .custom-timer-popover input{
+    width: 54px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(247,234,217,0.2);
+    border-radius: 8px;
+    padding: 5px 6px;
+    color: var(--cream);
+    font-family:'Quicksand', sans-serif;
+    font-size: 0.85rem;
+    outline:none;
+  }
+  .custom-timer-popover input:focus{ border-color: var(--ember-soft); }
+  .custom-timer-popover label{
+    font-size: 0.78rem;
+    color: var(--cream-dim);
+  }
+  .custom-timer-popover button{
+    margin-top: 4px;
+    border:none;
+    border-radius: 10px;
+    padding: 7px 8px;
+    background: linear-gradient(155deg, var(--ember-soft), var(--ember));
+    color: #2b1810;
+    font-weight:700;
+    font-size: 0.82rem;
+    cursor:pointer;
+    transition: transform 0.15s ease, filter 0.15s ease;
+  }
+  .custom-timer-popover button:hover{ transform: translateY(-1px); filter:brightness(1.06); }
+
+  /* ---------- Login-Overlay ---------- */
+  .login-backdrop{
+    position: fixed;
+    inset: 0;
+    background: rgba(20,12,8,0.55);
+    backdrop-filter: blur(2px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 20px;
+  }
+  .login-backdrop.open{ display: flex; }
+  .login-panel{
+    background: rgba(33,21,16,0.97);
+    border: 1px solid rgba(247,234,217,0.18);
+    border-radius: 18px;
+    padding: 26px 26px 22px;
+    width: 100%;
+    max-width: 280px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    text-align: center;
+  }
+  .login-panel .ctp-title{ font-size: 1.5rem; margin-bottom: 4px; }
+  .login-panel .login-sub{
+    font-size: 0.82rem;
+    color: var(--cream-dim);
+    margin-bottom: 16px;
+    line-height: 1.4;
+  }
+  .login-panel input{
+    width: 100%;
+    box-sizing: border-box;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(247,234,217,0.2);
+    border-radius: 10px;
+    padding: 9px 12px;
+    color: var(--cream);
+    font-family: 'Quicksand', sans-serif;
+    font-size: 0.92rem;
+    outline: none;
+    margin-bottom: 10px;
+  }
+  .login-panel input:focus{ border-color: var(--ember-soft); }
+  .login-panel button.login-submit{
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    padding: 10px;
+    background: linear-gradient(155deg, var(--ember-soft), var(--ember));
+    color: #2b1810;
+    font-weight: 700;
+    font-size: 0.92rem;
+    cursor: pointer;
+    transition: transform 0.15s ease, filter 0.15s ease;
+  }
+  .login-panel button.login-submit:hover{ transform: translateY(-1px); filter: brightness(1.06); }
+  .login-error{
+    color: #ff9d8a;
+    font-size: 0.8rem;
+    margin: -4px 0 10px;
+    min-height: 1em;
+  }
+
+  /* ---------- Gelber Klebezettel ---------- */
+  .sticky-trigger{
+    position: absolute;
+    top: -10px;
+    right: 18px;
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(160deg, #FFF3A0, #FFE066);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.22);
+    border: none;
+    cursor: pointer;
+    transform: rotate(6deg);
+    animation: stickyWiggle 3.6s ease-in-out infinite;
+    z-index: 5;
+  }
+  .sticky-trigger::before{
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    right: -1px;
+    width: 12px;
+    height: 12px;
+    background: linear-gradient(135deg, transparent 50%, rgba(0,0,0,0.14) 50%);
+  }
+  .sticky-trigger:hover{ animation-play-state: paused; transform: rotate(0deg) scale(1.06); }
+
+  @keyframes stickyWiggle{
+    0%, 100% { transform: rotate(6deg); }
+    50%      { transform: rotate(-4deg); }
+  }
+
+  .sticky-notes-layer{
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 200;
+  }
+
+  .sticky-note{
+    position: fixed;
+    width: 220px;
+    min-height: 200px;
+    background: linear-gradient(165deg, #FFF6B8, #FFE873);
+    box-shadow: 0 14px 34px rgba(0,0,0,0.32);
+    padding: 14px 14px 16px;
+    transform: rotate(-2deg);
+    display: flex;
+    flex-direction: column;
+    font-family: 'Patrick Hand', 'Quicksand', sans-serif;
+    pointer-events: auto;
+  }
+  .sticky-note::after{
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    width: 26px;
+    height: 26px;
+    background: linear-gradient(135deg, transparent 50%, rgba(0,0,0,0.14) 50%);
+  }
+  .sticky-drag-handle{
+    height: 18px;
+    margin: -14px -14px 8px;
+    cursor: grab;
+    touch-action: none;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 4px 6px 0 0;
+  }
+  .sticky-drag-handle:active{ cursor: grabbing; }
+  .sticky-palette{
+    background: none;
+    border: none;
+    font-size: 1rem;
+    color: rgba(80, 65, 10, 0.55);
+    cursor: pointer;
+    line-height: 1;
+    padding: 2px 4px;
+    margin-right: auto;
+  }
+  .sticky-palette:hover{ color: rgba(80, 65, 10, 0.9); }
+  .sticky-color-input{
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .sticky-resize-handle{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 22px;
+    height: 22px;
+    cursor: nwse-resize;
+    touch-action: none;
+    z-index: 2;
+  }
+  .sticky-close{
+    background: none;
+    border: none;
+    font-size: 1rem;
+    color: rgba(80, 65, 10, 0.55);
+    cursor: pointer;
+    line-height: 1;
+    padding: 2px 4px;
+  }
+  .sticky-close:hover{ color: rgba(80, 65, 10, 0.9); }
+  .sticky-note textarea{
+    flex: 1;
+    resize: none;
+    border: none;
+    background: transparent;
+    outline: none;
+    font-family: inherit;
+    font-size: 1.1rem;
+    line-height: 1.4;
+    color: #4a3c05;
+    min-height: 150px;
+    overflow: hidden;
+  }
+
+  .ring-center{
+    position:absolute;
+    inset:0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+  }
+  .time{
+    font-size: 2.6rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    font-variant-numeric: tabular-nums;
+  }
+  .status{
+    font-size: 0.75rem;
+    color: var(--cream-dim);
+    margin-top: 4px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .controls{
+    display:flex;
+    gap: 12px;
+  }
+  .btn{
+    border:none;
+    cursor:pointer;
+    font-family:'Quicksand', sans-serif;
+    font-weight:600;
+    font-size:0.9rem;
+    padding: 12px 18px;
+    border-radius: 16px;
+    display:flex;
+    align-items:center;
+    gap:7px;
+    color: var(--bg-deep);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+  }
+  .btn:hover{ transform: translateY(-2px); filter: brightness(1.06); }
+  .btn:active{ transform: translateY(0px) scale(0.97); }
+  .btn svg{ width:16px; height:16px; }
+
+  .btn-play{ background: linear-gradient(155deg, var(--sage) 0%, var(--sage-dark) 100%); color:#1d2b18;}
+  .btn-pause{ background: linear-gradient(155deg, var(--ember-soft) 0%, var(--ember) 100%); }
+  .btn-stop{ background: linear-gradient(155deg, var(--rust) 0%, var(--rust-dark) 100%); color:#2c1416;}
+
+  /* Todo card */
+  .todo-card{
+    width: 540px;
+    display:flex;
+    flex-direction:column;
+    position: relative;
+  }
+
+  .add-row{
+    display:flex;
+    gap:8px;
+    margin-bottom: 16px;
+  }
+  .add-row input{
+    flex:1;
+    background: rgba(0,0,0,0.18);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    padding: 10px 14px;
+    color: var(--cream);
+    font-family:'Quicksand', sans-serif;
+    font-size: 0.92rem;
+    outline:none;
+  }
+  .add-row input::placeholder{ color: rgba(247,234,217,0.4); }
+  .add-row input:focus{ border-color: var(--ember-soft); }
+
+  .add-btn{
+    width: 42px;
+    height: 42px;
+    flex-shrink:0;
+    border:none;
+    cursor:pointer;
+    border-radius: 14px;
+    background: linear-gradient(155deg, var(--ember-soft), var(--ember));
+    color: var(--bg-deep);
+    font-size: 1.4rem;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+    transition: transform 0.15s ease, filter 0.15s ease;
+  }
+  .add-btn:hover{ transform: translateY(-2px) rotate(90deg); filter:brightness(1.08); }
+
+  .todo-list{
+    list-style:none;
+    margin:0; padding:0;
+    display:flex;
+    flex-direction:column;
+    gap:9px;
+    max-height: 480px;
+    overflow-y:auto;
+    padding-top: 34px;
+    padding-left: 8px;
+    padding-right: 8px;
+    margin-top: -34px;
+    margin-left: -8px;
+    margin-right: -8px;
+  }
+  .todo-list::-webkit-scrollbar{ width:6px; }
+  .todo-list::-webkit-scrollbar-thumb{ background: rgba(247,234,217,0.2); border-radius:4px; }
+
+  .todo-item{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background: rgba(0,0,0,0.14);
+    border: 2px solid rgba(247,234,217,0.08);
+    border-radius: 14px;
+    padding: 10px 12px;
+    position: relative;
+    transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+  }
+  .todo-item:hover{
+    transform: scale(1.02);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+  }
+  .todo-item.prio-high{ border-color: var(--prio-high); background: rgba(217,99,94,0.10); }
+  .todo-item.prio-medium{ border-color: var(--prio-medium); background: rgba(227,165,72,0.10); }
+  .todo-item.prio-low{ border-color: var(--prio-low); background: rgba(143,166,129,0.10); }
+  .todo-item.prio-high:hover{ border-color: var(--prio-high); background: rgba(217,99,94,0.20); }
+  .todo-item.prio-medium:hover{ border-color: var(--prio-medium); background: rgba(227,165,72,0.20); }
+  .todo-item.prio-low:hover{ border-color: var(--prio-low); background: rgba(143,166,129,0.20); }
+  .todo-item:not(.prio-high):not(.prio-medium):not(.prio-low):hover{
+    border-color: var(--terracotta);
+  }
+
+  .edit-btn{
+    background:none;
+    border:none;
+    color: rgba(107, 66, 38, 0.5);
+    cursor:pointer;
+    font-size: 0.95rem;
+    line-height:1;
+    padding: 2px 4px;
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: opacity 0.15s ease, transform 0.15s ease, color 0.15s ease;
+  }
+  .todo-item:hover .edit-btn{
+    opacity: 1;
+    transform: translateX(0);
+  }
+  .edit-btn:hover{ color: var(--terracotta); }
+
+  /* ---------- Drag-Griff zum manuellen Verschieben ---------- */
+  .drag-handle{
+    flex-shrink: 0;
+    width: 18px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(107, 66, 38, 0.4);
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+    font-size: 1rem;
+    letter-spacing: -2px;
+    transition: color 0.15s ease;
+  }
+  .drag-handle:hover{ color: var(--terracotta); }
+  .drag-handle:active{ cursor: grabbing; }
+
+  .todo-item, .subtask-item{ touch-action: pan-y; }
+
+  .todo-item.dragging, .subtask-item.dragging{
+    cursor: grabbing;
+    transform: scale(1.03);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+    z-index: 30;
+    transition: none !important;
+  }
+
+  .todo-item:not(.dragging), .subtask-item:not(.dragging){
+    transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+  }
+
+  @keyframes dropSettle {
+    0%   { box-shadow: 0 0 0 3px rgba(221, 138, 70, 0.55); }
+    100% { box-shadow: 0 0 0 0 rgba(221, 138, 70, 0); }
+  }
+  .todo-item.just-dropped, .subtask-item.just-dropped{
+    animation: dropSettle 0.6s ease-out;
+  }
+
+  .todo-edit-input{
+    flex:1;
+    font-family:'Quicksand', sans-serif;
+    font-size: 1rem;
+    line-height: 1.4;
+    color: var(--text-dark);
+    background: #fff;
+    border: 1px solid rgba(107,66,38,0.3);
+    border-radius: 8px;
+    padding: 3px 8px;
+    min-width: 0;
+  }
+
+  .prio-picker{
+    position:relative;
+    flex-shrink:0;
+  }
+  .prio-dot-btn{
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.35);
+    cursor:pointer;
+    padding:0;
+    transition: transform 0.15s ease;
+  }
+  .prio-dot-btn:hover{ transform: scale(1.1); }
+  .prio-dot-btn.high{ background: var(--prio-high); box-shadow: 0 0 7px rgba(217,99,94,0.8); }
+  .prio-dot-btn.medium{ background: var(--prio-medium); box-shadow: 0 0 7px rgba(227,165,72,0.8); }
+  .prio-dot-btn.low{ background: var(--prio-low); box-shadow: 0 0 7px rgba(143,166,129,0.8); }
+
+  .prio-options{
+    position:absolute;
+    bottom: 26px;
+    right: 0;
+    display:flex;
+    gap:6px;
+    background: rgba(33,21,16,0.92);
+    border: 1px solid rgba(247,234,217,0.14);
+    padding: 6px;
+    border-radius: 12px;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.4);
+    opacity:0;
+    pointer-events:none;
+    transform: translateY(4px);
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    z-index: 6;
+  }
+  .prio-picker.open{ z-index: 6; }
+  .prio-picker.open .prio-options{
+    opacity:1;
+    pointer-events:auto;
+    transform: translateY(0);
+  }
+  .prio-options button{
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor:pointer;
+    padding:0;
+    transition: transform 0.15s ease;
+  }
+  .prio-options button:hover{ transform: scale(1.15); }
+  .prio-options button.high{ background: var(--prio-high); }
+  .prio-options button.medium{ background: var(--prio-medium); }
+  .prio-options button.low{ background: var(--prio-low); }
+
+  .check{
+    width: 22px; height: 22px;
+    flex-shrink:0;
+    border-radius: 8px;
+    border: 2px solid var(--sage);
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition: background 0.15s ease;
+  }
+  .check.done{ background: var(--sage); }
+  .check svg{ width:13px; height:13px; opacity:0; transition:opacity 0.15s ease; }
+  .check.done svg{ opacity:1; }
+
+  .todo-text{
+    flex:1;
+    font-size: 1rem;
+    line-height: 1.4;
+    word-break: break-word;
+    color: var(--cream);
+  }
+  .todo-text.done{
+    text-decoration: line-through;
+    color: var(--cream-dim);
+    opacity: 0.65;
+  }
+
+  .del-btn{
+    background:none;
+    border:none;
+    color: rgba(107, 66, 38, 0.5);
+    cursor:pointer;
+    font-size: 1rem;
+    line-height:1;
+    padding: 2px 4px;
+    transition: color 0.15s ease;
+  }
+  .del-btn:hover{ color: var(--rust); }
+
+  .empty-hint{
+    color: var(--cream-dim);
+    font-size: 0.85rem;
+    text-align:center;
+    padding: 18px 6px;
+    opacity: 0.7;
+    font-style: italic;
+  }
+
+  /* Mode toggle for add-row */
+  .mode-toggle{
+    display:flex;
+    gap:6px;
+    margin-bottom: 10px;
+  }
+  .mode-chip{
+    flex:1;
+    border:none;
+    cursor:pointer;
+    font-family:'Quicksand', sans-serif;
+    font-size: 0.78rem;
+    font-weight:600;
+    padding: 7px 10px;
+    border-radius: 12px;
+    background: rgba(0,0,0,0.16);
+    color: var(--cream-dim);
+    border: 1px solid transparent;
+    transition: all 0.15s ease;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:5px;
+  }
+  .mode-chip svg{ width:13px; height:13px; }
+  .mode-chip.active{
+    background: rgba(242,193,78,0.14);
+    border-color: rgba(242,193,78,0.4);
+    color: var(--ember-soft);
+  }
+
+  /* Group / project card */
+  .group-item{
+    background: rgba(0,0,0,0.16);
+    border: 1px solid rgba(247,234,217,0.1);
+    border-radius: 16px;
+    padding: 12px 12px 10px;
+  }
+  .group-header{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    cursor:pointer;
+  }
+  .group-caret{
+    width:10px; height:10px;
+    flex-shrink:0;
+    border-right:2px solid var(--ember-soft);
+    border-bottom:2px solid var(--ember-soft);
+    transform: rotate(-45deg);
+    transition: transform 0.2s ease;
+    margin-left:2px;
+  }
+  .group-item.collapsed .group-caret{ transform: rotate(45deg); }
+  .group-title{
+    flex:1;
+    font-weight:700;
+    font-size:0.95rem;
+    color: var(--cream);
+  }
+  .group-progress{
+    font-size:0.72rem;
+    color: var(--cream-dim);
+    background: rgba(143,166,129,0.18);
+    border-radius: 8px;
+    padding: 2px 8px;
+    white-space:nowrap;
+  }
+  .group-del{
+    background:none;
+    border:none;
+    color: rgba(247,234,217,0.35);
+    cursor:pointer;
+    font-size: 0.95rem;
+    padding: 2px 4px;
+    transition: color 0.15s ease;
+  }
+  .group-del:hover{ color: var(--rust); }
+
+  .subtask-list{
+    list-style:none;
+    margin: 10px 0 0;
+    padding: 0 0 0 6px;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    border-left: 2px dashed rgba(247,234,217,0.14);
+  }
+  .group-item.collapsed .subtask-list,
+  .group-item.collapsed .sub-add-row{ display:none; }
+
+  .subtask-item{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    padding: 6px 8px;
+    border: 2px solid transparent;
+    border-radius: 10px;
+    position: relative;
+    transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+  }
+  .subtask-item:hover{
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  }
+  .subtask-item.prio-high{ border-color: var(--prio-high); background: rgba(217,99,94,0.10); }
+  .subtask-item.prio-medium{ border-color: var(--prio-medium); background: rgba(227,165,72,0.10); }
+  .subtask-item.prio-low{ border-color: var(--prio-low); background: rgba(143,166,129,0.10); }
+  .subtask-item.prio-high:hover{ background: rgba(217,99,94,0.20); }
+  .subtask-item.prio-medium:hover{ background: rgba(227,165,72,0.20); }
+  .subtask-item.prio-low:hover{ background: rgba(143,166,129,0.20); }
+  .subtask-item:not(.prio-high):not(.prio-medium):not(.prio-low):hover{ border-color: var(--terracotta); }
+  .subtask-item .check{ width:18px; height:18px; border-radius:6px; }
+  .subtask-item .todo-text{ font-size: 0.85rem; }
+  .subtask-item .del-btn{ font-size:0.85rem; }
+  .subtask-item .edit-btn{ font-size:0.85rem; }
+
+  .sub-add-row{
+    display:flex;
+    gap:6px;
+    margin-top: 8px;
+    padding-left: 12px;
+  }
+  .sub-add-row input{
+    flex:1;
+    background: rgba(0,0,0,0.2);
+    border: 1px solid rgba(247,234,217,0.12);
+    border-radius: 10px;
+    padding: 6px 10px;
+    color: var(--cream);
+    font-family:'Quicksand', sans-serif;
+    font-size: 0.82rem;
+    outline:none;
+  }
+  .sub-add-row input:focus{ border-color: var(--ember-soft); }
+  .sub-add-row button{
+    border:none;
+    cursor:pointer;
+    border-radius: 10px;
+    width: 30px;
+    background: linear-gradient(155deg, var(--sage), var(--sage-dark));
+    color:#1d2b18;
+    font-weight:700;
+    font-size:1rem;
+  }
+
+  @media (max-width: 640px){
+    .app{ flex-direction:column; align-items:center; }
+    .timer-card, .todo-card{ width: 100%; max-width: 540px; }
+    .timer-card{ margin-top: 90px; }
+    .todo-list{ max-height: 55vh; }
+    .pomodoro-main{ padding-bottom: 90px; }
+  }
+
+  @media (max-width: 780px){
+    .copyright{ display: none; }
+  }
+
+  .copyright{
+    position: fixed;
+    right: 16px;
+    bottom: 12px;
+    z-index: 3;
+    font-family:'Quicksand', sans-serif;
+    font-size: 0.78rem;
+    color: rgba(62, 44, 30, 0.45);
+    letter-spacing: 0.02em;
+    pointer-events:none;
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="nav-inner">
+    <a href="index.html" class="brand">
+      <img src="assets/mufflon-mascot.png" alt="Mufflon Maskottchen">
+      Das__Mufflon
+    </a>
+    <button class="nav-toggle" aria-label="Menü öffnen">☰</button>
+    <nav class="main-nav">
+      <a href="index.html" class="nav-home"><img src="assets/mufflon-mascot.png" alt="Stall" title="Stall"></a>
+      <a href="Content.html">Content</a>
+      <a href="Opfanze.html">Opfanze</a>
+      <a href="Highlights.html">Highlights</a>
+      <a href="pomodoro.html" class="active">Pomodoro</a>
+      <a href="mahmories.html">Mähmories</a>
+    </nav>
+  </div>
+</header>
+
+  <div class="social-dock">
+    <a href="https://twitch.tv/das__mufflon" target="_blank" rel="noopener" aria-label="Twitch" class="social-btn" style="animation-delay:0s">
+      <span class="social-float" style="animation-duration:3.2s; animation-delay:0.6s">
+        <img src="assets/social/twitch.png" alt="Twitch">
+      </span>
+    </a>
+    <a href="https://discord.gg/mzW9Hh96S" target="_blank" rel="noopener" aria-label="Discord" class="social-btn" style="animation-delay:0.15s">
+      <span class="social-float" style="animation-duration:3.6s; animation-delay:0.75s">
+        <img src="assets/social/dc.png" alt="Discord">
+      </span>
+    </a>
+    <a href="https://www.instagram.com/das__mufflon/" target="_blank" rel="noopener" aria-label="Instagram" class="social-btn" style="animation-delay:0.3s">
+      <span class="social-float" style="animation-duration:4.0s; animation-delay:0.9s">
+        <img src="assets/social/insta.png" alt="Instagram">
+      </span>
+    </a>
+  </div>
+
+<main class="pomodoro-main">
+
+<svg width="0" height="0">
+  <defs>
+    <linearGradient id="emberGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffbf8a"/>
+      <stop offset="100%" stop-color="#ef8a5c"/>
+    </linearGradient>
+    <filter id="ringGlow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur"/>
+      <feColorMatrix in="blur" type="matrix"
+        values="1 0 0 0 0.94  0 1 0 0 0.58  0 0 1 0 0.35  0 0 0 0.9 0" result="glow"/>
+      <feMerge>
+        <feMergeNode in="glow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+</svg>
+
+<!-- Efeu-Ranken -->
+<svg class="vine" viewBox="0 0 140 700" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8 0 C 40 60, -10 120, 20 190 C 45 250, -5 300, 15 370 C 35 430, -8 480, 10 550 C 25 600, 0 650, 12 700"
+        fill="none" stroke="#5f7a4a" stroke-width="3.5" stroke-linecap="round"/>
+  <g fill="#6d8560">
+    <ellipse cx="34" cy="45" rx="15" ry="8" transform="rotate(35 34 45)"/>
+    <ellipse cx="-2" cy="95" rx="13" ry="7" transform="rotate(-30 -2 95)"/>
+    <ellipse cx="30" cy="160" rx="16" ry="8" transform="rotate(40 30 160)"/>
+    <ellipse cx="0" cy="220" rx="13" ry="7" transform="rotate(-25 0 220)"/>
+    <ellipse cx="32" cy="280" rx="15" ry="8" transform="rotate(35 32 280)"/>
+    <ellipse cx="-4" cy="335" rx="13" ry="7" transform="rotate(-30 -4 335)"/>
+    <ellipse cx="28" cy="395" rx="16" ry="8" transform="rotate(38 28 395)"/>
+    <ellipse cx="0" cy="450" rx="13" ry="7" transform="rotate(-28 0 450)"/>
+    <ellipse cx="30" cy="510" rx="15" ry="8" transform="rotate(35 30 510)"/>
+    <ellipse cx="-2" cy="565" rx="13" ry="7" transform="rotate(-30 -2 565)"/>
+    <ellipse cx="26" cy="625" rx="15" ry="8" transform="rotate(35 26 625)"/>
+  </g>
+  <g fill="#8fa681" opacity="0.85">
+    <ellipse cx="34" cy="45" rx="8" ry="4" transform="rotate(35 34 45)"/>
+    <ellipse cx="-2" cy="95" rx="7" ry="3.5" transform="rotate(-30 -2 95)"/>
+    <ellipse cx="30" cy="160" rx="8" ry="4" transform="rotate(40 30 160)"/>
+    <ellipse cx="0" cy="220" rx="7" ry="3.5" transform="rotate(-25 0 220)"/>
+    <ellipse cx="32" cy="280" rx="8" ry="4" transform="rotate(35 32 280)"/>
+    <ellipse cx="-4" cy="335" rx="7" ry="3.5" transform="rotate(-30 -4 335)"/>
+    <ellipse cx="28" cy="395" rx="8" ry="4" transform="rotate(38 28 395)"/>
+    <ellipse cx="0" cy="450" rx="7" ry="3.5" transform="rotate(-28 0 450)"/>
+    <ellipse cx="30" cy="510" rx="8" ry="4" transform="rotate(35 30 510)"/>
+    <ellipse cx="-2" cy="565" rx="7" ry="3.5" transform="rotate(-30 -2 565)"/>
+    <ellipse cx="26" cy="625" rx="8" ry="4" transform="rotate(35 26 625)"/>
+  </g>
+</svg>
+<svg class="vine right" viewBox="0 0 140 700" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8 0 C 40 60, -10 120, 20 190 C 45 250, -5 300, 15 370 C 35 430, -8 480, 10 550 C 25 600, 0 650, 12 700"
+        fill="none" stroke="#5f7a4a" stroke-width="3.5" stroke-linecap="round"/>
+  <g fill="#6d8560">
+    <ellipse cx="34" cy="70" rx="15" ry="8" transform="rotate(-35 34 70)"/>
+    <ellipse cx="-2" cy="130" rx="13" ry="7" transform="rotate(30 -2 130)"/>
+    <ellipse cx="30" cy="200" rx="16" ry="8" transform="rotate(-40 30 200)"/>
+    <ellipse cx="0" cy="255" rx="13" ry="7" transform="rotate(25 0 255)"/>
+    <ellipse cx="32" cy="310" rx="15" ry="8" transform="rotate(-35 32 310)"/>
+    <ellipse cx="-4" cy="365" rx="13" ry="7" transform="rotate(30 -4 365)"/>
+    <ellipse cx="28" cy="420" rx="16" ry="8" transform="rotate(-38 28 420)"/>
+    <ellipse cx="0" cy="480" rx="13" ry="7" transform="rotate(28 0 480)"/>
+    <ellipse cx="30" cy="540" rx="15" ry="8" transform="rotate(-35 30 540)"/>
+    <ellipse cx="-2" cy="600" rx="13" ry="7" transform="rotate(30 -2 600)"/>
+  </g>
+  <g fill="#8fa681" opacity="0.85">
+    <ellipse cx="34" cy="70" rx="8" ry="4" transform="rotate(-35 34 70)"/>
+    <ellipse cx="-2" cy="130" rx="7" ry="3.5" transform="rotate(30 -2 130)"/>
+    <ellipse cx="30" cy="200" rx="8" ry="4" transform="rotate(-40 30 200)"/>
+    <ellipse cx="0" cy="255" rx="7" ry="3.5" transform="rotate(25 0 255)"/>
+    <ellipse cx="32" cy="310" rx="8" ry="4" transform="rotate(-35 32 310)"/>
+    <ellipse cx="-4" cy="365" rx="7" ry="3.5" transform="rotate(30 -4 365)"/>
+    <ellipse cx="28" cy="420" rx="8" ry="4" transform="rotate(-38 28 420)"/>
+    <ellipse cx="0" cy="480" rx="7" ry="3.5" transform="rotate(28 0 480)"/>
+    <ellipse cx="30" cy="540" rx="8" ry="4" transform="rotate(-35 30 540)"/>
+    <ellipse cx="-2" cy="600" rx="7" ry="3.5" transform="rotate(30 -2 600)"/>
+  </g>
+</svg>
+
+<div class="app">
+
+  <div class="timer-wrap">
+<img id="mascotImg" class="mascot" src="assets/mufflon-wasser.png" alt="Mufflon mit Wasserglas">
+    <div class="card timer-card">
+    <h1>Mufflon Pomodoro</h1>
+    <div class="subtitle">Tu Dinge tuten tun 🍂</div>
+
+    <div class="ring-wrap">
+      <button class="custom-timer-btn" id="customTimerBtn" title="Eigene Zeit einstellen" type="button">+</button>
+
+      <div class="custom-timer-popover" id="customTimerPopover">
+        <div class="ctp-title">Eigene Zeit</div>
+        <div class="field-row">
+          <input type="number" id="customHours" min="0" max="24" value="0">
+          <label for="customHours">Std</label>
+        </div>
+        <div class="field-row">
+          <input type="number" id="customMinutes" min="0" max="59" value="25">
+          <label for="customMinutes">Min</label>
+        </div>
+        <button type="button" id="customTimerApply">schnubb</button>
+      </div>
+
+      <svg width="220" height="220" viewBox="0 0 220 220" style="overflow: visible;">
+        <circle class="ring-bg" cx="110" cy="110" r="100"></circle>
+        <circle class="ring-progress" id="ringProgress" cx="110" cy="110" r="100"
+                stroke-dasharray="628.3" stroke-dashoffset="0"></circle>
+      </svg>
+      <div class="ring-center">
+        <div class="time" id="timeDisplay">25:00</div>
+        <div class="status" id="statusDisplay">Bereit</div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="btn btn-play" id="playBtn">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        Play
+      </button>
+      <button class="btn btn-pause" id="pauseBtn">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg>
+        Pause
+      </button>
+      <button class="btn btn-stop" id="stopBtn">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h12v12H6z"/></svg>
+        Stop
+      </button>
+    </div>
+    </div>
+  </div>
+
+  <div class="card todo-card">
+    <button class="sticky-trigger" id="stickyTrigger" title="Klebezettel" aria-label="Klebezettel öffnen"></button>
+    <h1 style="font-size:2.1rem;">Meine Liste</h1>
+    <div class="subtitle">für diese Runde</div>
+
+    <div class="user-tag" id="userTag"></div>
+
+    <div class="mode-toggle">
+      <button class="mode-chip active" id="modeTodoBtn" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        Aufgabe
+      </button>
+      <button class="mode-chip" id="modeGroupBtn" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h5l2 2h11v10H3z"/></svg>
+        Gruppe
+      </button>
+    </div>
+
+    <div class="add-row">
+      <input type="text" id="todoInput" placeholder="Was steht an?" maxlength="160">
+      <button class="add-btn" id="addBtn" title="Hinzufügen">+</button>
+    </div>
+
+    <ul class="todo-list" id="todoList"></ul>
+  </div>
+
+</div>
+
+<div class="copyright">&copy; Das__Mufflon</div>
+
+<div class="sticky-notes-layer" id="stickyNotesLayer"></div>
+
+<div class="login-backdrop" id="loginBackdrop">
+  <div class="login-panel">
+    <div class="ctp-title">Wer bist du? 🐑</div>
+    <div class="login-sub">Name + Passwort eingeben.<br>Neuer Name? Einfach ein eigenes Passwort vergeben.</div>
+    <input type="text" id="loginName" placeholder="Name" maxlength="24" autocomplete="off">
+    <input type="password" id="loginPassword" placeholder="Passwort" maxlength="40" autocomplete="off">
+    <div class="login-error" id="loginError"></div>
+    <button class="login-submit" id="loginSubmit" type="button">Los geht's</button>
+  </div>
+</div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-brand">Das__Mufflon 🐑</div>
+  <p><a href="https://twitch.tv/das__mufflon" target="_blank" rel="noopener">twitch.tv/das__mufflon</a></p>
+</footer>
+
+<script src="js/main.js"></script>
+
+<script>
+  // ---------- Fireflies ----------
+  const body = document.body;
+  const fireflyCount = 22;
+  for (let i = 0; i < fireflyCount; i++) {
+    const f = document.createElement('div');
+    f.className = 'firefly';
+    f.style.left = Math.random() * 100 + 'vw';
+    f.style.top = (60 + Math.random() * 40) + 'vh';
+    const dur = 6 + Math.random() * 8;
+    f.style.animationDuration = dur + 's, ' + (2 + Math.random() * 3) + 's';
+    f.style.animationDelay = (Math.random() * dur) + 's, ' + (Math.random() * 3) + 's';
+    body.appendChild(f);
+  }
+
+  // ---------- Timer ----------
+  let TOTAL = 25 * 60;
+  let remaining = TOTAL;
+  let running = false;
+  let intervalId = null;
+
+  const timeDisplay = document.getElementById('timeDisplay');
+  const statusDisplay = document.getElementById('statusDisplay');
+  const ringProgress = document.getElementById('ringProgress');
+  const CIRC = 2 * Math.PI * 100;
+  ringProgress.setAttribute('stroke-dasharray', CIRC);
+
+  function render() {
+    const m = Math.floor(remaining / 60).toString().padStart(2, '0');
+    const s = Math.floor(remaining % 60).toString().padStart(2, '0');
+    timeDisplay.textContent = m + ':' + s;
+    const offset = CIRC * (1 - remaining / TOTAL);
+    ringProgress.style.strokeDashoffset = offset;
+  }
+
+  function setStatus(text) {
+    statusDisplay.textContent = text;
+  }
+
+  function tick() {
+    if (remaining <= 0) {
+      clearInterval(intervalId);
+      running = false;
+      setStatus('Fertig! 🌙');
+      showMascot();
+      return;
+    }
+    remaining -= 1;
+    render();
+    if (remaining <= 0) {
+      clearInterval(intervalId);
+      running = false;
+      setStatus('Fertig! 🌙');
+      showMascot();
+    }
+  }
+
+  document.getElementById('playBtn').addEventListener('click', () => {
+    if (running || remaining <= 0) return;
+    running = true;
+    setStatus('Läuft …');
+    intervalId = setInterval(tick, 1000);
+  });
+
+  document.getElementById('pauseBtn').addEventListener('click', () => {
+    if (!running) return;
+    clearInterval(intervalId);
+    running = false;
+    setStatus('Pausiert');
+    showMascot();
+  });
+
+  document.getElementById('stopBtn').addEventListener('click', () => {
+    clearInterval(intervalId);
+    running = false;
+    remaining = TOTAL;
+    render();
+    setStatus('Bereit');
+    showMascot();
+  });
+
+  render();
+
+  // ---------- Custom-Timer ----------
+  const customTimerBtn = document.getElementById('customTimerBtn');
+  const customTimerPopover = document.getElementById('customTimerPopover');
+  const customHours = document.getElementById('customHours');
+  const customMinutes = document.getElementById('customMinutes');
+  const customTimerApply = document.getElementById('customTimerApply');
+
+  function openCustomTimerPopover() {
+    const h = Math.floor(TOTAL / 3600);
+    const m = Math.floor((TOTAL % 3600) / 60);
+    customHours.value = h;
+    customMinutes.value = m;
+    customTimerPopover.classList.add('open');
+  }
+  function closeCustomTimerPopover() {
+    customTimerPopover.classList.remove('open');
+  }
+
+  customTimerBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (customTimerPopover.classList.contains('open')) {
+      closeCustomTimerPopover();
+    } else {
+      openCustomTimerPopover();
+    }
+  });
+  customTimerPopover.addEventListener('click', (e) => e.stopPropagation());
+
+  customTimerApply.addEventListener('click', () => {
+    let h = parseInt(customHours.value, 10);
+    let m = parseInt(customMinutes.value, 10);
+    if (isNaN(h) || h < 0) h = 0;
+    if (isNaN(m) || m < 0) m = 0;
+    if (h > 24) h = 24;
+    if (m > 59) m = 59;
+    let seconds = h * 3600 + m * 60;
+    if (seconds > 24 * 3600) seconds = 24 * 3600;
+    if (seconds < 60) seconds = 60;
+
+    clearInterval(intervalId);
+    running = false;
+    TOTAL = seconds;
+    remaining = TOTAL;
+    render();
+    setStatus('Bereit');
+    closeCustomTimerPopover();
+  });
+
+  document.addEventListener('click', () => {
+    if (customTimerPopover.classList.contains('open')) closeCustomTimerPopover();
+  });
+
+  // ---------- Maskottchen ----------
+  const mascotImg = document.getElementById('mascotImg');
+  function showMascot() { mascotImg.classList.add('peek'); }
+  function hideMascot() { mascotImg.classList.remove('peek'); }
+  mascotImg.addEventListener('click', hideMascot);
+
+  // ---------- Todo list (Aufgaben + Gruppen) ----------
+  // Jeder Name bekommt seine eigene, getrennte Liste.
+  // entry: { id, type: 'todo', text, done }
+  //     or { id, type: 'group', title, collapsed, items: [{id, text, done}] }
+  const TODO_STORAGE_KEY = 'mufflon-pomodoro-todos';
+  const DEFAULT_USER = 'Allgemein';
+  let allData = { nextId: 1, users: {} };
+  let entries = [];
+  let addMode = 'todo'; // 'todo' | 'group'
+
+  function loadAllData() {
+    try {
+      const raw = localStorage.getItem(TODO_STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed && typeof parsed === 'object' && parsed.users) {
+          allData = parsed;
+          return;
+        }
+        // Alte Version (eine gemeinsame Liste ohne Namen) -> in "Allgemein" uebernehmen
+        if (Array.isArray(parsed.entries)) {
+          allData = { nextId: parsed.nextId || 1, users: { [DEFAULT_USER]: parsed.entries } };
+        }
+      }
+    } catch (e) {
+      console.warn('Gespeicherte Aufgaben konnten nicht geladen werden:', e);
+    }
+  }
+
+  function saveTodos() {
+    allData.users[currentUser || DEFAULT_USER] = entries;
+    try {
+      localStorage.setItem(TODO_STORAGE_KEY, JSON.stringify(allData));
+    } catch (e) {
+      console.warn('Aufgaben konnten nicht gespeichert werden:', e);
+    }
+  }
+
+  function loadEntriesForCurrentUser() {
+    entries = allData.users[currentUser || DEFAULT_USER] || [];
+  }
+
+  function nextId() {
+    allData.nextId = (allData.nextId || 1) + 1;
+    return allData.nextId - 1;
+  }
+
+  loadAllData();
+
+  // ---------- Login (Name + Passwort, als kleines Overlay-Panel) ----------
+  // Hinweis: rein clientseitig, dient nur als Komfort-Schutz gegen versehentliches
+  // Wechseln/Verschreiben — keine echte, ausfallsichere Sicherheit.
+  const USER_STORAGE_KEY = 'mufflon-pomodoro-username';
+  let currentUser = localStorage.getItem(USER_STORAGE_KEY) || '';
+  const userTag = document.getElementById('userTag');
+  const loginBackdrop = document.getElementById('loginBackdrop');
+  const loginName = document.getElementById('loginName');
+  const loginPassword = document.getElementById('loginPassword');
+  const loginError = document.getElementById('loginError');
+  const loginSubmit = document.getElementById('loginSubmit');
+
+  async function hashPassword(pw) {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  function openLogin() {
+    loginError.textContent = '';
+    loginName.value = currentUser || '';
+    loginPassword.value = '';
+    loginBackdrop.classList.add('open');
+    (currentUser ? loginPassword : loginName).focus();
+  }
+
+  function closeLogin() {
+    loginBackdrop.classList.remove('open');
+  }
+
+  async function attemptLogin() {
+    const name = loginName.value.trim();
+    const pw = loginPassword.value;
+    if (!name) { loginError.textContent = 'Bitte einen Namen eingeben.'; return; }
+    if (!pw) { loginError.textContent = 'Bitte ein Passwort eingeben.'; return; }
+
+    allData.passwords = allData.passwords || {};
+    const savedHash = allData.passwords[name];
+    const enteredHash = await hashPassword(pw);
+
+    if (savedHash && savedHash !== enteredHash) {
+      loginError.textContent = 'Falsches Passwort für "' + name + '".';
+      loginPassword.value = '';
+      loginPassword.focus();
+      return;
+    }
+    if (!savedHash) {
+      // Neuer Name -> Passwort wird jetzt vergeben
+      allData.passwords[name] = enteredHash;
+    }
+
+    currentUser = name;
+    localStorage.setItem(USER_STORAGE_KEY, currentUser);
+    loadEntriesForCurrentUser();
+    saveTodos();
+    closeLogin();
+    renderUserTag();
+    renderTodos();
+    restoreStickyNoteForCurrentUser();
+  }
+
+  loginSubmit.addEventListener('click', attemptLogin);
+  [loginName, loginPassword].forEach(el => {
+    el.addEventListener('keydown', (e) => { if (e.key === 'Enter') attemptLogin(); });
+  });
+
+  loadEntriesForCurrentUser();
+
+  function renderUserTag() {
+    userTag.innerHTML = '';
+    const span = document.createElement('span');
+    if (currentUser) {
+      span.innerHTML = 'Angemeldet als <span class="who">' + escapeHtml(currentUser) + '</span>';
+    } else {
+      span.textContent = 'Nicht angemeldet';
+    }
+    const changeBtn = document.createElement('button');
+    changeBtn.textContent = currentUser ? '· wechseln' : '· anmelden';
+    changeBtn.addEventListener('click', openLogin);
+    userTag.appendChild(span);
+    userTag.appendChild(changeBtn);
+  }
+
+  function escapeHtml(str) {
+    const d = document.createElement('div');
+    d.textContent = str;
+    return d.innerHTML;
+  }
+
+  renderUserTag();
+  if (!currentUser) openLogin();
+
+  // ---------- Gelbe Klebezettel (bis zu 6 gleichzeitig) ----------
+  const stickyTrigger = document.getElementById('stickyTrigger');
+  const stickyLayer = document.getElementById('stickyNotesLayer');
+  const STICKY_DEFAULT_COLOR = '#FFE873';
+  const MAX_STICKY_NOTES = 6;
+
+  function getNotesArray() {
+    allData.notes = allData.notes || {};
+    const key = currentUser || DEFAULT_USER;
+    if (!Array.isArray(allData.notes[key])) allData.notes[key] = [];
+    return allData.notes[key];
+  }
+
+  function saveNotes() {
+    saveTodos();
+  }
+
+  function shadeColor(hex, percent) {
+    const num = parseInt(hex.replace('#', ''), 16);
+    let r = (num >> 16) + Math.round(255 * percent / 100);
+    let g = ((num >> 8) & 0x00FF) + Math.round(255 * percent / 100);
+    let b = (num & 0x0000FF) + Math.round(255 * percent / 100);
+    r = Math.max(0, Math.min(255, r));
+    g = Math.max(0, Math.min(255, g));
+    b = Math.max(0, Math.min(255, b));
+    return '#' + (0x1000000 + r * 0x10000 + g * 0x100 + b).toString(16).slice(1);
+  }
+
+  function nextNoteId() {
+    allData.noteNextId = (allData.noteNextId || 1) + 1;
+    return allData.noteNextId - 1;
+  }
+
+  function defaultNotePosition(index) {
+    const rect = stickyTrigger.getBoundingClientRect();
+    let x = rect.left - 40 - (index * 22);
+    let y = rect.bottom + 10 + (index * 22);
+    x = Math.max(10, Math.min(x, window.innerWidth - 230));
+    y = Math.max(10, Math.min(y, window.innerHeight - 210));
+    return { x, y };
+  }
+
+  function buildNoteElement(note) {
+    const el = document.createElement('div');
+    el.className = 'sticky-note';
+    el.style.left = note.x + 'px';
+    el.style.top = note.y + 'px';
+    if (note.w) el.style.width = note.w + 'px';
+    if (note.h) el.style.height = note.h + 'px';
+
+    const dragHandle = document.createElement('div');
+    dragHandle.className = 'sticky-drag-handle';
+
+    const palette = document.createElement('button');
+    palette.className = 'sticky-palette';
+    palette.title = 'Farbe ändern';
+    palette.setAttribute('aria-label', 'Farbe ändern');
+    palette.textContent = '🎨';
+
+    const colorInput = document.createElement('input');
+    colorInput.type = 'color';
+    colorInput.className = 'sticky-color-input';
+    colorInput.value = note.color || STICKY_DEFAULT_COLOR;
+
+    const close = document.createElement('button');
+    close.className = 'sticky-close';
+    close.title = 'Schließen';
+    close.setAttribute('aria-label', 'Schließen');
+    close.textContent = '✕';
+
+    dragHandle.appendChild(palette);
+    dragHandle.appendChild(colorInput);
+    dragHandle.appendChild(close);
+
+    const textarea = document.createElement('textarea');
+    textarea.placeholder = 'Notiz …';
+    textarea.maxLength = 500;
+    textarea.value = note.text || '';
+
+    const resizeHandle = document.createElement('span');
+    resizeHandle.className = 'sticky-resize-handle';
+    resizeHandle.title = 'Größe ändern';
+
+    el.appendChild(dragHandle);
+    el.appendChild(textarea);
+    el.appendChild(resizeHandle);
+
+    function applyColor(hex) {
+      const darker = shadeColor(hex, -12);
+      el.style.background = `linear-gradient(165deg, ${hex}, ${darker})`;
+      colorInput.value = hex;
+    }
+    applyColor(note.color || STICKY_DEFAULT_COLOR);
+
+    function updateNote(partial) {
+      Object.assign(note, partial);
+      saveNotes();
+    }
+
+    close.addEventListener('pointerdown', (e) => e.stopPropagation());
+    palette.addEventListener('pointerdown', (e) => e.stopPropagation());
+
+    close.addEventListener('click', () => {
+      const arr = getNotesArray();
+      const idx = arr.findIndex(n => n.id === note.id);
+      if (idx !== -1) arr.splice(idx, 1);
+      saveNotes();
+      el.remove();
+    });
+
+    palette.addEventListener('click', () => colorInput.click());
+    colorInput.addEventListener('input', () => {
+      applyColor(colorInput.value);
+      updateNote({ color: colorInput.value });
+    });
+
+    textarea.addEventListener('input', () => {
+      updateNote({ text: textarea.value });
+    });
+
+    dragHandle.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      const rect = el.getBoundingClientRect();
+      const offsetX = e.clientX - rect.left;
+      const offsetY = e.clientY - rect.top;
+      dragHandle.setPointerCapture(e.pointerId);
+
+      function onMove(ev) {
+        let x = ev.clientX - offsetX;
+        let y = ev.clientY - offsetY;
+        x = Math.max(4, Math.min(x, window.innerWidth - 224));
+        y = Math.max(4, Math.min(y, window.innerHeight - 40));
+        el.style.left = x + 'px';
+        el.style.top = y + 'px';
+      }
+      function onUp() {
+        dragHandle.releasePointerCapture(e.pointerId);
+        document.removeEventListener('pointermove', onMove);
+        document.removeEventListener('pointerup', onUp);
+        const r = el.getBoundingClientRect();
+        updateNote({ x: r.left, y: r.top });
+      }
+      document.addEventListener('pointermove', onMove);
+      document.addEventListener('pointerup', onUp);
+    });
+
+    resizeHandle.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const rect = el.getBoundingClientRect();
+      const startX = e.clientX, startY = e.clientY;
+      const startW = rect.width, startH = rect.height;
+      resizeHandle.setPointerCapture(e.pointerId);
+
+      function onMove(ev) {
+        const w = Math.max(160, Math.min(startW + (ev.clientX - startX), 480));
+        const h = Math.max(140, Math.min(startH + (ev.clientY - startY), 520));
+        el.style.width = w + 'px';
+        el.style.height = h + 'px';
+      }
+      function onUp() {
+        resizeHandle.releasePointerCapture(e.pointerId);
+        document.removeEventListener('pointermove', onMove);
+        document.removeEventListener('pointerup', onUp);
+        const r = el.getBoundingClientRect();
+        updateNote({ w: r.width, h: r.height });
+      }
+      document.addEventListener('pointermove', onMove);
+      document.addEventListener('pointerup', onUp);
+    });
+
+    return { el, textarea };
+  }
+
+  function addNewStickyNote() {
+    const arr = getNotesArray();
+    if (arr.length >= MAX_STICKY_NOTES) {
+      stickyTrigger.animate(
+        [{ transform: 'rotate(6deg)' }, { transform: 'rotate(-10deg)' }, { transform: 'rotate(6deg)' }],
+        { duration: 300 }
+      );
+      return;
+    }
+    const pos = defaultNotePosition(arr.length);
+    const note = { id: nextNoteId(), text: '', x: pos.x, y: pos.y, w: null, h: null, color: STICKY_DEFAULT_COLOR };
+    arr.push(note);
+    saveNotes();
+    const { el, textarea } = buildNoteElement(note);
+    stickyLayer.appendChild(el);
+    textarea.focus();
+  }
+
+  stickyTrigger.addEventListener('click', addNewStickyNote);
+
+  // Beim Laden bzw. Nutzerwechsel alle gespeicherten Zettel wiederherstellen
+  function restoreStickyNoteForCurrentUser() {
+    stickyLayer.innerHTML = '';
+    getNotesArray().forEach(note => {
+      const { el } = buildNoteElement(note);
+      stickyLayer.appendChild(el);
+    });
+  }
+  restoreStickyNoteForCurrentUser();
+
+
+  const todoList = document.getElementById('todoList');
+  const todoInput = document.getElementById('todoInput');
+  const addBtn = document.getElementById('addBtn');
+  const modeTodoBtn = document.getElementById('modeTodoBtn');
+  const modeGroupBtn = document.getElementById('modeGroupBtn');
+
+  function setMode(mode) {
+    addMode = mode;
+    modeTodoBtn.classList.toggle('active', mode === 'todo');
+    modeGroupBtn.classList.toggle('active', mode === 'group');
+    todoInput.placeholder = mode === 'todo' ? 'Was steht an?' : 'Name des Projekts, z.B. Projekt malen';
+  }
+  modeTodoBtn.addEventListener('click', () => setMode('todo'));
+  modeGroupBtn.addEventListener('click', () => setMode('group'));
+
+  function checkSvg() {
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="#1d2b18" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+  }
+
+  function makePriorityPicker(obj, onChange) {
+    const wrap = document.createElement('div');
+    wrap.className = 'prio-picker' + (obj._open ? ' open' : '');
+
+    const current = document.createElement('button');
+    current.type = 'button';
+    current.className = 'prio-dot-btn ' + obj.priority;
+    current.title = 'Dringlichkeit ändern';
+    current.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const wasOpen = obj._open;
+      closeAllPickers();
+      obj._open = !wasOpen;
+      onChange();
+    });
+
+    const options = document.createElement('div');
+    options.className = 'prio-options';
+    ['high', 'medium', 'low'].filter(level => level !== obj.priority).forEach(level => {
+      const opt = document.createElement('button');
+      opt.type = 'button';
+      opt.className = level;
+      opt.title = level === 'high' ? 'Dringend' : (level === 'medium' ? 'Mittel' : 'Standard');
+      opt.addEventListener('click', (e) => {
+        e.stopPropagation();
+        obj.priority = level;
+        obj._open = false;
+        onChange();
+      });
+      options.appendChild(opt);
+    });
+
+    wrap.appendChild(current);
+    wrap.appendChild(options);
+    return wrap;
+  }
+
+  function closeAllPickers() {
+    entries.forEach(e => {
+      if (e.type === 'todo') e._open = false;
+      else e.items.forEach(i => { i._open = false; });
+    });
+  }
+
+  const PRIO_RANK = { high: 0, medium: 1, low: 2 };
+
+  function naturalCompare(a, b) {
+    return a.localeCompare(b, 'de', { numeric: true, sensitivity: 'base' });
+  }
+
+  function sortTodoItems(list) {
+    list.sort((a, b) => {
+      const oa = a.order ?? a.id, ob = b.order ?? b.id;
+      if (ob !== oa) return ob - oa; // 1. Regel: manuelle Reihenfolge (neueste zuerst als Start)
+      const ra = PRIO_RANK[a.priority] ?? 2;
+      const rb = PRIO_RANK[b.priority] ?? 2;
+      if (ra !== rb) return ra - rb;
+      return naturalCompare(a.text, b.text);
+    });
+  }
+
+  function groupEffectiveRank(entry) {
+    if (!entry.items.length) return PRIO_RANK.low;
+    return Math.min(...entry.items.map(i => PRIO_RANK[i.priority] ?? 2));
+  }
+
+  function sortEntries() {
+    entries.sort((a, b) => {
+      const oa = a.order ?? a.id, ob = b.order ?? b.id;
+      if (ob !== oa) return ob - oa; // 1. Regel: manuelle Reihenfolge (neueste zuerst als Start)
+      const ra = a.type === 'todo' ? (PRIO_RANK[a.priority] ?? 2) : groupEffectiveRank(a);
+      const rb = b.type === 'todo' ? (PRIO_RANK[b.priority] ?? 2) : groupEffectiveRank(b);
+      if (ra !== rb) return ra - rb;
+      const ka = a.type === 'todo' ? a.text : a.title;
+      const kb = b.type === 'todo' ? b.text : b.title;
+      return naturalCompare(ka, kb);
+    });
+    entries.forEach(e => { if (e.type === 'group') sortTodoItems(e.items); });
+  }
+
+  function makeDraggable(li, list, arr) {
+    const handle = li.querySelector('.drag-handle');
+    if (!handle) return;
+
+    handle.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      const items = Array.from(list.children).filter(el => el.dataset.entryId);
+      const startIndex = items.indexOf(li);
+      if (startIndex === -1) return;
+      const startY = e.clientY;
+      const rects = items.map(el => el.getBoundingClientRect());
+      const gap = items.length > 1 ? Math.max(0, rects[1].top - rects[0].bottom) : 0;
+      const stepHeight = rects[0].height + gap;
+
+      let currentIndex = startIndex;
+      li.classList.add('dragging');
+      li.setPointerCapture(e.pointerId);
+
+      function applyShift(target) {
+        items.forEach((el, i) => {
+          if (el === li) return;
+          let shift = 0;
+          if (target > startIndex && i > startIndex && i <= target) shift = -1;
+          else if (target < startIndex && i >= target && i < startIndex) shift = 1;
+          el.style.transform = shift ? `translateY(${shift * stepHeight}px)` : '';
+        });
+      }
+
+      function onMove(ev) {
+        const dy = ev.clientY - startY;
+        li.style.transform = `translateY(${dy}px) scale(1.03)`;
+        const shift = Math.round(dy / stepHeight);
+        const target = Math.min(items.length - 1, Math.max(0, startIndex + shift));
+        if (target !== currentIndex) {
+          currentIndex = target;
+          applyShift(currentIndex);
+        }
+      }
+
+      function onUp() {
+        li.releasePointerCapture(e.pointerId);
+        document.removeEventListener('pointermove', onMove);
+        document.removeEventListener('pointerup', onUp);
+
+        li.classList.remove('dragging');
+        li.style.transform = '';
+        items.forEach(el => { if (el !== li) el.style.transform = ''; });
+
+        if (currentIndex !== startIndex) {
+          const moved = arr.splice(startIndex, 1)[0];
+          arr.splice(currentIndex, 0, moved);
+          const total = arr.length;
+          arr.forEach((it, i) => { it.order = total - i; });
+        }
+
+        const draggedId = li.dataset.entryId;
+        renderTodos();
+        requestAnimationFrame(() => {
+          const settled = document.querySelector('[data-entry-id="' + draggedId + '"]');
+          if (settled) {
+            settled.classList.add('just-dropped');
+            settled.addEventListener('animationend', () => settled.classList.remove('just-dropped'), { once: true });
+          }
+        });
+      }
+
+      document.addEventListener('pointermove', onMove);
+      document.addEventListener('pointerup', onUp);
+    });
+  }
+
+  function startEditText(getText, setText, textEl, li) {
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'todo-edit-input';
+    input.maxLength = 160;
+    input.value = getText();
+
+    textEl.replaceWith(input);
+    input.focus();
+    input.select();
+
+    let finished = false;
+    function finish(save) {
+      if (finished) return;
+      finished = true;
+      if (save) {
+        const val = input.value.trim();
+        if (val) setText(val);
+      }
+      renderTodos();
+    }
+
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') finish(true);
+      if (e.key === 'Escape') finish(false);
+    });
+    input.addEventListener('blur', () => finish(true));
+  }
+
+  function renderTodos() {
+    saveTodos();
+    sortEntries();
+    todoList.innerHTML = '';
+    if (entries.length === 0) {
+      const li = document.createElement('li');
+      li.className = 'empty-hint';
+      li.textContent = 'Noch nichts hier — füg eine Aufgabe oder ein Projekt hinzu 🌿';
+      todoList.appendChild(li);
+      return;
+    }
+
+    entries.forEach(entry => {
+      if (entry.type === 'todo') {
+        const li = document.createElement('li');
+        li.className = 'todo-item' + (entry.priority ? ' prio-' + entry.priority : '');
+        li.dataset.entryId = entry.id;
+
+        const handle = document.createElement('span');
+        handle.className = 'drag-handle';
+        handle.innerHTML = '⠿';
+        handle.title = 'Zum Verschieben ziehen';
+
+        const check = document.createElement('div');
+        check.className = 'check' + (entry.done ? ' done' : '');
+        check.innerHTML = checkSvg();
+        check.addEventListener('click', () => { entry.done = !entry.done; renderTodos(); });
+
+        const text = document.createElement('span');
+        text.className = 'todo-text' + (entry.done ? ' done' : '');
+        text.textContent = entry.text;
+
+        const dots = makePriorityPicker(entry, renderTodos);
+
+        const edit = document.createElement('button');
+        edit.className = 'edit-btn';
+        edit.innerHTML = '✎';
+        edit.title = 'Bearbeiten';
+        edit.addEventListener('click', () => {
+          startEditText(
+            () => entry.text,
+            (val) => { entry.text = val; },
+            text,
+            li
+          );
+        });
+
+        const del = document.createElement('button');
+        del.className = 'del-btn';
+        del.innerHTML = '✕';
+        del.title = 'Entfernen';
+        del.addEventListener('click', () => {
+          entries = entries.filter(e => e.id !== entry.id);
+          renderTodos();
+        });
+
+        li.appendChild(handle);
+        li.appendChild(check);
+        li.appendChild(text);
+        li.appendChild(edit);
+        li.appendChild(dots);
+        li.appendChild(del);
+        todoList.appendChild(li);
+        makeDraggable(li, todoList, entries);
+        return;
+      }
+
+      // Gruppe / Projekt
+      const li = document.createElement('li');
+      li.className = 'group-item' + (entry.collapsed ? ' collapsed' : '');
+      li.dataset.entryId = entry.id;
+
+      const header = document.createElement('div');
+      header.className = 'group-header';
+
+      const groupHandle = document.createElement('span');
+      groupHandle.className = 'drag-handle';
+      groupHandle.innerHTML = '⠿';
+      groupHandle.title = 'Zum Verschieben ziehen';
+      groupHandle.addEventListener('click', (e) => e.stopPropagation());
+
+      const caret = document.createElement('div');
+      caret.className = 'group-caret';
+
+      const title = document.createElement('span');
+      title.className = 'group-title';
+      title.textContent = entry.title;
+
+      const done = entry.items.filter(i => i.done).length;
+      const progress = document.createElement('span');
+      progress.className = 'group-progress';
+      progress.textContent = done + '/' + entry.items.length;
+
+      const del = document.createElement('button');
+      del.className = 'group-del';
+      del.innerHTML = '✕';
+      del.title = 'Projekt entfernen';
+      del.addEventListener('click', (e) => {
+        e.stopPropagation();
+        entries = entries.filter(en => en.id !== entry.id);
+        renderTodos();
+      });
+
+      header.addEventListener('click', () => {
+        entry.collapsed = !entry.collapsed;
+        renderTodos();
+      });
+
+      header.appendChild(groupHandle);
+      header.appendChild(caret);
+      header.appendChild(title);
+      header.appendChild(progress);
+      header.appendChild(del);
+      li.appendChild(header);
+
+      const subList = document.createElement('ul');
+      subList.className = 'subtask-list';
+      entry.items.forEach(item => {
+        const subLi = document.createElement('li');
+        subLi.className = 'subtask-item' + (item.priority ? ' prio-' + item.priority : '');
+        subLi.dataset.entryId = item.id;
+
+        const subHandle = document.createElement('span');
+        subHandle.className = 'drag-handle';
+        subHandle.innerHTML = '⠿';
+        subHandle.title = 'Zum Verschieben ziehen';
+
+        const check = document.createElement('div');
+        check.className = 'check' + (item.done ? ' done' : '');
+        check.innerHTML = checkSvg();
+        check.addEventListener('click', () => { item.done = !item.done; renderTodos(); });
+
+        const text = document.createElement('span');
+        text.className = 'todo-text' + (item.done ? ' done' : '');
+        text.textContent = item.text;
+
+        const subDots = makePriorityPicker(item, renderTodos);
+
+        const subEdit = document.createElement('button');
+        subEdit.className = 'edit-btn';
+        subEdit.innerHTML = '✎';
+        subEdit.title = 'Bearbeiten';
+        subEdit.addEventListener('click', () => {
+          startEditText(
+            () => item.text,
+            (val) => { item.text = val; },
+            text,
+            subLi
+          );
+        });
+
+        const subDel = document.createElement('button');
+        subDel.className = 'del-btn';
+        subDel.innerHTML = '✕';
+        subDel.title = 'Entfernen';
+        subDel.addEventListener('click', () => {
+          entry.items = entry.items.filter(i => i.id !== item.id);
+          renderTodos();
+        });
+
+        subLi.appendChild(subHandle);
+        subLi.appendChild(check);
+        subLi.appendChild(text);
+        subLi.appendChild(subEdit);
+        subLi.appendChild(subDots);
+        subLi.appendChild(subDel);
+        subList.appendChild(subLi);
+        makeDraggable(subLi, subList, entry.items);
+      });
+      li.appendChild(subList);
+
+      const subAddRow = document.createElement('div');
+      subAddRow.className = 'sub-add-row';
+      const subInput = document.createElement('input');
+      subInput.type = 'text';
+      subInput.placeholder = 'Unterpunkt hinzufügen …';
+      subInput.maxLength = 160;
+      const subBtn = document.createElement('button');
+      subBtn.textContent = '+';
+      function addSubtask() {
+        const val = subInput.value.trim();
+        if (!val) return;
+        const newId = nextId();
+        entry.items.push({ id: newId, order: newId, text: val, done: false, priority: 'low', author: currentUser });
+        subInput.value = '';
+        renderTodos();
+      }
+      subBtn.addEventListener('click', addSubtask);
+      subInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') addSubtask(); });
+      subInput.addEventListener('click', (e) => e.stopPropagation());
+      subAddRow.appendChild(subInput);
+      subAddRow.appendChild(subBtn);
+      li.appendChild(subAddRow);
+
+      todoList.appendChild(li);
+      makeDraggable(li, todoList, entries);
+    });
+  }
+
+  function addTodo() {
+    const val = todoInput.value.trim();
+    if (!val) return;
+    if (addMode === 'todo') {
+      const newId = nextId();
+      entries.push({ id: newId, order: newId, type: 'todo', text: val, done: false, priority: 'low', author: currentUser });
+    } else {
+      const newId = nextId();
+      entries.push({ id: newId, order: newId, type: 'group', title: val, collapsed: false, items: [], author: currentUser });
+    }
+    todoInput.value = '';
+    renderTodos();
+    todoInput.focus();
+  }
+
+  addBtn.addEventListener('click', addTodo);
+  todoInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') addTodo();
+  });
+
+  renderTodos();
+
+  document.addEventListener('click', () => {
+    const anyOpen = entries.some(e => e.type === 'todo' ? e._open : e.items.some(i => i._open));
+    if (anyOpen) {
+      closeAllPickers();
+      renderTodos();
+    }
+  });
+</script>
+
+</body>
+</html>
