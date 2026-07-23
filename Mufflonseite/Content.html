@@ -36,7 +36,7 @@
       align-items: flex-start;
     }
 
-    /* Linke Spalte: Stream (20% kleiner, weiter links) */
+    /* Linke Spalte: Stream (48% = etwa 20% kleiner als vorher) */
     .stream-col {
       flex: 0 0 48%;
       min-width: 0;
@@ -55,20 +55,20 @@
       display: block;
     }
 
-    /* Rechte Spalte: Shorts + Instagram (50% größer) */
+    /* Rechte Spalte: Shorts + Instagram */
     .side-col {
       flex: 1;
       min-width: 0;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 20px;
     }
 
-    /* YouTube-Shorts: 3 nebeneinander, 50% größer */
+    /* YouTube-Shorts: 3 nebeneinander, gleiche Größe wie Instagram */
     .shorts-row {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
+      gap: 12px;
     }
     .shorts-row .short-item {
       aspect-ratio: 9 / 16;
@@ -77,12 +77,9 @@
       box-shadow: var(--shadow-soft);
       background: #1c1210;
       transition: transform 0.18s ease, box-shadow 0.18s ease;
-      transform: scale(1.5);
-      transform-origin: top left;
-      width: 66.66%;
     }
     .shorts-row .short-item:hover {
-      transform: scale(1.55);
+      transform: translateY(-3px) scale(1.02);
       box-shadow: var(--shadow-lift);
     }
     .shorts-row .short-item iframe {
@@ -92,26 +89,22 @@
       display: block;
     }
 
-    /* Instagram-Reihe: 3 nebeneinander, 50% größer */
+    /* Instagram-Reihe: 3 nebeneinander, gleiche Größe wie Shorts */
     .insta-row {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-      margin-top: 8px;
+      gap: 12px;
     }
     .insta-row .insta-item {
-      aspect-ratio: 1 / 1;
+      aspect-ratio: 9 / 16;
       border-radius: var(--radius-md);
       overflow: hidden;
       box-shadow: var(--shadow-soft);
       background: #1c1210;
       transition: transform 0.18s ease, box-shadow 0.18s ease;
-      transform: scale(1.5);
-      transform-origin: top left;
-      width: 66.66%;
     }
     .insta-row .insta-item:hover {
-      transform: scale(1.55);
+      transform: translateY(-3px) scale(1.02);
       box-shadow: var(--shadow-lift);
     }
     .insta-row .insta-item iframe {
@@ -155,15 +148,11 @@
       .side-col {
         width: 100%;
       }
-      .shorts-row .short-item,
-      .insta-row .insta-item {
-        transform: scale(1);
-        width: 100%;
-        transform-origin: center;
+      .shorts-row {
+        grid-template-columns: repeat(3, 1fr);
       }
-      .shorts-row .short-item:hover,
-      .insta-row .insta-item:hover {
-        transform: scale(1.02);
+      .insta-row {
+        grid-template-columns: repeat(3, 1fr);
       }
     }
 
@@ -178,11 +167,6 @@
       }
       .content-social-row a {
         width: 100px;
-      }
-      .shorts-row .short-item,
-      .insta-row .insta-item {
-        transform: scale(1);
-        width: 100%;
       }
     }
   </style>
@@ -232,7 +216,7 @@
     <div class="section-head" style="margin-bottom:16px;">
       <span class="eyebrow" style="font-size:0.95rem;">Frisch aus dem Stall</span>
       <h1 style="font-size:clamp(1.6rem, 2.5vw, 2.2rem);">Content</h1>
-      <p style="font-size:0.95rem; margin-bottom:0;">Live-Stream, Shorts und Neuigkeiten.</p>
+      <p style="font-size:0.95rem; margin-bottom:0;">Live-Stream, Shorts und Instagram.</p>
     </div>
   </section>
 
@@ -264,7 +248,7 @@
       </div>
     </div>
 
-    <!-- Rechte Spalte: Shorts + Instagram (50% größer) -->
+    <!-- Rechte Spalte: Shorts + Instagram -->
     <div class="side-col">
 
       <!-- YouTube-Shorts (3 nebeneinander) -->
@@ -287,7 +271,7 @@
         </div>
       </div>
 
-      <!-- Instagram-Posts (3 nebeneinander) -->
+      <!-- Instagram-Posts (3 nebeneinander, gleiche Größe) -->
       <div class="insta-row">
         <div class="insta-item">
           <iframe
