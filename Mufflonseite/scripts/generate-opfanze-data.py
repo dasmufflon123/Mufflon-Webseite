@@ -2,12 +2,9 @@ from pathlib import Path
 import json
 import re
 
-# === PFADE ANPASSEN ===
-# Dein lokaler Ordner mit den PDFs
-LOCAL_PDF_DIR = Path("C:/Users/angel/Desktop/Opfanze Downloader/Opfanze_PDFs")
-
-# Dein GitHub-Projektordner (wo die Opfanze-data.js hin soll)
-BASE_DIR = Path("C:/Users/angel/Desktop/Neuer Ordner")
+# === PFADE ===
+BASE_DIR = Path(__file__).resolve().parent.parent
+OPFANZE_DIR = BASE_DIR / "assets" / "Opfanze_assets"
 
 # Ausgabe-Datei
 OUTPUT_FILE = BASE_DIR / "js" / "Opfanze-data.js"
@@ -16,10 +13,10 @@ ausgaben = []
 
 # Beide Jahrgänge durchsuchen
 for year_folder in ["Extrablatt_2025", "Extrablatt_2026"]:
-    folder = LOCAL_PDF_DIR / year_folder
+    folder = OPFANZE_DIR / year_folder
 
     if not folder.exists():
-        print(f"Ordner nicht gefunden: {folder}")
+        print(f"⚠️ Ordner nicht gefunden: {folder}")
         continue
 
     for pdf in folder.glob("*.pdf"):
@@ -50,7 +47,7 @@ for year_folder in ["Extrablatt_2025", "Extrablatt_2026"]:
             jahr = 2026
 
         else:
-            print(f"Nicht erkannt: {pdf.name}")
+            print(f"❌ Nicht erkannt: {pdf.name}")
             continue
 
         # Titel bereinigen
@@ -58,8 +55,8 @@ for year_folder in ["Extrablatt_2025", "Extrablatt_2026"]:
         titel = titel.replace("-", " ")
         titel = re.sub(r"\s+", " ", titel).strip()
 
-        # Pfad für GitHub (wichtig für die Website)
-        relativer_pfad = f"Mufflonseite/assets/Opfanze_assets/{year_folder}/{pdf.name}"
+        # Pfad für die Website
+        relativer_pfad = pdf.relative_to(BASE_DIR).as_posix()
 
         ausgaben.append({
             "nummer": f"{nummer:03d}",
@@ -87,5 +84,5 @@ with open(OUTPUT_FILE, "w", encoding="utf-8") as file:
         + ";\n"
     )
 
-print(f"{len(ausgaben)} Opfanzen gefunden.")
-print(f"Datei erstellt: {OUTPUT_FILE}")
+print(f"✅ {len(ausgaben)} Opfanzen gefunden.")
+print(f"✅ Datei erstellt: {OUTPUT_FILE}")
