@@ -2,9 +2,12 @@ from pathlib import Path
 import json
 import re
 
-# Ordner mit den PDFs
-BASE_DIR = Path(__file__).resolve().parent.parent
-OPFANZE_DIR = BASE_DIR / "assets" / "Opfanze_assets"
+# === PFADE ANPASSEN ===
+# Dein lokaler Ordner mit den PDFs
+LOCAL_PDF_DIR = Path("C:/Users/angel/Desktop/Opfanze Downloader/Opfanze_PDFs")
+
+# Dein GitHub-Projektordner (wo die Opfanze-data.js hin soll)
+BASE_DIR = Path("C:/Users/angel/Desktop/Neuer Ordner")
 
 # Ausgabe-Datei
 OUTPUT_FILE = BASE_DIR / "js" / "Opfanze-data.js"
@@ -13,23 +16,22 @@ ausgaben = []
 
 # Beide Jahrgänge durchsuchen
 for year_folder in ["Extrablatt_2025", "Extrablatt_2026"]:
-    folder = OPFANZE_DIR / year_folder
+    folder = LOCAL_PDF_DIR / year_folder
 
     if not folder.exists():
+        print(f"Ordner nicht gefunden: {folder}")
         continue
 
     for pdf in folder.glob("*.pdf"):
         filename = pdf.stem
 
-        # 2025:
-        # 0012025_OPFANZE_Titel_0012025_20250626
+        # 2025: 0012025_OPFANZE_Titel_0012025_20250626
         match_2025 = re.match(
             r"^(\d{3})2025_OPFANZE_(.*?)_\d{7}_?(\d{8})$",
             filename
         )
 
-        # 2026:
-        # Extrablatt_0012026_Titel_20260105
+        # 2026: Extrablatt_0012026_Titel_20260105
         match_2026 = re.match(
             r"^Extrablatt_(\d{3})2026_(.*?)_(\d{8})$",
             filename
@@ -51,17 +53,13 @@ for year_folder in ["Extrablatt_2025", "Extrablatt_2026"]:
             print(f"Nicht erkannt: {pdf.name}")
             continue
 
-        # Unterstriche im Titel durch Leerzeichen ersetzen
+        # Titel bereinigen
         titel = titel.replace("_", " ")
-
-        # Bindestriche im Titel durch Leerzeichen ersetzen
         titel = titel.replace("-", " ")
-
-        # Mehrere Leerzeichen entfernen
         titel = re.sub(r"\s+", " ", titel).strip()
 
-        # Website-Pfad
-        relativer_pfad = pdf.relative_to(BASE_DIR).as_posix()
+        # Pfad für GitHub (wichtig für die Website)
+        relativer_pfad = f"Mufflonseite/assets/Opfanze_assets/{year_folder}/{pdf.name}"
 
         ausgaben.append({
             "nummer": f"{nummer:03d}",
