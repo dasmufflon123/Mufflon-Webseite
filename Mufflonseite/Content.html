@@ -36,9 +36,9 @@
       align-items: flex-start;
     }
 
-    /* Linke Spalte: Stream */
+    /* Linke Spalte: Stream (20% kleiner, weiter links) */
     .stream-col {
-      flex: 0 0 58%;
+      flex: 0 0 48%;
       min-width: 0;
     }
     .stream-col .embed-wrap {
@@ -55,7 +55,7 @@
       display: block;
     }
 
-    /* Rechte Spalte: Shorts + Instagram */
+    /* Rechte Spalte: Shorts + Instagram (50% größer) */
     .side-col {
       flex: 1;
       min-width: 0;
@@ -64,11 +64,11 @@
       gap: 16px;
     }
 
-    /* YouTube-Shorts: 3 nebeneinander */
+    /* YouTube-Shorts: 3 nebeneinander, 50% größer */
     .shorts-row {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
+      gap: 14px;
     }
     .shorts-row .short-item {
       aspect-ratio: 9 / 16;
@@ -77,9 +77,12 @@
       box-shadow: var(--shadow-soft);
       background: #1c1210;
       transition: transform 0.18s ease, box-shadow 0.18s ease;
+      transform: scale(1.5);
+      transform-origin: top left;
+      width: 66.66%;
     }
     .shorts-row .short-item:hover {
-      transform: translateY(-3px) scale(1.02);
+      transform: scale(1.55);
       box-shadow: var(--shadow-lift);
     }
     .shorts-row .short-item iframe {
@@ -89,11 +92,12 @@
       display: block;
     }
 
-    /* Instagram-Reihe: 3 nebeneinander */
+    /* Instagram-Reihe: 3 nebeneinander, 50% größer */
     .insta-row {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
+      gap: 14px;
+      margin-top: 8px;
     }
     .insta-row .insta-item {
       aspect-ratio: 1 / 1;
@@ -102,10 +106,12 @@
       box-shadow: var(--shadow-soft);
       background: #1c1210;
       transition: transform 0.18s ease, box-shadow 0.18s ease;
-      position: relative;
+      transform: scale(1.5);
+      transform-origin: top left;
+      width: 66.66%;
     }
     .insta-row .insta-item:hover {
-      transform: translateY(-3px) scale(1.02);
+      transform: scale(1.55);
       box-shadow: var(--shadow-lift);
     }
     .insta-row .insta-item iframe {
@@ -137,18 +143,6 @@
       border-radius: 12px;
     }
 
-    /* Neuigkeiten-Bereich (kompakter) */
-    .news-section {
-      padding-top: 10px !important;
-      padding-bottom: 30px !important;
-    }
-    .news-section .section-head {
-      margin-bottom: 16px !important;
-    }
-    .news-section .section-head h2 {
-      font-size: clamp(1.3rem, 2vw, 1.8rem) !important;
-    }
-
     /* ---- Responsive ---- */
     @media (max-width: 820px) {
       .content-grid {
@@ -161,11 +155,15 @@
       .side-col {
         width: 100%;
       }
-      .shorts-row {
-        grid-template-columns: repeat(3, 1fr);
+      .shorts-row .short-item,
+      .insta-row .insta-item {
+        transform: scale(1);
+        width: 100%;
+        transform-origin: center;
       }
-      .insta-row {
-        grid-template-columns: repeat(3, 1fr);
+      .shorts-row .short-item:hover,
+      .insta-row .insta-item:hover {
+        transform: scale(1.02);
       }
     }
 
@@ -180,6 +178,11 @@
       }
       .content-social-row a {
         width: 100px;
+      }
+      .shorts-row .short-item,
+      .insta-row .insta-item {
+        transform: scale(1);
+        width: 100%;
       }
     }
   </style>
@@ -251,7 +254,7 @@
        ============================================================ -->
   <div class="content-grid">
 
-    <!-- Linke Spalte: Twitch-Stream (kleiner) -->
+    <!-- Linke Spalte: Twitch-Stream (kleiner, weiter links) -->
     <div class="stream-col">
       <div class="embed-wrap">
         <iframe
@@ -261,7 +264,7 @@
       </div>
     </div>
 
-    <!-- Rechte Spalte: Shorts + Instagram -->
+    <!-- Rechte Spalte: Shorts + Instagram (50% größer) -->
     <div class="side-col">
 
       <!-- YouTube-Shorts (3 nebeneinander) -->
@@ -312,19 +315,6 @@
     </div><!-- /side-col -->
   </div><!-- /content-grid -->
 
-  <!-- ============================================================
-       NEUIGKEITEN
-       ============================================================ -->
-  <section class="news-section" style="padding-top:10px; padding-bottom:30px;">
-    <div class="section-head" style="margin-bottom:16px;">
-      <span class="eyebrow">Aus der Commähnity</span>
-      <h2 style="font-size:clamp(1.3rem, 2vw, 1.8rem);">📰 Neuigkeiten</h2>
-    </div>
-    <div id="news-container" class="wrap" style="max-width:720px;">
-      <!-- wird per JavaScript aus content-data.js befüllt -->
-    </div>
-  </section>
-
   <footer class="site-footer">
     <div class="footer-brand">Das__Mufflon 🐑</div>
     <p><a href="https://twitch.tv/das__mufflon" target="_blank" rel="noopener">twitch.tv/das__mufflon</a></p>
@@ -333,26 +323,7 @@
   <!-- ============================================================
        JAVASCRIPT
        ============================================================ -->
-  <script src="js/content-data.js"></script>
   <script src="js/main.js"></script>
-  <script>
-    const container = document.getElementById('news-container');
 
-    if (!CONTENT_EINTRAEGE || CONTENT_EINTRAEGE.length === 0) {
-      container.innerHTML = '<div class="empty-state">Noch keine Neuigkeiten — schau bald wieder vorbei! 🌿</div>';
-    } else {
-      CONTENT_EINTRAEGE.forEach(entry => {
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.innerHTML = `
-          <span class="tag">${entry.tag || 'Neu'}</span>
-          <h3 style="margin-top:4px;">${entry.titel}</h3>
-          <p style="color:#8a7660; font-size:0.85rem; margin-bottom:10px;">${entry.datum}</p>
-          <p style="margin-bottom:0;">${entry.text}</p>
-        `;
-        container.appendChild(card);
-      });
-    }
-  </script>
 </body>
 </html>
