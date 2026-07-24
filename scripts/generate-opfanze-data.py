@@ -11,6 +11,11 @@ OPFANZE_DIR = BASE_DIR / "Mufflonseite" / "assets" / "Opfanze_assets"
 # Ausgabe-Datei: MUSS in Mufflonseite/js/ liegen!
 OUTPUT_FILE = BASE_DIR / "Mufflonseite" / "js" / "Opfanze-data.js"
 
+# Debug: Zeige die Pfade an
+print(f"🔍 BASE_DIR: {BASE_DIR}")
+print(f"🔍 OPFANZE_DIR: {OPFANZE_DIR}")
+print(f"🔍 OUTPUT_FILE: {OUTPUT_FILE}")
+
 ausgaben = []
 
 # Beide Jahrgänge durchsuchen
@@ -21,7 +26,9 @@ for year_folder in ["Extrablatt_2025", "Extrablatt_2026"]:
         print(f"⚠️ Ordner nicht gefunden: {folder}")
         continue
 
+    print(f"📁 Durchsuche: {folder}")
     for pdf in folder.glob("*.pdf"):
+        print(f"📄 Gefunden: {pdf.name}")
         filename = pdf.stem
 
         # 2025: 0012025_OPFANZE_Titel_0012025_20250626
