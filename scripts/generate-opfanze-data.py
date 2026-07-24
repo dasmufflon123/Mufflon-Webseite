@@ -8,8 +8,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Die PDFs liegen in Mufflonseite/assets/Opfanze_assets/
 OPFANZE_DIR = BASE_DIR / "Mufflonseite" / "assets" / "Opfanze_assets"
 
-# Ausgabe-Datei (bleibt im Hauptverzeichnis)
-OUTPUT_FILE = BASE_DIR / "js" / "Opfanze-data.js"
+# Ausgabe-Datei: MUSS in Mufflonseite/js/ liegen!
+OUTPUT_FILE = BASE_DIR / "Mufflonseite" / "js" / "Opfanze-data.js"
 
 ausgaben = []
 
@@ -76,7 +76,7 @@ ausgaben.sort(
     reverse=True
 )
 
-# JavaScript-Datei erstellen
+# JavaScript-Datei erstellen (in Mufflonseite/js/)
 OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)
 
 with open(OUTPUT_FILE, "w", encoding="utf-8") as file:
