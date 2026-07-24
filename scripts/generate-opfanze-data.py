@@ -2,11 +2,13 @@ from pathlib import Path
 import json
 import re
 
-# === PFADE ===
+# === PFADE ANPASSEN ===
 BASE_DIR = Path(__file__).resolve().parent.parent
-OPFANZE_DIR = BASE_DIR / "assets" / "Opfanze_assets"
 
-# Ausgabe-Datei
+# Die PDFs liegen in Mufflonseite/assets/Opfanze_assets/
+OPFANZE_DIR = BASE_DIR / "Mufflonseite" / "assets" / "Opfanze_assets"
+
+# Ausgabe-Datei (bleibt im Hauptverzeichnis)
 OUTPUT_FILE = BASE_DIR / "js" / "Opfanze-data.js"
 
 ausgaben = []
@@ -55,7 +57,7 @@ for year_folder in ["Extrablatt_2025", "Extrablatt_2026"]:
         titel = titel.replace("-", " ")
         titel = re.sub(r"\s+", " ", titel).strip()
 
-        # Pfad für die Website
+        # Pfad für die Website (relativ zum Hauptverzeichnis)
         relativer_pfad = pdf.relative_to(BASE_DIR).as_posix()
 
         ausgaben.append({
