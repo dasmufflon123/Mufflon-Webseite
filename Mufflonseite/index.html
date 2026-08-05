@@ -7,6 +7,36 @@
   <meta name="description" content="Die Homepage von Das__Mufflon — Content, die Streamingzeitung Opfanze und die Mähmories der Commähnity.">
   <link rel="icon" type="image/png" href="assets/mufflon-mascot.png">
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Hero-Bilder nebeneinander */
+    .hero-image {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero-image img {
+      max-width: 45%;
+      height: auto;
+    }
+    .hero-image img:first-child {
+      animation: float 5s ease-in-out infinite;
+    }
+    .hero-image img:last-child {
+      animation: float 5s ease-in-out infinite 0.8s;
+    }
+    @media (max-width: 780px) {
+      .hero-image {
+        flex-direction: row;
+        flex-wrap: wrap;
+        width: 100%;
+        justify-content: center;
+      }
+      .hero-image img {
+        max-width: 40%;
+      }
+    }
+  </style>
 </head>
 <body>
 
@@ -27,7 +57,8 @@
       </nav>
     </div>
   </header>
-   <div class="social-dock">
+
+  <div class="social-dock">
     <a href="https://twitch.tv/das__mufflon" target="_blank" rel="noopener" aria-label="Twitch" class="social-btn" style="animation-delay:0s">
       <span class="social-float" style="animation-duration:3.2s; animation-delay:0.6s">
         <img src="assets/social/twitch.png" alt="Twitch">
@@ -43,28 +74,31 @@
         <img src="assets/social/insta.png" alt="Instagram">
       </span>
     </a>
-  <a href="https://www.youtube.com/@dasmufflon" target="_blank" rel="noopener" aria-label="YouTube" class="social-btn" style="animation-delay:0.45s">
-  <span class="social-float" style="animation-duration:3.8s; animation-delay:1.05s">
-    <img src="assets/social/yt.png" alt="YouTube">
-  </span>
-</a>
-   </div>
-  
+    <a href="https://www.youtube.com/@dasmufflon" target="_blank" rel="noopener" aria-label="YouTube" class="social-btn" style="animation-delay:0.45s">
+      <span class="social-float" style="animation-duration:3.8s; animation-delay:1.05s">
+        <img src="assets/social/yt.png" alt="YouTube">
+      </span>
+    </a>
+  </div>
+
   <div class="hero">
     <div class="hero-text">
       <span class="eyebrow">Willkommen im Stall ~</span>
       <h1>Hey, ich bin Angey —<br>das ist Das__Mufflon.</h1>
-      <p>Hier findest du alles rund um meine Commähnity: den neuesten Content, das Archiv unserer Streamingzeitung <strong>Opfanze</strong> und unsere gemeinsamen Mähmories.</p>
+      <p>Hallo! Ich bin Angey, Jahrgang 1990 und die Person hinter Das__Mufflon. Gaming war schon immer ein großer Teil meines Lebens, doch mit dem Streamen habe ich einen Ort gefunden, an dem ich meine Leidenschaft mit einer wundervollen Community teilen kann. Jeder Stream lebt von gemeinsamen Erlebnissen, viel Gelächter und einer entspannten Atmosphäre.</p>
+      <p>An meiner Seite ist mein Mann Bober, den ich vor einigen Jahren kennengelernt habe. Er unterstützt mich auf meinem Weg und gibt mir den Rückhalt, meinen Traum von einer erfolgreichen Streamerkarriere zu verfolgen. Ohne ihn wären viele Projekte und Ideen nur halb so leicht umzusetzen.</p>
+      <p>Mein Ziel ist es, einen Ort zu schaffen, an dem sich jeder willkommen fühlt. Egal ob auf Twitch, YouTube oder in unserer Community: Schön, dass du hier bist und ein Teil der Mufflons bist! 🐑</p>
       <div style="display:flex; gap:14px; flex-wrap:wrap; margin-top:22px;">
-<a href="Opfanze.html" class="btn btn-primary">
-  <img src="assets/Opfanze_assets/opfanze zeitung blatt.png" alt="Opfanze" style="height:26px; vertical-align:middle; margin-right:8px;">
-  Opfanze lesen
-</a>
+        <a href="Opfanze.html" class="btn btn-primary">
+          <img src="assets/Opfanze_assets/opfanze zeitung blatt.png" alt="Opfanze" style="height:26px; vertical-align:middle; margin-right:8px;">
+          Opfanze lesen
+        </a>
         <a href="Content.html" class="btn btn-ghost">Neuigkeiten ansehen</a>
       </div>
     </div>
     <div class="hero-image">
       <img src="assets/mufflon-mascot.png" alt="Mufflon Maskottchen">
+      <img src="assets/Angey Bild.png" alt="Angey" class="hero-angey">
     </div>
   </div>
 
