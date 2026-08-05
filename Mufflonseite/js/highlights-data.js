@@ -4,7 +4,7 @@
 
 const HIGHLIGHTS = [
   { 
-    label: "SONGBATTLES", 
+    label: "SONG-<br>BATTLE", 
     farbe1: "#DD8A46", 
     farbe2: "#B96B2E", 
     link: "#",
@@ -18,14 +18,14 @@ const HIGHLIGHTS = [
     desc: "<strong>Das Mufflon sucht den mähgischen Songwriter</strong><br>DMSDMS ist das musikalische Community-Format auf Twitch. Talente aus der Commähnity präsentieren ihre eigenen Songs, stellen sich dem Voting und kämpfen um den Titel des mähgischen Songwriters. Kreativität, Emotionen und jede Menge Gänsehautmomente stehen dabei im Mittelpunkt."
   },
   { 
-    label: "HUFGAMES", 
+    label: "HUF-<br>GAMES", 
     farbe1: "#6B4A8C", 
     farbe2: "#4F3868", 
     link: "#",
     desc: "<strong>HUFGAMES</strong><br>Die HUFGAMES sind das große Community-Event von Das__Mufflon. In verschiedenen Spielen treten Teams oder Einzelspieler gegeneinander an und sammeln Punkte für den Sieg. Der Spaß, das Miteinander und verrückte Momente stehen dabei immer an erster Stelle."
   },
   { 
-    label: "SUBATHON", 
+    label: "SUBA-<br>THON", 
     farbe1: "#C1662E", 
     farbe2: "#8B4A20", 
     link: "#",
@@ -39,7 +39,7 @@ const HIGHLIGHTS = [
     desc: "<strong>YouTube Shorts</strong><br>Auf YouTube Shorts erscheinen regelmäßig kurze Highlights, lustige Clips und besondere Momente aus den Streams. Perfekt für alle, die auch zwischendurch einen schnellen Einblick in die Welt von Das__Mufflon bekommen möchten. Neue Shorts erscheinen fortlaufend auf dem YouTube-Kanal."
   },
   { 
-    label: "GOAT CLASH", 
+    label: "GOAT<br>CLASH", 
     farbe1: "#9C8465", 
     farbe2: "#7A6650", 
     link: "#",
