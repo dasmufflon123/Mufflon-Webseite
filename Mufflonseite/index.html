@@ -8,32 +8,55 @@
   <link rel="icon" type="image/png" href="assets/mufflon-mascot.png">
   <link rel="stylesheet" href="css/style.css">
   <style>
-    /* Hero-Bilder nebeneinander */
+    /* Hero-Bilder: Mufflon + Angey im harmonischen Layout */
     .hero-image {
       display: flex;
-      gap: 16px;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
+      gap: 8px;
+      flex: 0 0 340px;
+      position: relative;
     }
-    .hero-image img {
-      max-width: 45%;
+    .hero-image .mufflon-img {
+      width: 100%;
+      max-width: 280px;
       height: auto;
-    }
-    .hero-image img:first-child {
+      filter: drop-shadow(var(--shadow-lift));
       animation: float 5s ease-in-out infinite;
     }
-    .hero-image img:last-child {
+    .hero-image .angey-img {
+      width: 100%;
+      max-width: 260px;
+      height: auto;
+      border-radius: 20px 20px 20px 20px;
+      box-shadow: var(--shadow-soft);
+      border: 4px solid rgba(255,255,255,0.6);
       animation: float 5s ease-in-out infinite 0.8s;
+      margin-top: -10px;
     }
     @media (max-width: 780px) {
       .hero-image {
+        flex: 0 0 auto;
+        width: 100%;
         flex-direction: row;
         flex-wrap: wrap;
-        width: 100%;
         justify-content: center;
+        gap: 12px;
       }
-      .hero-image img {
-        max-width: 40%;
+      .hero-image .mufflon-img {
+        max-width: 160px;
+      }
+      .hero-image .angey-img {
+        max-width: 150px;
+        margin-top: 0;
+      }
+    }
+    @media (max-width: 480px) {
+      .hero-image .mufflon-img {
+        max-width: 120px;
+      }
+      .hero-image .angey-img {
+        max-width: 110px;
       }
     }
   </style>
@@ -97,8 +120,8 @@
       </div>
     </div>
     <div class="hero-image">
-      <img src="assets/mufflon-mascot.png" alt="Mufflon Maskottchen">
-      <img src="assets/Angey Bild.png" alt="Angey" class="hero-angey">
+      <img src="assets/mufflon-mascot.png" alt="Mufflon Maskottchen" class="mufflon-img">
+      <img src="assets/Angey Bild.png" alt="Angey" class="angey-img">
     </div>
   </div>
 
