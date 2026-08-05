@@ -47,6 +47,7 @@
     position:relative;
   }
 
+  /* Zentriert den Timer-Bereich unterhalb vom Mufflon-Header */
   .pomodoro-main{
     display:flex;
     align-items:center;
@@ -55,6 +56,7 @@
     min-height: calc(100vh - 76px);
   }
 
+  /* Fireflies */
   .firefly{
     position:fixed;
     width:4px; height:4px;
@@ -74,6 +76,7 @@
     50% { opacity: 0.9; }
   }
 
+  /* Window vine decoration */
   .vine{
     position:fixed;
     top:0; left:0;
@@ -107,6 +110,7 @@
     padding: 28px 30px 32px;
   }
 
+  /* Todo-Card sitzt jetzt auf hellem Untergrund -> eigene helle Kartenfarbe + dunkler Text */
   .card.todo-card{
     --cream: #3E2C1E;
     --cream-dim: #6B5645;
@@ -134,6 +138,35 @@
     font-size: inherit;
     padding: 0;
   }
+  .user-tag .name-form{
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .user-tag .name-form input{
+    font-size: 0.88rem;
+    padding: 4px 8px;
+    border-radius: 8px;
+    border: 1px solid rgba(107,66,38,0.25);
+    background: #fff;
+    color: var(--text-dark);
+    width: 130px;
+  }
+  .user-tag .name-form button.save{
+    background: var(--terracotta);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 4px 10px;
+    cursor: pointer;
+    font-weight: 700;
+  }
+  .todo-author{
+    font-size: 0.78rem;
+    color: var(--cream-dim);
+    margin-left: 6px;
+    font-style: italic;
+  }
 
   h1{
     font-family:'Caveat', cursive;
@@ -151,7 +184,7 @@
     margin-bottom: 18px;
   }
 
-  /* Timer wrap – relative container für Mufflon + Karte */
+  /* Timer wrap – neuer Container für Mufflon + Karte */
   .timer-wrap{
     position: relative;
     display: flex;
@@ -159,7 +192,7 @@
     align-items: center;
   }
 
-  /* Mascot – schiebt sich von unten nach oben */
+  /* Mascot – schiebt von unten nach oben */
   .mascot{
     position: absolute;
     bottom: 100%;
@@ -229,6 +262,15 @@
   }
   .card.timer-card .time{
     color: #3d2313;
+  }
+
+  .timer-card{
+    width: 300px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    margin-top: 0;
+    transition: margin-top 0.6s cubic-bezier(.32, 1.2, .38, 1);
   }
 
   .ring-wrap{
@@ -338,6 +380,7 @@
   }
   .custom-timer-popover button:hover{ transform: translateY(-1px); filter:brightness(1.06); }
 
+  /* ---------- Login-Overlay ---------- */
   .login-backdrop{
     position: fixed;
     inset: 0;
@@ -401,6 +444,7 @@
     min-height: 1em;
   }
 
+  /* ---------- Gelber Klebezettel ---------- */
   .sticky-trigger{
     position: absolute;
     top: -10px;
@@ -572,6 +616,7 @@
   .btn-pause{ background: linear-gradient(155deg, var(--ember-soft) 0%, var(--ember) 100%); }
   .btn-stop{ background: linear-gradient(155deg, var(--rust) 0%, var(--rust-dark) 100%); color:#2c1416;}
 
+  /* Todo card */
   .todo-card{
     width: 540px;
     display:flex;
@@ -656,6 +701,9 @@
   .todo-item.prio-high:hover{ border-color: var(--prio-high); background: rgba(217,99,94,0.20); }
   .todo-item.prio-medium:hover{ border-color: var(--prio-medium); background: rgba(227,165,72,0.20); }
   .todo-item.prio-low:hover{ border-color: var(--prio-low); background: rgba(143,166,129,0.20); }
+  .todo-item:not(.prio-high):not(.prio-medium):not(.prio-low):hover{
+    border-color: var(--terracotta);
+  }
 
   .edit-btn{
     background:none;
@@ -675,6 +723,7 @@
   }
   .edit-btn:hover{ color: var(--terracotta); }
 
+  /* ---------- Drag-Griff zum manuellen Verschieben ---------- */
   .drag-handle{
     flex-shrink: 0;
     width: 18px;
@@ -830,6 +879,7 @@
     font-style: italic;
   }
 
+  /* Mode toggle for add-row */
   .mode-toggle{
     display:flex;
     gap:6px;
@@ -847,58 +897,3 @@
     background: rgba(0,0,0,0.16);
     color: var(--cream-dim);
     border: 1px solid transparent;
-    transition: all 0.15s ease;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:5px;
-  }
-  .mode-chip svg{ width:13px; height:13px; }
-  .mode-chip.active{
-    background: rgba(242,193,78,0.14);
-    border-color: rgba(242,193,78,0.4);
-    color: var(--ember-soft);
-  }
-
-  .group-item{
-    background: rgba(0,0,0,0.16);
-    border: 1px solid rgba(247,234,217,0.1);
-    border-radius: 16px;
-    padding: 12px 12px 10px;
-  }
-  .group-header{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    cursor:pointer;
-  }
-  .group-caret{
-    width:10px; height:10px;
-    flex-shrink:0;
-    border-right:2px solid var(--ember-soft);
-    border-bottom:2px solid var(--ember-soft);
-    transform: rotate(-45deg);
-    transition: transform 0.2s ease;
-    margin-left:2px;
-  }
-  .group-item.collapsed .group-caret{ transform: rotate(45deg); }
-  .group-title{
-    flex:1;
-    font-weight:700;
-    font-size:0.95rem;
-    color: var(--cream);
-  }
-  .group-progress{
-    font-size:0.72rem;
-    color: var(--cream-dim);
-    background: rgba(143,166,129,0.18);
-    border-radius: 8px;
-    padding: 2px 8px;
-    white-space:nowrap;
-  }
-  .group-del{
-    background:none;
-    border:none;
-    color: rgba(247,234,217,0.35);
-    cursor:pointer;
-    font-size:
