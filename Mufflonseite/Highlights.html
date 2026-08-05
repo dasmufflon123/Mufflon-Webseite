@@ -34,14 +34,12 @@
       font-weight: 700;
       font-size: 1.8rem;
       letter-spacing: 0.02em;
-      background: rgba(0,0,0,0.4);
-      backdrop-filter: blur(4px);
-      padding: 0.4rem 1rem;
-      border-radius: 60px;
-      display: inline-block;
+      /* KEIN dunkler Hintergrund mehr */
+      padding: 0;
+      display: block;
       margin-bottom: 0.3rem;
-      align-self: flex-start;
-      border: 1px solid rgba(255,255,255,0.15);
+      text-align: center;
+      line-height: 1.2;
     }
     
     .highlight-tile .desc {
@@ -50,20 +48,17 @@
       transform: translateY(20px);
       transition: opacity 0.5s ease, transform 0.5s ease, max-height 0.5s ease;
       overflow: hidden;
-      background: rgba(0,0,0,0.3);
-      backdrop-filter: blur(4px);
-      border-radius: 12px;
-      margin-top: 0.5rem;
-      border-left: 3px solid rgba(255,215,0,0.5);
+      /* KEIN Hintergrund mehr */
       font-size: 0.95rem;
       line-height: 1.5;
+      text-align: center;
     }
     
     .highlight-tile:hover .desc {
       opacity: 1;
-      max-height: 300px;
+      max-height: 500px; /* Mehr Platz für den ganzen Text */
       transform: translateY(0);
-      padding: 0.8rem;
+      padding: 0.5rem 0 0 0;
     }
     
     /* Toast/Notification für Klick */
@@ -180,17 +175,14 @@
       
       // Klick-Event: Toast anzeigen und Link unterdrücken
       tile.addEventListener('click', function(e) {
-        e.preventDefault(); // Verhindert das Laden von "#"
+        e.preventDefault();
         
-        // Toast anzeigen
         toast.classList.add('show');
         
-        // Vorherigen Timer löschen
         if (toastTimer) {
           clearTimeout(toastTimer);
         }
         
-        // Toast nach 2,5 Sekunden ausblenden
         toastTimer = setTimeout(() => {
           toast.classList.remove('show');
           toastTimer = null;
