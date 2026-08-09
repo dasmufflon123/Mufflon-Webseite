@@ -11,7 +11,6 @@
        HIGHLIGHTS — Verbesserte Darstellung
        ============================================================ */
 
-    /* Highlight-Kacheln größer und mit Platz für Text */
     .highlight-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -67,7 +66,6 @@
       word-break: break-word;
     }
 
-    /* Hover-Effekt: Mehr Infos werden sichtbar */
     .highlight-tile .label .sub-label {
       display: none;
       font-size: 0.75rem;
@@ -82,7 +80,6 @@
       display: block;
     }
 
-    /* Für Kacheln mit nur einem Wort */
     .highlight-tile .label .main-label {
       display: block;
       font-size: 1.2rem;
@@ -92,7 +89,6 @@
       font-size: 1rem;
     }
 
-    /* Platz für mehrzeiligen Text */
     .highlight-tile .label-content {
       display: flex;
       flex-direction: column;
@@ -101,7 +97,6 @@
       width: 100%;
     }
 
-    /* Responsive Anpassungen */
     @media (max-width: 640px) {
       .highlight-grid {
         grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -208,16 +203,6 @@
   <script>
     const grid = document.getElementById('highlight-grid');
 
-    // Untertitel für die Kacheln (kannst du beliebig erweitern)
-    const SUB_LABELS = {
-      "Event": "📅 Live-Events & Specials",
-      "DMSDMS": "🎮 DMZ & More",
-      "HUFGAMES": "🏆 Turniere & Wettkämpfe",
-      "SUBATHON": "🎯 Subathon-Ziele",
-      "SHORTS": "📱 Kurz & knackig",
-      "Mehr bald": "✨ Kommt noch!"
-    };
-
     HIGHLIGHTS.forEach(h => {
       const tile = document.createElement('a');
       tile.href = h.link || '#';
@@ -225,13 +210,10 @@
       tile.style.setProperty('--tile-c1', h.farbe1);
       tile.style.setProperty('--tile-c2', h.farbe2);
 
-      const subText = SUB_LABELS[h.label] || '';
-
       tile.innerHTML = `
         <span class="label">
           <span class="label-content">
             <span class="main-label">${h.label}</span>
-            ${subText ? `<span class="sub-label">${subText}</span>` : ''}
           </span>
         </span>
       `;
