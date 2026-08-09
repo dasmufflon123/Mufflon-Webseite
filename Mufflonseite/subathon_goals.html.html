@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subathon 2026 — Das__Mufflon</title>
+  <meta name="description" content="Die Subathon-Ziele für 2026 — Alle Subs und ihre Challenges.">
+  <link rel="icon" type="image/png" href="assets/mufflon-mascot.png">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ============================================================
+       SUBATHON SUBGOALS 2026 — Eigene Styles
+       ============================================================ */
+
+    .subathon-header {
+      padding-top: 30px !important;
+      padding-bottom: 10px !important;
+    }
+    .subathon-header .section-head {
+      margin-bottom: 20px !important;
+    }
+    .subathon-header .section-head h1 {
+      font-size: clamp(2rem, 3.5vw, 2.8rem) !important;
+    }
+
+    /* ---- Fortschrittsbalken ---- */
+    .progress-wrap {
+      max-width: 1080px;
+      margin: 0 auto 40px;
+      padding: 0 24px;
+    }
+    .progress-bar-bg {
+      width: 100%;
+      height: 32px;
+      background: rgba(107, 66, 38, 0.12);
+      border-radius: 999px;
+      overflow: hidden;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);
+      position: relative;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--terracotta), var(--terracotta-dark));
+      border-radius: 999px;
+      width: 0%;
+      transition: width 0.6s ease;
+      box-shadow: 0 0 12px rgba(221, 138, 70, 0.3);
+    }
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 600;
+      color: var(--horn-brown);
+      font-size: 0.95rem;
+      margin-top: 6px;
+    }
+    .progress-label .sub-count {
+      background: var(--terracotta);
+      color: #fff;
+      padding: 2px 14px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+    }
+
+    /* ---- Subathon-Grid ---- */
+    .subathon-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 18px;
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 24px 40px;
+    }
+
+    .sub-goal-card {
+      background: var(--cream-soft);
+      border: 2px solid rgba(107, 66, 38, 0.08);
+      border-radius: var(--radius-md);
+      padding: 18px 20px 20px;
+      box-shadow: var(--shadow-soft);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .sub-goal-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lift);
+      border-color: var(--terracotta);
+    }
+
+    /* Milestone-Kennzeichnung */
+    .sub-goal-card.milestone {
+      border-color: var(--terracotta);
+      border-width: 3px;
+    }
+    .sub-goal-card.milestone::before {
+      content: "★";
+      position: absolute;
+      top: 6px;
+      right: 12px;
+      font-size: 1.2rem;
+      color: var(--terracotta);
+      opacity: 0.4;
+    }
+
+    .sub-goal-card .sub-number {
+      font-family: 'Baloo 2', sans-serif;
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--terracotta);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .sub-goal-card .sub-number .sub-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-soft);
+    }
+    .sub-goal-card .sub-goal-text {
+      font-size: 0.92rem;
+      color: var(--text);
+      line-height: 1.5;
+      margin-top: 4px;
+    }
+    .sub-goal-card .sub-goal-text .highlight {
+      color: var(--terracotta-dark);
+      font-weight: 600;
+    }
+
+    /* Badges für Kategorien */
+    .sub-badge {
+      display: inline-block;
+      font-family: 'Baloo 2', sans-serif;
+      font-size: 0.6rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 2px 10px;
+      border-radius: 999px;
+      background: var(--moss);
+      color: var(--white);
+      margin-bottom: 6px;
+    }
+    .sub-badge.game { background: #6B4A8C; }
+    .sub-badge.creative { background: #DD8A46; }
+    .sub-badge.community { background: #7C9473; }
+    .sub-badge.challenge { background: #C1662E; }
+    .sub-badge.punishment { background: #A34E53; }
+    .sub-badge.special { background: #6B4226; }
+
+    /* Abgeschlossen-Markierung */
+    .sub-goal-card.completed {
+      opacity: 0.6;
+      border-color: var(--moss) !important;
+    }
+    .sub-goal-card.completed .sub-number {
+      color: var(--moss);
+    }
+    .sub-goal-card.completed::after {
+      content: "✓";
+      position: absolute;
+      bottom: 8px;
+      right: 14px;
+      font-size: 1.8rem;
+      color: var(--moss);
+      opacity: 0.25;
+    }
+
+    /* ---- Legende ---- */
+    .legend-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px 20px;
+      max-width: 1080px;
+      margin: -10px auto 30px;
+      padding: 0 24px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      color: var(--text-soft);
+      font-family: 'Baloo 2', sans-serif;
+    }
+    .legend-item .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+    .legend-item .dot.game { background: #6B4A8C; }
+    .legend-item .dot.creative { background: #DD8A46; }
+    .legend-item .dot.community { background: #7C9473; }
+    .legend-item .dot.challenge { background: #C1662E; }
+    .legend-item .dot.punishment { background: #A34E53; }
+    .legend-item .dot.special { background: #6B4226; }
+
+    /* ---- Responsive ---- */
+    @media (max-width: 640px) {
+      .subathon-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+        padding: 0 16px 30px;
+      }
+      .sub-goal-card .sub-number {
+        font-size: 1.6rem;
+      }
+      .progress-wrap {
+        padding: 0 16px;
+      }
+      .legend-wrap {
+        gap: 8px 14px;
+      }
+      .legend-item {
+        font-size: 0.7rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="nav-inner">
+      <a href="index.html" class="brand">
+        <img src="assets/mufflon-mascot.png" alt="Mufflon Maskottchen">
+        Das__Mufflon
+      </a>
+      <button class="nav-toggle" aria-label="Menü öffnen">☰</button>
+      <nav class="main-nav">
+        <a href="index.html" class="nav-home"><img src="assets/mufflon-mascot.png" alt="Stall" title="Stall"></a>
+        <a href="Content.html">Content</a>
+        <a href="Opfanze.html">Opfanze</a>
+        <a href="Highlights.html">Highlights</a>
+        <a href="pomodoro.html">Pomodoro</a>
+        <a href="mahmories.html">Mähmories</a>
+        <a href="subathon.html" class="active">Subathon</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="social-dock">
+    <a href="https://twitch.tv/das__mufflon" target="_blank" rel="noopener" aria-label="Twitch" class="social-btn" style="animation-delay:0s">
+      <span class="social-float" style="animation-duration:3.2s; animation-delay:0.6s">
+        <img src="assets/social/twitch.png" alt="Twitch">
+      </span>
+    </a>
+    <a href="https://discord.gg/mzW9Hh96S" target="_blank" rel="noopener" aria-label="Discord" class="social-btn" style="animation-delay:0.15s">
+      <span class="social-float" style="animation-duration:3.6s; animation-delay:0.75s">
+        <img src="assets/social/dc.png" alt="Discord">
+      </span>
+    </a>
+    <a href="https://www.instagram.com/das__mufflon/" target="_blank" rel="noopener" aria-label="Instagram" class="social-btn" style="animation-delay:0.3s">
+      <span class="social-float" style="animation-duration:4.0s; animation-delay:0.9s">
+        <img src="assets/social/insta.png" alt="Instagram">
+      </span>
+    </a>
+    <a href="https://www.youtube.com/@dasmufflon" target="_blank" rel="noopener" aria-label="YouTube" class="social-btn" style="animation-delay:0.45s">
+      <span class="social-float" style="animation-duration:3.8s; animation-delay:1.05s">
+        <img src="assets/social/yt.png" alt="YouTube">
+      </span>
+    </a>
+  </div>
+
+  <!-- ============================================================
+       HEADER
+       ============================================================ -->
+  <section class="subathon-header">
+    <div class="section-head">
+      <span class="eyebrow">Die große Challenge</span>
+      <h1>🎯 SUBATHON SUBGOALS 2026</h1>
+      <p>Jede 10 neue Subs schalten ein neues Ziel frei!<br>Die Commähnity bestimmt, was Mufflon erwartet.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       FORTSCHRITTSBALKEN
+       ============================================================ -->
+  <div class="progress-wrap">
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progressFill" style="width: 0%;"></div>
+    </div>
+    <div class="progress-label">
+      <span>Ziele freigeschaltet</span>
+      <span class="sub-count" id="progressCount">0 / 901</span>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       LEGENDE
+       ============================================================ -->
+  <div class="legend-wrap">
+    <span class="legend-item"><span class="dot game"></span> Games</span>
+    <span class="legend-item"><span class="dot creative"></span> Kreativ</span>
+    <span class="legend-item"><span class="dot community"></span> Community</span>
+    <span class="legend-item"><span class="dot challenge"></span> Challenge</span>
+    <span class="legend-item"><span class="dot punishment"></span> Strafe</span>
+    <span class="legend-item"><span class="dot special"></span> Special</span>
+    <span class="legend-item">★ = Meilenstein</span>
+  </div>
+
+  <!-- ============================================================
+       SUBGOAL-GRID
+       ============================================================ -->
+  <div class="subathon-grid" id="subathonGrid">
+    <!-- wird per JavaScript befüllt -->
+  </div>
+
+  <!-- ============================================================
+       FOOTER
+       ============================================================ -->
+  <footer class="site-footer">
+    <div class="footer-brand">Das__Mufflon 🐑</div>
+    <p><a href="https://twitch.tv/das__mufflon" target="_blank" rel="noopener">twitch.tv/das__mufflon</a></p>
+  </footer>
+
+  <script src="js/main.js"></script>
+
+  <script>
+    // ============================================================
+    // SUBATHON SUBGOALS 2026 — Daten
+    // ============================================================
+
+    const SUBATHON_GOALS = [
+      { subs: 10,  text: "Strafenrad (30 Min TTS-Hölle mit Eggin On, Hühnerhut, 1 Ingwershot, doppelte Strafdrehs, privates Foto Reveal + 1 Stunde Spielzeit)", category: "punishment" },
+      { subs: 20,  text: "Level Devil — 3 Stunden zocken", category: "game" },
+      { subs: 30,  text: "Robot Unicorn Attack gegen die Community — Beste Highscore gewinnt (2 Stunden)", category: "game" },
+      { subs: 40,  text: "Chat bestimmt ein YT Short (Inhalt + Text). Der Gewinner von Unicorn Attack darf das letzte Wort im Short bestimmen (TOS-konform)", category: "community" },
+      { subs: 50,  text: "Bob Ross Bild nach Vorgabe malen — inkl. Verlosung (40×60 cm)", category: "creative" },
+      { subs: 60,  text: "Strafenrad (30 Min TTS-Hölle mit Eggin On, Hühnerhut, 1 Ingwershot, doppelte Strafdrehs, privates Foto Reveal + 1 Stunde Spielzeit)", category: "punishment" },
+      { subs: 70,  text: "More or Less — 4 Stunden Ratespaß", category: "game" },
+      { subs: 80,  text: "Tierlist: Tiere, die Mufflon bekämpfen könnte", category: "community" },
+      { subs: 90,  text: "Bandle — Musik erraten (3 Stunden)", category: "game" },
+      { subs: 100, text: "Super Ghouls'n Ghosts (SNES) — 4 Stunden", category: "game" },
+      { subs: 110, text: "Strafenrad (30 Min TTS-Hölle mit Eggin On, Hühnerhut, 1 Ingwershot, doppelte Strafdrehs, privates Foto Reveal + 1 Stunde Spielzeit)", category: "punishment" },
+      { subs: 120, text: "Der schlechte Werbespot — Live einen überzogenen Werbespot über ein sinnloses Ding aus Mufflons Wohnung drehen", category: "creative" },
+      { subs: 130, text: "Facepaint nach Chat-Vorgabe — danach 9 Stunden passende Spiele zocken", category: "challenge" },
+      { subs: 140, text: "Herdenlexikon anlegen — mit Hilfe des Chats werden Insider, Memes & Meilensteine dokumentiert (Wikipedia-Stil)", category: "community" },
+      { subs: 150, text: "Don't Laugh Challenge — Video produziert von Bober. Für jeden Lacher ein ganzes Stück Mouth Party essen", category: "challenge" },
+      { subs: 160, text: "Tierlist: Heißte Celebrity Männerse", category: "community" },
+      { subs: 170, text: "Strafenrad (30 Min TTS-Hölle mit Eggin On, Hühnerhut, 1 Ingwershot, doppelte Strafdrehs, privates Foto Reveal + 1 Stunde Spielzeit)", category: "punishment" },
+      { subs: 180, text: "Super Mario World (SNES) mit Super Mario Maske — 9 Stunden", category: "game" },
+      { subs: 190, text: "Trashsong Songbattle — alles erlaubt (TOS-konform), max. 5 Minuten Länge", category: "creative" },
+      { subs: 200, text: "Online IQ Test — Live im Stream", category: "challenge" },
+      { subs: 225, text: "PowerPoint Karaoke — Chat sucht 3 Powerpoints, Mufflon trägt sie als Experte vor", category: "community" },
+      { subs: 250, text: "Bob Ross Bild nach Vorgabe malen — inkl. Verlosung (40×60 cm)", category: "creative" },
+      { subs: 275, text: "Strafenrad (30 Min TTS-Hölle mit Eggin On, Hühnerhut, 1 Ingwershot, doppelte Strafdrehs, privates Foto Reveal + 1 Stunde Spielzeit)", category: "punishment" },
+      { subs: 300, text: "Cosplay aus Haushaltsgegenständen — Chat bestimmt Charakter, 30 Minuten Vorbereitung, danach ganzer Tag im Outfit", category: "challenge" },
+      { subs: 325, text: "Tierlist: Heulende Katzen", category: "community" },
+      { subs: 350, text: "Chat bestimmt ein YT Short (Inhalt + Text)", category: "community" },
+      { subs: 375, text: "Community Roast — Die Community roastet Mufflon über Maggus (Opfanze). Jeder kann einen Roast einsenden, Mufflon liest live vor.", category: "community" },
+      { subs: 400, text: "Facepaint nach Chat-Vorgabe — danach 9 Stunden passende Spiele zocken", category: "challenge" },
+      { subs: 425, text: "Strafenrad (30 Min TTS-Hölle mit Eggin On, Hühnerhut, 1 Ingwershot, doppelte Strafdrehs, privates Foto Reveal + 1 Stunde Spielzeit)", category: "punishment" },
+      { subs: 450, text: "Fright Night mit der Commähnity — Nunnies Nightshift: Wir suchen gruselige Anomalien", category: "game" },
+      { subs: 475, text: "One Huf Handicap — Donkey Kong Country (SNES) mit nur einem Huf! Inkl. Huf-Cam (6 Stunden)", category: "challenge" },
+      { subs: 500, text: "Songbattle: Kinderserien-Intros", category: "creative" },
+      { subs: 525, text: "Tierlist nach Chat-Entscheidung (Abstimmung)", category: "community" },
+      { subs: 550, text: "Speedrun gegen den Chat — 3 Stunden", category: "game" },
+      { subs: 575, text: "Strafenrad (30 Min TTS-Hölle mit Eggin On, Hühnerhut, 1 Ingwershot, doppelte Strafdrehs, privates Foto Reveal + 1 Stunde Spielzeit)", category: "punishment" },
+      { subs: 600, text: "9h Retro Marathon — Beginn in den 80ern, alle 2 Stunden wechselt das Jahrzehnt (80er, 90er, 2000er, 2010er, 2020er). Spiele werden von der Community vorgeschlagen & abgestimmt.", category: "game" },
+      { subs: 625, text: "9h Horrorstream inkl. Facepaint oder Maske — Horrorgames werden von der Community vorgeschlagen (Bober bekommt 3 Erschreckerlies)", category: "game" },
+      { subs: 650, text: "Mufflon komponiert & schreibt einen Community-Song — Live auf Gitarre gespielt & gesungen!", category: "creative" },
+      { subs: 675, text: "Bob Ross Bild nach Vorgabe malen — inkl. Verlosung (40×60 cm)", category: "creative" },
+      { subs: 700, text: "Bobers Allgemeinwissensquiz — Live und in Farbe", category: "community" },
+      { subs: 725, text: "Strafenrad (30 Min TTS-Hölle mit Eggin On, Hühnerhut, 1 Ingwershot, doppelte Strafdrehs, privates Foto Reveal + 1 Stunde Spielzeit)", category: "punishment" },
+      { subs: 750, text: "9h Diktatur — Der Chat bestimmt: Wann Mufflon Pause macht, isst, welches Game gespielt wird und wie Mufflon sich im Spiel zu verhalten hat (Kein Amogus!)", category: "challenge" },
+      { subs: 800, text: "Das Herdenhörspiel", category: "special" },
+      { subs: 850, text: "Der Tag der Qualen! 4 Stunden Among Us + 4 Stunden Mufflon Karaoke — Ihr quält mich, ich quäle euch!", category: "challenge" },
+      { subs: 875, text: "Strafenrad (30 Min TTS-Hölle mit Eggin On, Hühnerhut, 1 Ingwershot, doppelte Strafdrehs, privates Foto Reveal + 1 Stunde Spielzeit)", category: "punishment" },
+      { subs: 900, text: "Mufflons lonely Zeltnacht — Eine Nacht DRAUSSEN im Zelt! Mit lustigen Geistergeschichten + Dose kalte Ravioli essen!", category: "special" },
+      { subs: 901, text: "Extended Goals werden revealed! 👀", category: "special" }
+    ];
+
+    // Meilenstein-Schwellen (100, 200, 300, 400, 500, 600, 700, 800, 900)
+    const MILESTONES = [100, 200, 300, 400, 500, 600, 700, 800, 900];
+
+    // ============================================================
+    // RENDER-FUNKTION
+    // ============================================================
+
+    const grid = document.getElementById('subathonGrid');
+    const progressFill = document.getElementById('progressFill');
+    const progressCount = document.getElementById('progressCount');
+
+    function renderGoals() {
+      grid.innerHTML = '';
+      const total = SUBATHON_GOALS.length;
+      const currentSubs = 901; // Aktueller Stand – kannst du hier anpassen!
+
+      let unlocked = 0;
+
+      SUBATHON_GOALS.forEach((goal, index) => {
+        const isUnlocked = goal.subs <= currentSubs;
+        if (isUnlocked) unlocked++;
+
+        const isMilestone = MILESTONES.includes(goal.subs);
+        const isLast = index === total - 1;
+
+        const card = document.createElement('div');
+        card.className = 'sub-goal-card' + (isMilestone ? ' milestone' : '') + (isUnlocked ? ' completed' : '');
+
+        const catLabels = {
+          game: '🎮 Game',
+          creative: '🎨 Kreativ',
+          community: '👥 Community',
+          challenge: '⚡ Challenge',
+          punishment: '😈 Strafe',
+          special: '✨ Special'
+        };
+
+        card.innerHTML = `
+          <span class="sub-badge ${goal.category}">${catLabels[goal.category] || goal.category}</span>
+          <div class="sub-number">
+            ${goal.subs}
+            <span class="sub-label">Subs</span>
+          </div>
+          <div class="sub-goal-text">${goal.text}</div>
+        `;
+
+        grid.appendChild(card);
+      });
+
+      // Fortschrittsbalken
+      const percent = Math.round((unlocked / total) * 100);
+      progressFill.style.width = percent + '%';
+      progressCount.textContent = unlocked + ' / ' + total;
+    }
+
+    renderGoals();
+  </script>
+
+</body>
+</html>
