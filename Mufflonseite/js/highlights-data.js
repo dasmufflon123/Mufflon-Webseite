@@ -1,44 +1,210 @@
-const HIGHLIGHTS = [
-  { 
-    label: "SONG-<br>BATTLE", 
-    farbe1: "#DD8A46", 
-    farbe2: "#B96B2E", 
-    link: "#",
-    desc: "Bei den SongBattles treten Songs in spannenden Duellen gegeneinander an. Die Community stimmt ab, welcher Titel weiterkommt. Klassiker, Hits oder Geheimtipps – hier wird mitgefiebert!"
-  },
-  { 
-    label: "DMSDMS", 
-    farbe1: "#7C9473", 
-    farbe2: "#5C7050", 
-    link: "#",
-    desc: "Das musikalische Community-Format auf Twitch. Talente präsentieren eigene Songs, kämpfen um Votes und den Titel des mähgischen Songwriters. Kreativität pur!"
-  },
-  { 
-    label: "HUF-<br>GAMES", 
-    farbe1: "#6B4A8C", 
-    farbe2: "#4F3868", 
-    link: "#",
-    desc: "Das große Community-Event von Das__Mufflon. Teams oder Einzelspieler treten in verschiedenen Spielen an und sammeln Punkte für den Sieg. Spaß garantiert!"
-  },
-  { 
-    label: "SUBA-<br>THON", 
-    farbe1: "#C1662E", 
-    farbe2: "#8B4A20", 
-    link: "#",
-    desc: "Die Community entscheidet, wie lange der Stream läuft. Jede Unterstützung verlängert den Timer und bringt neue Ziele, Challenges und unvergessliche Momente."
-  },
-  { 
-    label: "SHORTS", 
-    farbe1: "#6B4226", 
-    farbe2: "#4A2D18", 
-    link: "#",
-    desc: "Kurze Highlights, lustige Clips und besondere Momente aus den Streams. Perfekt für einen schnellen Einblick in die Welt von Das__Mufflon."
-  },
-  { 
-    label: "GOAT<br>CLASH", 
-    farbe1: "#9C8465", 
-    farbe2: "#7A6650", 
-    link: "#",
-    desc: "Das große Wettkampf-Event mit anderen Creatorn. Geschick, Teamwork und Chaos sorgen für spannende Duelle und legendäre Momente."
-  }
-];
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Highlights — Das__Mufflon</title>
+  <link rel="icon" type="image/png" href="assets/mufflon-mascot.png">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ============================================================
+       HIGHLIGHTS — Verbesserte Darstellung
+       ============================================================ */
+
+    .highlight-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .highlight-tile {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+      box-shadow: var(--shadow-soft);
+      text-decoration: none;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+      min-height: 220px;
+    }
+    .highlight-tile:hover {
+      transform: translateY(-4px) scale(1.03);
+      box-shadow: var(--shadow-lift);
+    }
+
+    .highlight-tile::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.25), transparent 45%),
+        linear-gradient(155deg, var(--tile-c1), var(--tile-c2));
+    }
+
+    .highlight-tile .label {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      padding: 18px 16px 16px;
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 700;
+      font-size: 1.15rem;
+      color: #fff;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+      background: linear-gradient(0deg, rgba(0,0,0,0.60) 0%, transparent 100%);
+      text-align: center;
+      line-height: 1.1;
+      letter-spacing: 0.02em;
+      min-height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      word-break: break-word;
+    }
+
+    .highlight-tile .label .main-label {
+      display: block;
+      font-size: 1.15rem;
+      line-height: 1.1;
+    }
+
+    /* Hover: Text wird etwas kleiner, damit alles passt */
+    .highlight-tile:hover .label .main-label {
+      font-size: 1.0rem;
+      line-height: 1.1;
+    }
+
+    /* Responsive Anpassungen */
+    @media (max-width: 640px) {
+      .highlight-grid {
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 14px;
+      }
+      .highlight-tile {
+        min-height: 160px;
+      }
+      .highlight-tile .label {
+        font-size: 0.95rem;
+        padding: 14px 12px 12px;
+        min-height: 56px;
+      }
+      .highlight-tile .label .main-label {
+        font-size: 0.95rem;
+      }
+      .highlight-tile:hover .label .main-label {
+        font-size: 0.85rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .highlight-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+      .highlight-tile {
+        min-height: 140px;
+      }
+      .highlight-tile .label {
+        font-size: 0.8rem;
+        padding: 10px 8px 8px;
+        min-height: 44px;
+      }
+      .highlight-tile .label .main-label {
+        font-size: 0.8rem;
+        line-height: 1.0;
+      }
+      .highlight-tile:hover .label .main-label {
+        font-size: 0.7rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="nav-inner">
+      <a href="index.html" class="brand">
+        <img src="assets/mufflon-mascot.png" alt="Mufflon Maskottchen">
+        Das__Mufflon
+      </a>
+      <button class="nav-toggle" aria-label="Menü öffnen">☰</button>
+      <nav class="main-nav">
+        <a href="index.html" class="nav-home"><img src="assets/mufflon-mascot.png" alt="Stall" title="Stall"></a>
+        <a href="Content.html">Content</a>
+        <a href="Opfanze.html">Opfanze</a>
+        <a href="Highlights.html" class="active">Highlights</a>
+        <a href="subathon_goals.html">Subathon</a>
+        <a href="pomodoro.html">Pomodoro</a>
+        <a href="mahmories.html">Mähmories</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="social-dock">
+    <a href="https://twitch.tv/das__mufflon" target="_blank" rel="noopener" aria-label="Twitch" class="social-btn" style="animation-delay:0s">
+      <span class="social-float" style="animation-duration:3.2s; animation-delay:0.6s">
+        <img src="assets/social/twitch.png" alt="Twitch">
+      </span>
+    </a>
+    <a href="https://discord.gg/mzW9Hh96S" target="_blank" rel="noopener" aria-label="Discord" class="social-btn" style="animation-delay:0.15s">
+      <span class="social-float" style="animation-duration:3.6s; animation-delay:0.75s">
+        <img src="assets/social/dc.png" alt="Discord">
+      </span>
+    </a>
+    <a href="https://www.instagram.com/das__mufflon/" target="_blank" rel="noopener" aria-label="Instagram" class="social-btn" style="animation-delay:0.3s">
+      <span class="social-float" style="animation-duration:4.0s; animation-delay:0.9s">
+        <img src="assets/social/insta.png" alt="Instagram">
+      </span>
+    </a>
+    <a href="https://www.youtube.com/@dasmufflon" target="_blank" rel="noopener" aria-label="YouTube" class="social-btn" style="animation-delay:0.45s">
+      <span class="social-float" style="animation-duration:3.8s; animation-delay:1.05s">
+        <img src="assets/social/yt.png" alt="YouTube">
+      </span>
+    </a>
+  </div>
+
+  <section style="padding-top:50px;">
+    <div class="section-head">
+      <span class="eyebrow">MÄHGIC MOMENTS</span>
+      <h1 class="tilt-heading">🎬 Highlights</h1>
+      <p>Über die Jahre kommen viele schöne Erinnerungen zusammen</p>
+    </div>
+
+    <div id="highlight-grid" class="highlight-grid wrap">
+      <!-- wird per JavaScript aus highlights-data.js befüllt -->
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-brand">Das__Mufflon 🐑</div>
+    <p><a href="https://twitch.tv/das__mufflon" target="_blank" rel="noopener">twitch.tv/das__mufflon</a></p>
+  </footer>
+
+  <script src="js/highlights-data.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    const grid = document.getElementById('highlight-grid');
+
+    HIGHLIGHTS.forEach(h => {
+      const tile = document.createElement('a');
+      tile.href = h.link || '#';
+      tile.className = 'highlight-tile';
+      tile.style.setProperty('--tile-c1', h.farbe1);
+      tile.style.setProperty('--tile-c2', h.farbe2);
+
+      tile.innerHTML = `
+        <span class="label">
+          <span class="main-label">${h.label}</span>
+        </span>
+      `;
+
+      grid.appendChild(tile);
+    });
+  </script>
+
+</body>
+</html>
