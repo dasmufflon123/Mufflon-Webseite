@@ -59,7 +59,7 @@
       text-align: center;
       line-height: 1.1;
       letter-spacing: 0.02em;
-      min-height: 70px;
+      min-height: 80px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -75,14 +75,15 @@
     /* Untertitel erscheint beim Hovern */
     .highlight-tile .label .sub-label {
       display: none;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-weight: 400;
-      opacity: 0.9;
+      opacity: 0.95;
       margin-top: 4px;
       font-family: 'Nunito', sans-serif;
-      line-height: 1.2;
+      line-height: 1.15;
       color: #fff;
-      text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+      text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+      max-width: 95%;
     }
 
     .highlight-tile:hover .label .sub-label {
@@ -116,7 +117,7 @@
       .highlight-tile .label {
         font-size: 0.95rem;
         padding: 14px 12px 12px;
-        min-height: 56px;
+        min-height: 65px;
       }
       .highlight-tile .label .main-label {
         font-size: 0.95rem;
@@ -125,7 +126,8 @@
         font-size: 0.85rem;
       }
       .highlight-tile .label .sub-label {
-        font-size: 0.65rem;
+        font-size: 0.62rem;
+        line-height: 1.1;
       }
     }
 
@@ -140,7 +142,7 @@
       .highlight-tile .label {
         font-size: 0.8rem;
         padding: 10px 8px 8px;
-        min-height: 44px;
+        min-height: 55px;
       }
       .highlight-tile .label .main-label {
         font-size: 0.8rem;
@@ -150,7 +152,9 @@
         font-size: 0.7rem;
       }
       .highlight-tile .label .sub-label {
-        font-size: 0.55rem;
+        font-size: 0.52rem;
+        line-height: 1.05;
+        margin-top: 2px;
       }
     }
   </style>
@@ -221,16 +225,6 @@
   <script>
     const grid = document.getElementById('highlight-grid');
 
-    // Untertitel für die Kacheln (kannst du beliebig erweitern)
-    const SUB_LABELS = {
-      "Event": "📅 Live-Events & Specials",
-      "DMSDMS": "🎮 DMZ & More",
-      "HUFGAMES": "🏆 Turniere & Wettkämpfe",
-      "SUBATHON": "🎯 Subathon-Ziele",
-      "SHORTS": "📱 Kurz & knackig",
-      "Mehr bald": "✨ Kommt noch!"
-    };
-
     HIGHLIGHTS.forEach(h => {
       const tile = document.createElement('a');
       tile.href = h.link || '#';
@@ -238,13 +232,11 @@
       tile.style.setProperty('--tile-c1', h.farbe1);
       tile.style.setProperty('--tile-c2', h.farbe2);
 
-      const subText = SUB_LABELS[h.label] || '';
-
       tile.innerHTML = `
         <span class="label">
           <span class="label-content">
             <span class="main-label">${h.label}</span>
-            ${subText ? `<span class="sub-label">${subText}</span>` : ''}
+            ${h.sub ? `<span class="sub-label">${h.sub}</span>` : ''}
           </span>
         </span>
       `;
