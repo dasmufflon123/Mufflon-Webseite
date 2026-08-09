@@ -72,10 +72,36 @@
       line-height: 1.1;
     }
 
-    /* Hover: Text wird etwas kleiner, damit alles passt */
+    /* Untertitel erscheint beim Hovern */
+    .highlight-tile .label .sub-label {
+      display: none;
+      font-size: 0.75rem;
+      font-weight: 400;
+      opacity: 0.9;
+      margin-top: 4px;
+      font-family: 'Nunito', sans-serif;
+      line-height: 1.2;
+      color: #fff;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    }
+
+    .highlight-tile:hover .label .sub-label {
+      display: block;
+    }
+
+    /* Hover: Haupttext wird etwas kleiner, damit Untertitel Platz hat */
     .highlight-tile:hover .label .main-label {
       font-size: 1.0rem;
       line-height: 1.1;
+    }
+
+    /* Label-Content als Flex für Haupttitel + Untertitel */
+    .highlight-tile .label-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
     }
 
     /* Responsive Anpassungen */
@@ -98,6 +124,9 @@
       .highlight-tile:hover .label .main-label {
         font-size: 0.85rem;
       }
+      .highlight-tile .label .sub-label {
+        font-size: 0.65rem;
+      }
     }
 
     @media (max-width: 480px) {
@@ -119,6 +148,9 @@
       }
       .highlight-tile:hover .label .main-label {
         font-size: 0.7rem;
+      }
+      .highlight-tile .label .sub-label {
+        font-size: 0.55rem;
       }
     }
   </style>
@@ -189,6 +221,16 @@
   <script>
     const grid = document.getElementById('highlight-grid');
 
+    // Untertitel für die Kacheln (kannst du beliebig erweitern)
+    const SUB_LABELS = {
+      "Event": "📅 Live-Events & Specials",
+      "DMSDMS": "🎮 DMZ & More",
+      "HUFGAMES": "🏆 Turniere & Wettkämpfe",
+      "SUBATHON": "🎯 Subathon-Ziele",
+      "SHORTS": "📱 Kurz & knackig",
+      "Mehr bald": "✨ Kommt noch!"
+    };
+
     HIGHLIGHTS.forEach(h => {
       const tile = document.createElement('a');
       tile.href = h.link || '#';
@@ -196,9 +238,14 @@
       tile.style.setProperty('--tile-c1', h.farbe1);
       tile.style.setProperty('--tile-c2', h.farbe2);
 
+      const subText = SUB_LABELS[h.label] || '';
+
       tile.innerHTML = `
         <span class="label">
-          <span class="main-label">${h.label}</span>
+          <span class="label-content">
+            <span class="main-label">${h.label}</span>
+            ${subText ? `<span class="sub-label">${subText}</span>` : ''}
+          </span>
         </span>
       `;
 
