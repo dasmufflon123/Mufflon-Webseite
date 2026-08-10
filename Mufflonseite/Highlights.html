@@ -6,160 +6,6 @@
   <title>Highlights — Das__Mufflon</title>
   <link rel="icon" type="image/png" href="assets/mufflon-mascot.png">
   <link rel="stylesheet" href="css/style.css">
-  <style>
-    /* ============================================================
-       HIGHLIGHTS — Verbesserte Darstellung
-       ============================================================ */
-
-    .highlight-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
-      max-width: 1080px;
-      margin: 0 auto;
-    }
-
-    .highlight-tile {
-      position: relative;
-      aspect-ratio: 1 / 1;
-      border-radius: var(--radius-md);
-      overflow: hidden;
-      display: flex;
-      align-items: flex-end;
-      box-shadow: var(--shadow-soft);
-      text-decoration: none;
-      transition: transform 0.18s ease, box-shadow 0.18s ease;
-      min-height: 220px;
-      cursor: pointer;
-    }
-    .highlight-tile:hover {
-      transform: translateY(-4px) scale(1.03);
-      box-shadow: var(--shadow-lift);
-    }
-
-    .highlight-tile::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background-image:
-        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.25), transparent 45%),
-        linear-gradient(155deg, var(--tile-c1), var(--tile-c2));
-    }
-
-    .highlight-tile .label {
-      position: relative;
-      z-index: 1;
-      width: 100%;
-      padding: 18px 16px 16px;
-      font-family: 'Baloo 2', sans-serif;
-      font-weight: 700;
-      font-size: 1.15rem;
-      color: #fff;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.5);
-      background: linear-gradient(0deg, rgba(0,0,0,0.60) 0%, transparent 100%);
-      text-align: center;
-      line-height: 1.1;
-      letter-spacing: 0.02em;
-      min-height: 80px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      word-break: break-word;
-    }
-
-    .highlight-tile .label .main-label {
-      display: block;
-      font-size: 1.15rem;
-      line-height: 1.1;
-    }
-
-    /* Untertitel erscheint beim Hovern über das ganze Tile */
-    .highlight-tile .label .sub-label {
-      display: none;
-      font-size: 0.72rem;
-      font-weight: 400;
-      opacity: 0.95;
-      margin-top: 4px;
-      font-family: 'Nunito', sans-serif;
-      line-height: 1.15;
-      color: #fff;
-      text-shadow: 0 1px 4px rgba(0,0,0,0.4);
-      max-width: 95%;
-    }
-
-    /* WICHTIG: Hover auf das ganze Tile, nicht nur auf .label */
-    .highlight-tile:hover .label .sub-label {
-      display: block !important;
-    }
-
-    /* Hover: Haupttext wird etwas kleiner, damit Untertitel Platz hat */
-    .highlight-tile:hover .label .main-label {
-      font-size: 1.0rem;
-      line-height: 1.1;
-    }
-
-    /* Label-Content als Flex für Haupttitel + Untertitel */
-    .highlight-tile .label-content {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-    }
-
-    /* Responsive Anpassungen */
-    @media (max-width: 640px) {
-      .highlight-grid {
-        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-        gap: 14px;
-      }
-      .highlight-tile {
-        min-height: 160px;
-      }
-      .highlight-tile .label {
-        font-size: 0.95rem;
-        padding: 14px 12px 12px;
-        min-height: 65px;
-      }
-      .highlight-tile .label .main-label {
-        font-size: 0.95rem;
-      }
-      .highlight-tile:hover .label .main-label {
-        font-size: 0.85rem;
-      }
-      .highlight-tile .label .sub-label {
-        font-size: 0.62rem;
-        line-height: 1.1;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .highlight-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-      }
-      .highlight-tile {
-        min-height: 140px;
-      }
-      .highlight-tile .label {
-        font-size: 0.8rem;
-        padding: 10px 8px 8px;
-        min-height: 55px;
-      }
-      .highlight-tile .label .main-label {
-        font-size: 0.8rem;
-        line-height: 1.0;
-      }
-      .highlight-tile:hover .label .main-label {
-        font-size: 0.7rem;
-      }
-      .highlight-tile .label .sub-label {
-        font-size: 0.52rem;
-        line-height: 1.05;
-        margin-top: 2px;
-      }
-    }
-  </style>
 </head>
 <body>
 
@@ -175,14 +21,13 @@
         <a href="Content.html">Content</a>
         <a href="Opfanze.html">Opfanze</a>
         <a href="Highlights.html" class="active">Highlights</a>
-        <a href="subathon_goals.html">Subathon</a>
         <a href="pomodoro.html">Pomodoro</a>
         <a href="mahmories.html">Mähmories</a>
       </nav>
     </div>
   </header>
 
-  <div class="social-dock">
+   <div class="social-dock">
     <a href="https://twitch.tv/das__mufflon" target="_blank" rel="noopener" aria-label="Twitch" class="social-btn" style="animation-delay:0s">
       <span class="social-float" style="animation-duration:3.2s; animation-delay:0.6s">
         <img src="assets/social/twitch.png" alt="Twitch">
@@ -198,12 +43,12 @@
         <img src="assets/social/insta.png" alt="Instagram">
       </span>
     </a>
-    <a href="https://www.youtube.com/@dasmufflon" target="_blank" rel="noopener" aria-label="YouTube" class="social-btn" style="animation-delay:0.45s">
-      <span class="social-float" style="animation-duration:3.8s; animation-delay:1.05s">
-        <img src="assets/social/yt.png" alt="YouTube">
-      </span>
-    </a>
-  </div>
+  <a href="https://www.youtube.com/@dasmufflon" target="_blank" rel="noopener" aria-label="YouTube" class="social-btn" style="animation-delay:0.45s">
+  <span class="social-float" style="animation-duration:3.8s; animation-delay:1.05s">
+    <img src="assets/social/yt.png" alt="YouTube">
+  </span>
+</a>
+   </div>
 
   <section style="padding-top:50px;">
     <div class="section-head">
@@ -213,7 +58,7 @@
     </div>
 
     <div id="highlight-grid" class="highlight-grid wrap">
-      <!-- wird per JavaScript aus highlights-data.js befüllt -->
+      <!-- wird per JavaScript aus highlights-data.js befuellt -->
     </div>
   </section>
 
@@ -233,19 +78,9 @@
       tile.className = 'highlight-tile';
       tile.style.setProperty('--tile-c1', h.farbe1);
       tile.style.setProperty('--tile-c2', h.farbe2);
-
-      tile.innerHTML = `
-        <span class="label">
-          <span class="label-content">
-            <span class="main-label">${h.label}</span>
-            ${h.sub ? `<span class="sub-label">${h.sub}</span>` : ''}
-          </span>
-        </span>
-      `;
-
+      tile.innerHTML = `<span class="label">${h.label}</span>`;
       grid.appendChild(tile);
     });
   </script>
-
 </body>
 </html>
