@@ -25,14 +25,12 @@
       font-size: 0.95rem !important;
     }
 
-    /* ---- Hauptcontainer: Stream oben, Kacheln darunter ---- */
     .content-container {
       max-width: 1080px;
       margin: 0 auto;
       padding: 0 24px 20px;
     }
 
-    /* ---- Stream (breit, schöner) ---- */
     .stream-wrap {
       width: 100%;
       margin-bottom: 28px;
@@ -52,7 +50,6 @@
       display: block;
     }
 
-    /* ---- Kachel-Reihen: YouTube Shorts + Instagram ---- */
     .kachel-section {
       margin-bottom: 28px;
     }
@@ -101,12 +98,10 @@
       display: block;
     }
 
-    /* Instagram-Iframes sauberer */
     .kachel-item.insta iframe {
       clip-path: inset(0% 0% 0% 0%);
     }
 
-    /* ---- Social-Buttons ---- */
     .content-social-row {
       display: flex;
       flex-wrap: wrap;
@@ -128,7 +123,6 @@
       border-radius: 12px;
     }
 
-    /* ---- Play-Buttons kleiner ---- */
     .embed-wrap .ytp-large-play-button,
     .embed-wrap .ytp-play-button,
     .kachel-item .ytp-large-play-button,
@@ -137,7 +131,6 @@
       transform-origin: center !important;
     }
 
-    /* ---- Responsive ---- */
     @media (max-width: 820px) {
       .kachel-row {
         grid-template-columns: repeat(3, 1fr);
@@ -210,9 +203,6 @@
     </a>
   </div>
 
-  <!-- ============================================================
-       HEADER
-       ============================================================ -->
   <section class="content-header" style="padding-top:10px; padding-bottom:10px;">
     <div class="section-head" style="margin-bottom:16px;">
       <span class="eyebrow" style="font-size:0.95rem;">Frisch aus dem Stall</span>
@@ -221,7 +211,6 @@
     </div>
   </section>
 
-  <!-- Social-Buttons -->
   <div class="content-social-row">
     <a href="https://twitch.tv/das__mufflon" target="_blank" rel="noopener" aria-label="Twitch">
       <img src="assets/social/twitch.png" alt="Twitch">
@@ -234,12 +223,8 @@
     </a>
   </div>
 
-  <!-- ============================================================
-       CONTENT: Stream oben, Kacheln darunter
-       ============================================================ -->
   <div class="content-container">
 
-    <!-- ---- STREAM (breit, oben) ---- -->
     <div class="stream-wrap">
       <div class="embed-wrap">
         <iframe
@@ -249,7 +234,6 @@
       </div>
     </div>
 
-    <!-- ---- YOUTUBE SHORTS (3 nebeneinander) ---- -->
     <div class="kachel-section">
       <div class="kachel-head">
         <span class="icon">📱</span>
@@ -276,7 +260,6 @@
       </div>
     </div>
 
-    <!-- ---- INSTAGRAM (3 nebeneinander) ---- -->
     <div class="kachel-section">
       <div class="kachel-head">
         <span class="icon">📸</span>
@@ -308,7 +291,7 @@
       </div>
     </div>
 
-  </div><!-- /content-container -->
+  </div>
 
   <footer class="site-footer">
     <div class="footer-brand">Das__Mufflon 🐑</div>
