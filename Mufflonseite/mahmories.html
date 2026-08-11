@@ -9,7 +9,6 @@
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/mahmories.css">
   <style>
-    /* Zusätzlicher Style für Cover-Einblendung */
     .book-cover {
       position: absolute;
       inset: 0;
@@ -38,6 +37,14 @@
       object-fit: cover;
       display: block;
     }
+    /* Linke Cover-Seite ist durchsichtig/leer */
+    .book-cover .page-half.left {
+      background: transparent;
+    }
+    /* Rechte Cover-Seite zeigt Buch vorne */
+    .book-cover .page-half.right {
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    }
     .book-cover .book-spine-cover {
       position: absolute;
       left: 50%;
@@ -48,12 +55,6 @@
       background: linear-gradient(to right, rgba(0,0,0,0.10), rgba(0,0,0,0.02), rgba(0,0,0,0.10));
       z-index: 6;
       pointer-events: none;
-    }
-    .book-cover .page-half.right {
-      border-radius: 0 var(--radius-md) var(--radius-md) 0;
-    }
-    .book-cover .page-half.left {
-      border-radius: var(--radius-md) 0 0 var(--radius-md);
     }
   </style>
 </head>
@@ -122,13 +123,13 @@
 
       <div class="book-spine"></div>
 
-      <!-- BUCH-COVER (wird beim ersten Öffnen ausgeblendet) -->
+      <!-- BUCH-COVER: NUR RECHTE SEITE (Buch vorne) -->
       <div class="book-cover" id="bookCover">
         <div class="page-half left">
-          <img src="assets/mähmories/Buch vorne.png" alt="Buch Vorderseite">
+          <!-- Leer / transparent -->
         </div>
         <div class="page-half right">
-          <img src="assets/mähmories/Buch hinten.png" alt="Buch Rückseite">
+          <img src="assets/mähmories/Buch vorne.png" alt="Buch Vorderseite">
         </div>
         <div class="book-spine-cover"></div>
       </div>
@@ -172,27 +173,22 @@
   <script src="js/main.js"></script>
   <script>
     // ============================================================
-    // MAEHMORIES — MIT BUCH COVER + HINTEN
+    // MAEHMORIES — MIT BUCH COVER (nur rechts) + RÜCKSEITE (nur links)
     // ============================================================
 
-    // Die echten Mitglieder (ohne Cover und Rückseite)
     const MEMBERS = MAHMORIES_MITGLIEDER;
 
-    // Gesamte Seitenliste: [Cover (rechts), Mitglieder, Rückseite (links)]
-    // Cover = nur rechte Seite (Buch vorne), linke Seite ist leer/weiß
-    // Rückseite = nur linke Seite (Buch hinten), rechte Seite ist leer/weiß
+    // Cover: nur rechte Seite (Buch vorne), linke Seite leer
+    const COVER_PAGE = { left: null, right: { name: "Cover", seite_links: null, seite_rechts: "assets/mähmories/Buch vorne.png" } };
 
-    const COVER_LEFT = null; // keine linke Seite beim Cover
-    const COVER_RIGHT = { name: "Cover", seite_links: null, seite_rechts: "assets/mähmories/Buch vorne.png" };
-
-    const BACK_LEFT = { name: "Rückseite", seite_links: "assets/mähmories/Buch hinten.png", seite_rechts: null };
-    const BACK_RIGHT = null; // keine rechte Seite bei der Rückseite
+    // Rückseite: nur linke Seite (Buch hinten), rechte Seite leer
+    const BACK_PAGE = { left: { name: "Rückseite", seite_links: "assets/mähmories/Buch hinten.png", seite_rechts: null }, right: null };
 
     // Seitenliste aufbauen
     let allPages = [];
 
     // 1. Cover (nur rechte Seite)
-    allPages.push({ left: null, right: COVER_RIGHT });
+    allPages.push(COVER_PAGE);
 
     // 2. Alle Mitglieder (links + rechts)
     MEMBERS.forEach(m => {
@@ -200,15 +196,14 @@
     });
 
     // 3. Rückseite (nur linke Seite)
-    allPages.push({ left: BACK_LEFT, right: null });
+    allPages.push(BACK_PAGE);
 
     // ============================================================
     // BUCH-LOGIK
     // ============================================================
 
-    let currentIndex = 0; // 0 = Cover
+    let currentIndex = 0;
     let isAnimating = false;
-    let isCoverVisible = true;
 
     const baseLeftImg = document.getElementById('baseLeftImg');
     const baseRightImg = document.getElementById('baseRightImg');
@@ -221,12 +216,6 @@
 
     function getPage(index) {
       return allPages[index] || { left: null, right: null };
-    }
-
-    function getMemberForSide(page, side) {
-      const data = side === 'left' ? page.left : page.right;
-      if (!data) return null;
-      return data;
     }
 
     function getImageSrc(page, side) {
@@ -251,9 +240,9 @@
       baseRightImg.src = rightSrc || '';
       baseRightImg.alt = getImageAlt(page, 'right') || 'Leere rechte Seite';
 
-      // Flip-Bilder für die Klappen (immer die gleichen wie Basis)
-      const leftMember = getMemberForSide(page, 'left');
-      const rightMember = getMemberForSide(page, 'right');
+      // Flip-Bilder
+      const leftMember = page.left;
+      const rightMember = page.right;
 
       if (rightMember) {
         document.getElementById('flipRightFrontImg').src = rightMember.seite_rechts || '';
@@ -273,11 +262,10 @@
 
       // Seitenanzeige
       const total = allPages.length;
-      const displayIndex = index + 1;
-      let label = displayIndex + ' / ' + total;
+      let label;
       if (index === 0) label = '📖 Cover';
       else if (index === total - 1) label = '🔚 Rückseite';
-      else label = displayIndex + ' / ' + total;
+      else label = (index) + ' / ' + (total - 2);
 
       indicator.textContent = label;
 
@@ -287,10 +275,8 @@
       // Buch-Cover ausblenden, wenn wir nicht mehr auf Seite 0 sind
       if (index === 0) {
         bookCover.classList.remove('hidden');
-        isCoverVisible = true;
       } else {
         bookCover.classList.add('hidden');
-        isCoverVisible = false;
       }
     }
 
@@ -311,14 +297,11 @@
       const targetPage = getPage(targetIndex);
 
       if (direction === 1) {
-        // Vorwärts
         flipRight.style.zIndex = '10';
         flipLeft.style.zIndex = '4';
 
-        // Rechte Seite der aktuellen Seite (was wegklappt)
-        const currentRight = getMemberForSide(currentPage, 'right');
-        // Linke Seite der Zielseite (was aufgedeckt wird)
-        const targetLeft = getMemberForSide(targetPage, 'left');
+        const currentRight = currentPage.right;
+        const targetLeft = targetPage.left;
 
         if (currentRight) {
           document.getElementById('flipRightFrontImg').src = currentRight.seite_rechts || '';
@@ -336,7 +319,6 @@
           document.getElementById('flipRightBackImg').alt = '';
         }
 
-        // Rechte Basis auf Ziel-Rechts setzen (unsichtbar unter Klappe)
         const targetRightSrc = getImageSrc(targetPage, 'right');
         baseRightImg.src = targetRightSrc || '';
         baseRightImg.alt = getImageAlt(targetPage, 'right') || '';
@@ -348,7 +330,6 @@
 
         flipRight.addEventListener('transitionend', function onDone() {
           flipRight.removeEventListener('transitionend', onDone);
-          // Linke Basis auf Ziel-Links setzen (unsichtbar unter Klappe)
           const targetLeftSrc = getImageSrc(targetPage, 'left');
           baseLeftImg.src = targetLeftSrc || '';
           baseLeftImg.alt = getImageAlt(targetPage, 'left') || '';
@@ -362,12 +343,11 @@
         }, { once: true });
 
       } else {
-        // Rückwärts
         flipLeft.style.zIndex = '10';
         flipRight.style.zIndex = '4';
 
-        const currentLeft = getMemberForSide(currentPage, 'left');
-        const targetRight = getMemberForSide(targetPage, 'right');
+        const currentLeft = currentPage.left;
+        const targetRight = targetPage.right;
 
         if (currentLeft) {
           document.getElementById('flipLeftFrontImg').src = currentLeft.seite_links || '';
@@ -420,8 +400,6 @@
       if (isAnimating || isNaN(num)) return;
       const target = Math.min(Math.max(1, num), allPages.length) - 1;
       if (target === currentIndex) return;
-
-      // Einfacher Sprung: direkt hinspringen (ohne Animation)
       currentIndex = target;
       renderBaseInstant(currentIndex);
       pageJumpInput.value = '';
@@ -438,14 +416,13 @@
       if (e.key === 'ArrowLeft') turn(-1);
     });
 
-    // Buch-Cover beim Klick ausblenden (wie "aufschlagen")
+    // Cover klick = aufschlagen
     bookCover.addEventListener('click', () => {
       if (currentIndex === 0) {
-        turn(1); // Eine Seite nach vorne blättern = Cover verschwindet
+        turn(1);
       }
     });
 
-    // Initial rendern
     renderBaseInstant(currentIndex);
   </script>
 
