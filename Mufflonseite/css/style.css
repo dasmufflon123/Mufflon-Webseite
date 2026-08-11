@@ -116,6 +116,7 @@ img { max-width: 100%; display: block; }
 .btn-soon:hover { transform: none; }
 
 /* ---------- Nav ---------- */
+/* ---------- Nav ---------- */
 header.site-header {
   position: sticky;
   top: 0;
@@ -151,6 +152,7 @@ header.site-header {
   font-size: 1.3rem;
   color: var(--cream);
   text-shadow: 0 1px 2px rgba(0,0,0,0.35);
+  margin-right: auto; /* Schiebt die Brand weiter nach links */
 }
 .brand { position: relative; overflow: visible; }
 .brand img { width: 58px; height: 58px; object-fit: contain; margin: -4px 0; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.35)); }
@@ -170,6 +172,7 @@ nav.main-nav a {
   border-radius: 999px;
   font-size: 0.98rem;
   transition: background 0.15s ease, color 0.15s ease;
+  text-align: center; /* Text in den Links zentrieren */
 }
 nav.main-nav a:hover,
 nav.main-nav a.active {
@@ -218,7 +221,15 @@ nav.main-nav a.nav-home img {
     border-bottom: 3px solid #3d2612;
   }
   nav.main-nav.open { display: flex; }
-  nav.main-nav a { text-align: center; }
+  nav.main-nav a {
+    text-align: center; /* Zentriert den Text bei Zeilenumbruch */
+    padding: 10px 14px;
+    font-size: 1rem;
+    word-break: break-word; /* Erlaubt sauberen Zeilenumbruch */
+  }
+  nav.main-nav a.nav-home {
+    justify-content: center;
+  }
 }
 
 /* ---------- Hero ---------- */
