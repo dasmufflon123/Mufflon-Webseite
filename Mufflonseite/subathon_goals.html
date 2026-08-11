@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="css/style.css">
   <style>
     /* ============================================================
-       SUBATHON SUBGOALS 2026 — Verbessertes Design
+       SUBATHON SUBGOALS 2026
        ============================================================ */
 
     .subathon-header {
@@ -42,46 +42,6 @@
     }
     .subathon-header .section-head .sub-desc-small a:hover {
       color: var(--terracotta-dark);
-    }
-
-    .progress-wrap {
-      max-width: 1080px;
-      margin: 0 auto 40px;
-      padding: 0 24px;
-      text-align: center;
-    }
-    .progress-bar-bg {
-      width: 100%;
-      height: 32px;
-      background: rgba(107, 66, 38, 0.12);
-      border-radius: 999px;
-      overflow: hidden;
-      box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);
-      position: relative;
-    }
-    .progress-bar-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--terracotta), var(--terracotta-dark));
-      border-radius: 999px;
-      width: 0%;
-      transition: width 0.6s ease;
-      box-shadow: 0 0 12px rgba(221, 138, 70, 0.3);
-    }
-    .progress-label {
-      display: flex;
-      justify-content: space-between;
-      font-family: 'Baloo 2', sans-serif;
-      font-weight: 600;
-      color: var(--horn-brown);
-      font-size: 0.95rem;
-      margin-top: 6px;
-    }
-    .progress-label .sub-count {
-      background: var(--terracotta);
-      color: #fff;
-      padding: 2px 14px;
-      border-radius: 999px;
-      font-size: 0.85rem;
     }
 
     .subathon-grid {
@@ -221,36 +181,6 @@
       opacity: 0.25;
     }
 
-    .legend-wrap {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 12px 20px;
-      max-width: 1080px;
-      margin: -10px auto 30px;
-      padding: 0 24px;
-    }
-    .legend-item {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.78rem;
-      color: var(--text-soft);
-      font-family: 'Baloo 2', sans-serif;
-    }
-    .legend-item .dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 4px;
-      flex-shrink: 0;
-    }
-    .legend-item .dot.game { background: #6B4A8C; }
-    .legend-item .dot.creative { background: #DD8A46; }
-    .legend-item .dot.community { background: #7C9473; }
-    .legend-item .dot.challenge { background: #C1662E; }
-    .legend-item .dot.punishment { background: #A34E53; }
-    .legend-item .dot.special { background: #6B4226; }
-
     @media (max-width: 640px) {
       .subathon-grid {
         grid-template-columns: 1fr;
@@ -262,15 +192,6 @@
       }
       .sub-goal-card .sub-number .sub-label {
         font-size: 0.95rem;
-      }
-      .progress-wrap {
-        padding: 0 16px;
-      }
-      .legend-wrap {
-        gap: 8px 14px;
-      }
-      .legend-item {
-        font-size: 0.7rem;
       }
       .sub-goal-card .sub-goal-text .strafenrad-headline {
         font-size: 1.05rem;
@@ -339,26 +260,6 @@
     </div>
   </section>
 
-  <div class="progress-wrap">
-    <div class="progress-bar-bg">
-      <div class="progress-bar-fill" id="progressFill" style="width: 0%;"></div>
-    </div>
-    <div class="progress-label">
-      <span>Ziele freigeschaltet</span>
-      <span class="sub-count" id="progressCount">0 / 901</span>
-    </div>
-  </div>
-
-  <div class="legend-wrap">
-    <span class="legend-item"><span class="dot game"></span> Games</span>
-    <span class="legend-item"><span class="dot creative"></span> Kreativ</span>
-    <span class="legend-item"><span class="dot community"></span> Community</span>
-    <span class="legend-item"><span class="dot challenge"></span> Challenge</span>
-    <span class="legend-item"><span class="dot punishment"></span> Strafe</span>
-    <span class="legend-item"><span class="dot special"></span> Special</span>
-    <span class="legend-item">★ = Meilenstein</span>
-  </div>
-
   <div class="subathon-grid" id="subathonGrid"></div>
 
   <footer class="site-footer">
@@ -421,8 +322,6 @@
     const MILESTONES = [100, 200, 300, 400, 500, 600, 700, 800, 900];
 
     const grid = document.getElementById('subathonGrid');
-    const progressFill = document.getElementById('progressFill');
-    const progressCount = document.getElementById('progressCount');
 
     function formatGoalText(text) {
       if (text.includes('Strafenrad')) {
@@ -449,18 +348,12 @@
 
     function renderGoals() {
       grid.innerHTML = '';
-      const total = SUBATHON_GOALS.length;
-      const currentSubs = 901;
-      let unlocked = 0;
 
       SUBATHON_GOALS.forEach((goal) => {
-        const isUnlocked = goal.subs <= currentSubs;
-        if (isUnlocked) unlocked++;
-
         const isMilestone = MILESTONES.includes(goal.subs);
 
         const card = document.createElement('div');
-        card.className = 'sub-goal-card' + (isMilestone ? ' milestone' : '') + (isUnlocked ? ' completed' : '');
+        card.className = 'sub-goal-card' + (isMilestone ? ' milestone' : '');
 
         const catLabels = {
           game: '🎮 Game',
@@ -484,10 +377,6 @@
 
         grid.appendChild(card);
       });
-
-      const percent = Math.round((unlocked / total) * 100);
-      progressFill.style.width = percent + '%';
-      progressCount.textContent = unlocked + ' / ' + total;
     }
 
     renderGoals();
