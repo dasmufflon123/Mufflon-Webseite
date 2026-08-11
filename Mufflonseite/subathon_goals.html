@@ -3,74 +3,210 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FAQ — Das__Mufflon</title>
+  <title>Subathon 2026 — Das__Mufflon</title>
   <link rel="icon" type="image/png" href="assets/mufflon-mascot.png">
   <link rel="stylesheet" href="css/style.css">
   <style>
-    .faq-container {
-      max-width: 820px;
-      margin: 0 auto;
-      padding: 40px 24px 80px;
-    }
-    .faq-container h1 {
-      font-family: 'Baloo 2', sans-serif;
-      font-size: clamp(2rem, 3vw, 2.6rem);
-      color: var(--horn-brown);
+    /* ============================================================
+       SUBATHON SUBGOALS 2026
+       ============================================================ */
+
+    .subathon-header {
+      padding-top: 30px !important;
+      padding-bottom: 10px !important;
       text-align: center;
-      margin-bottom: 8px;
     }
-    .faq-container .sub {
-      text-align: center;
+    .subathon-header .section-head {
+      margin-bottom: 20px !important;
+    }
+    .subathon-header .section-head h1 {
+      font-size: clamp(2rem, 3.5vw, 2.8rem) !important;
+    }
+    .subathon-header .section-head p {
+      max-width: 680px;
+      margin: 0 auto 4px;
+      line-height: 1.5;
+    }
+    .subathon-header .section-head .sub-desc-small {
+      font-size: 0.85rem;
       color: var(--text-soft);
-      margin-bottom: 36px;
-      font-size: 1.05rem;
+      max-width: 640px;
+      margin: 0 auto;
+      line-height: 1.5;
     }
-    .faq-item {
-      background: var(--cream-soft);
-      border-radius: var(--radius-md);
-      border: 2px solid rgba(107, 66, 38, 0.08);
-      padding: 20px 24px 22px;
-      margin-bottom: 16px;
-      box-shadow: var(--shadow-soft);
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-    }
-    .faq-item:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-lift);
-    }
-    .faq-item .question {
-      font-family: 'Baloo 2', sans-serif;
+    .subathon-header .section-head .sub-desc-small a {
+      color: var(--terracotta);
       font-weight: 700;
-      font-size: 1.2rem;
+      text-decoration: underline;
+      transition: color 0.15s ease;
+    }
+    .subathon-header .section-head .sub-desc-small a:hover {
       color: var(--terracotta-dark);
+    }
+
+    .subathon-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 24px 40px;
+    }
+
+    .sub-goal-card {
+      background: var(--cream-soft);
+      border: 2px solid rgba(107, 66, 38, 0.08);
+      border-radius: var(--radius-md);
+      padding: 20px 22px 22px;
+      box-shadow: var(--shadow-soft);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .sub-goal-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lift);
+      border-color: var(--terracotta);
+    }
+
+    .sub-goal-card.milestone {
+      border-color: var(--terracotta);
+      border-width: 3px;
+    }
+    .sub-goal-card.milestone::before {
+      content: "★";
+      position: absolute;
+      top: 6px;
+      right: 12px;
+      font-size: 1.2rem;
+      color: var(--terracotta);
+      opacity: 0.4;
+    }
+
+    /* ---- Sub-Nummer: KNALLIGER FARBVERLAUF + DUNKLE KONTUR ---- */
+    .sub-goal-card .sub-number {
+      font-family: 'Baloo 2', sans-serif;
+      font-size: 2.8rem;
+      font-weight: 900;
+      line-height: 1;
+      margin-bottom: 4px;
+      letter-spacing: 0.02em;
+      background: linear-gradient(135deg, #FF6B35, #F7C948, #00B4D8) !important;
+      -webkit-background-clip: text !important;
+      -webkit-text-fill-color: transparent !important;
+      background-clip: text !important;
+      filter: drop-shadow(0 1px 0 #2a1a0e) drop-shadow(0 0 6px rgba(0,0,0,0.6));
+      text-shadow: 
+        0 1px 0 #2a1a0e,
+        0 2px 0 #2a1a0e,
+        0 3px 0 #2a1a0e,
+        0 4px 4px rgba(0,0,0,0.5);
+    }
+
+    .sub-goal-card .sub-number .sub-label {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+      -webkit-text-fill-color: #fff !important;
+      background: none !important;
+      filter: none;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.6), 0 2px 8px rgba(0,0,0,0.4);
+      margin-left: 2px;
+      display: inline-block;
+    }
+
+    .sub-goal-card.completed .sub-number {
+      background: linear-gradient(135deg, #FF6B35, #F7C948, #00B4D8) !important;
+      -webkit-background-clip: text !important;
+      -webkit-text-fill-color: transparent !important;
+      background-clip: text !important;
+      filter: drop-shadow(0 1px 0 #2a1a0e) drop-shadow(0 0 6px rgba(0,0,0,0.6));
+      opacity: 0.7;
+    }
+
+    .sub-goal-card .sub-goal-text {
+      font-size: 0.92rem;
+      color: var(--text);
+      line-height: 1.5;
+      margin-top: 6px;
+      text-align: center;
+      max-width: 100%;
+    }
+
+    .sub-goal-card .sub-goal-text .strafenrad-headline {
+      display: block;
+      font-weight: 800;
+      font-size: 1.25rem;
+      color: var(--terracotta-dark);
+      margin-bottom: 4px;
+      letter-spacing: 0.04em;
+    }
+    .sub-goal-card .sub-goal-text .strafenrad-desc {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--text-soft);
+      line-height: 1.5;
+    }
+
+    .sub-badge {
+      display: inline-block;
+      font-family: 'Baloo 2', sans-serif;
+      font-size: 0.6rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 2px 12px;
+      border-radius: 999px;
+      background: var(--moss);
+      color: var(--white);
       margin-bottom: 6px;
     }
-    .faq-item .answer {
-      font-size: 0.95rem;
-      color: var(--text);
-      line-height: 1.6;
+    .sub-badge.game { background: #6B4A8C; }
+    .sub-badge.creative { background: #DD8A46; }
+    .sub-badge.community { background: #7C9473; }
+    .sub-badge.challenge { background: #C1662E; }
+    .sub-badge.punishment { background: #A34E53; }
+    .sub-badge.special { background: #6B4226; }
+
+    .sub-goal-card.completed {
+      opacity: 0.6;
+      border-color: var(--moss) !important;
     }
-    .faq-item .answer a {
-      color: var(--terracotta);
-      font-weight: 600;
-      text-decoration: underline;
-      transition: color 0.15s ease;
+    .sub-goal-card.completed::after {
+      content: "✓";
+      position: absolute;
+      bottom: 8px;
+      right: 14px;
+      font-size: 1.8rem;
+      color: var(--moss);
+      opacity: 0.25;
     }
-    .faq-item .answer a:hover {
-      color: var(--terracotta-dark);
-    }
-    .back-link {
-      display: inline-block;
-      margin-top: 30px;
-      font-family: 'Baloo 2', sans-serif;
-      font-weight: 700;
-      color: var(--terracotta);
-      text-decoration: none;
-      transition: color 0.15s ease;
-    }
-    .back-link:hover {
-      color: var(--terracotta-dark);
-      text-decoration: underline;
+
+    @media (max-width: 640px) {
+      .subathon-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+        padding: 0 16px 30px;
+      }
+      .sub-goal-card .sub-number {
+        font-size: 2.2rem;
+      }
+      .sub-goal-card .sub-number .sub-label {
+        font-size: 0.95rem;
+      }
+      .sub-goal-card .sub-goal-text .strafenrad-headline {
+        font-size: 1.05rem;
+      }
+      .sub-goal-card .sub-goal-text .strafenrad-desc {
+        font-size: 0.78rem;
+      }
+      .subathon-header .section-head .sub-desc-small {
+        font-size: 0.78rem;
+      }
     }
   </style>
 </head>
@@ -88,7 +224,7 @@
         <a href="Content.html">Content</a>
         <a href="Opfanze.html">Opfanze</a>
         <a href="Highlights.html">Highlights</a>
-        <a href="subathon_goals.html">Subathon</a>
+        <a href="subathon_goals.html" class="active">Subathon</a>
         <a href="pomodoro.html">Pomodoro</a>
         <a href="mahmories.html">Mähmories</a>
       </nav>
@@ -118,37 +254,18 @@
     </a>
   </div>
 
-  <div class="faq-container">
-    <h1>❓ FAQ – Subathon 2026</h1>
-    <p class="sub">Die wichtigsten Fragen und Antworten rund um die Subathon-Goals.</p>
-
-    <div class="faq-item">
-      <div class="question">🤔 Werden die Goals in der Reihenfolge abgestreamt, in der sie hier stehen?</div>
-      <div class="answer">Nein! Die Reihenfolge der Liste ist nur die Reihenfolge, in der die Goals <strong>freigeschaltet</strong> werden. Wann und in welcher Reihenfolge sie tatsächlich im Stream stattfinden, kann je nach Planung, Laune und Community-Wünschen variieren.</div>
+  <section class="subathon-header">
+    <div class="section-head">
+      <span class="eyebrow">Die große Challenge</span>
+      <h1>🎯 SUBATHON SUBGOALS 2026</h1>
+      <p>Je nachdem, wie viele Subs zusammenkommen, werden nach und nach neue Goals erreicht</p>
+      <p class="sub-desc-small">
+        Die Goals werden nicht zwangsläufig in der Reihenfolge abgestreamt, in der sie hier aufgelistet sind. Wann welches Goal stattfindet, kann also variieren. Mehr Infos kannst du <a href="FAQ.html">HIER</a> finden
+      </p>
     </div>
+  </section>
 
-    <div class="faq-item">
-      <div class="question">📅 Wann finden die einzelnen Goals statt?</div>
-      <div class="answer">Das wird immer wieder kurzfristig im Stream und auf <a href="https://discord.gg/mzW9Hh96S" target="_blank">Discord</a> bekannt gegeben. Ein fester Zeitplan existiert nicht – mach dich also auf Überraschungen gefasst!</div>
-    </div>
-
-    <div class="faq-item">
-      <div class="question">🎯 Was passiert, wenn ein Goal nicht erreicht wird?</div>
-      <div class="answer">Dann bleibt es erstmal liegen! Manche Goals werden vielleicht zu einem späteren Zeitpunkt nochmal aufgegriffen oder es gibt alternative Aktionen. Die Commähnity entscheidet mit! 🐑</div>
-    </div>
-
-    <div class="faq-item">
-      <div class="question">🔥 Was ist das "Strafenrad"?</div>
-      <div class="answer">Das Strafenrad ist ein besonderes Goal, bei dem Mufflon sich verschiedenen Challenges stellen muss – von TTS-Höllen über Ingwershots bis hin zu privaten Foto-Reveals. Ein Highlight für alle, die gern mal etwas Chaos sehen! 😈</div>
-    </div>
-
-    <div class="faq-item">
-      <div class="question">📺 Wo kann ich die Subathon-Streams schauen?</div>
-      <div class="answer">Alle Streams laufen auf <a href="https://twitch.tv/das__mufflon" target="_blank">Twitch.tv/das__mufflon</a>. Schau vorbei und sei dabei!</div>
-    </div>
-
-    <a href="subathon_goals.html" class="back-link">← Zurück zur Subathon-Übersicht</a>
-  </div>
+  <div class="subathon-grid" id="subathonGrid"></div>
 
   <footer class="site-footer">
     <div class="footer-brand">Das__Mufflon 🐑</div>
@@ -156,5 +273,119 @@
   </footer>
 
   <script src="js/main.js"></script>
+  <script>
+    const SUBATHON_GOALS = [
+      { subs: 10,  text: 'Strafenrad (30 Min TTS-Hölle mit Eggin On, Hühnerhut, 1 Ingwershot, doppelte Strafdrehs, privates Foto Reveal + 1 Stunde Spielzeit)', category: 'punishment' },
+      { subs: 20,  text: 'Level Devil — 3 Stunden zocken', category: 'game' },
+      { subs: 30,  text: 'Robot Unicorn Attack gegen die Community — Beste Highscore gewinnt (2 Stunden)', category: 'game' },
+      { subs: 40,  text: 'Chat bestimmt ein YT Short (Inhalt + Text). Der Gewinner von Unicorn Attack darf das letzte Wort im Short bestimmen (TOS-konform)', category: 'community' },
+      { subs: 50,  text: 'Bob Ross Bild nach Vorgabe malen — inkl. Verlosung (40×60 cm)', category: 'creative' },
+      { subs: 60,  text: 'Strafenrad (30 Min TTS-Hölle mit Eggin On, Hühnerhut, 1 Ingwershot, doppelte Strafdrehs, privates Foto Reveal + 1 Stunde Spielzeit)', category: 'punishment' },
+      { subs: 70,  text: 'More or Less — 4 Stunden Ratespaß', category: 'game' },
+      { subs: 80,  text: 'Tierlist: Tiere, die Mufflon bekämpfen könnte', category: 'community' },
+      { subs: 90,  text: 'Bandle — Musik erraten (3 Stunden)', category: 'game' },
+      { subs: 100, text: 'Super Ghouls\'n Ghosts (SNES) — 4 Stunden', category: 'game' },
+      { subs: 110, text: 'Strafenrad (30 Min TTS-Hölle mit Eggin On, Hühnerhut, 1 Ingwershot, doppelte Strafdrehs, privates Foto Reveal + 1 Stunde Spielzeit)', category: 'punishment' },
+      { subs: 120, text: 'Der schlechte Werbespot — Live einen überzogenen Werbespot über ein sinnloses Ding aus Mufflons Wohnung drehen', category: 'creative' },
+      { subs: 130, text: 'Facepaint nach Chat-Vorgabe — danach 9 Stunden passende Spiele zocken', category: 'challenge' },
+      { subs: 140, text: 'Herdenlexikon anlegen — mit Hilfe des Chats werden Insider, Memes & Meilensteine dokumentiert (Wikipedia-Stil)', category: 'community' },
+      { subs: 150, text: 'Don\'t Laugh Challenge — Video produziert von Bober. Für jeden Lacher ein ganzes Stück Mouth Party essen', category: 'challenge' },
+      { subs: 160, text: 'Tierlist: Heißte Celebrity Männerse', category: 'community' },
+      { subs: 170, text: 'Strafenrad (30 Min TTS-Hölle mit Eggin On, Hühnerhut, 1 Ingwershot, doppelte Strafdrehs, privates Foto Reveal + 1 Stunde Spielzeit)', category: 'punishment' },
+      { subs: 180, text: 'Super Mario World (SNES) mit Super Mario Maske — 9 Stunden', category: 'game' },
+      { subs: 190, text: 'Trashsong Songbattle — alles erlaubt (TOS-konform), max. 5 Minuten Länge', category: 'creative' },
+      { subs: 200, text: 'Online IQ Test — Live im Stream', category: 'challenge' },
+      { subs: 225, text: 'PowerPoint Karaoke — Chat sucht 3 Powerpoints, Mufflon trägt sie als Experte vor', category: 'community' },
+      { subs: 250, text: 'Bob Ross Bild nach Vorgabe malen — inkl. Verlosung (40×60 cm)', category: 'creative' },
+      { subs: 275, text: 'Strafenrad (30 Min TTS-Hölle mit Eggin On, Hühnerhut, 1 Ingwershot, doppelte Strafdrehs, privates Foto Reveal + 1 Stunde Spielzeit)', category: 'punishment' },
+      { subs: 300, text: 'Cosplay aus Haushaltsgegenständen — Chat bestimmt Charakter, 30 Minuten Vorbereitung, danach ganzer Tag im Outfit', category: 'challenge' },
+      { subs: 325, text: 'Tierlist: Heulende Katzen', category: 'community' },
+      { subs: 350, text: 'Chat bestimmt ein YT Short (Inhalt + Text)', category: 'community' },
+      { subs: 375, text: 'Community Roast — Die Community roastet Mufflon über Maggus (Opfanze). Jeder kann einen Roast einsenden, Mufflon liest live vor.', category: 'community' },
+      { subs: 400, text: 'Facepaint nach Chat-Vorgabe — danach 9 Stunden passende Spiele zocken', category: 'challenge' },
+      { subs: 425, text: 'Strafenrad (30 Min TTS-Hölle mit Eggin On, Hühnerhut, 1 Ingwershot, doppelte Strafdrehs, privates Foto Reveal + 1 Stunde Spielzeit)', category: 'punishment' },
+      { subs: 450, text: 'Fright Night mit der Commähnity — Nunnies Nightshift: Wir suchen gruselige Anomalien', category: 'game' },
+      { subs: 475, text: 'One Huf Handicap — Donkey Kong Country (SNES) mit nur einem Huf! Inkl. Huf-Cam (6 Stunden)', category: 'challenge' },
+      { subs: 500, text: 'Songbattle: Kinderserien-Intros', category: 'creative' },
+      { subs: 525, text: 'Tierlist nach Chat-Entscheidung (Abstimmung)', category: 'community' },
+      { subs: 550, text: 'Speedrun gegen den Chat — 3 Stunden', category: 'game' },
+      { subs: 575, text: 'Strafenrad (30 Min TTS-Hölle mit Eggin On, Hühnerhut, 1 Ingwershot, doppelte Strafdrehs, privates Foto Reveal + 1 Stunde Spielzeit)', category: 'punishment' },
+      { subs: 600, text: '9h Retro Marathon — Beginn in den 80ern, alle 2 Stunden wechselt das Jahrzehnt (80er, 90er, 2000er, 2010er, 2020er). Spiele werden von der Community vorgeschlagen & abgestimmt.', category: 'game' },
+      { subs: 625, text: '9h Horrorstream inkl. Facepaint oder Maske — Horrorgames werden von der Community vorgeschlagen (Bober bekommt 3 Erschreckerlies)', category: 'game' },
+      { subs: 650, text: 'Mufflon komponiert & schreibt einen Community-Song — Live auf Gitarre gespielt & gesungen!', category: 'creative' },
+      { subs: 675, text: 'Bob Ross Bild nach Vorgabe malen — inkl. Verlosung (40×60 cm)', category: 'creative' },
+      { subs: 700, text: 'Bobers Allgemeinwissensquiz — Live und in Farbe', category: 'community' },
+      { subs: 725, text: 'Strafenrad (30 Min TTS-Hölle mit Eggin On, Hühnerhut, 1 Ingwershot, doppelte Strafdrehs, privates Foto Reveal + 1 Stunde Spielzeit)', category: 'punishment' },
+      { subs: 750, text: '9h Diktatur — Der Chat bestimmt: Wann Mufflon Pause macht, isst, welches Game gespielt wird und wie Mufflon sich im Spiel zu verhalten hat (Kein Amogus!)', category: 'challenge' },
+      { subs: 800, text: 'Das Herdenhörspiel', category: 'special' },
+      { subs: 850, text: 'Der Tag der Qualen! 4 Stunden Among Us + 4 Stunden Mufflon Karaoke — Ihr quält mich, ich quäle euch!', category: 'challenge' },
+      { subs: 875, text: 'Strafenrad (30 Min TTS-Hölle mit Eggin On, Hühnerhut, 1 Ingwershot, doppelte Strafdrehs, privates Foto Reveal + 1 Stunde Spielzeit)', category: 'punishment' },
+      { subs: 900, text: 'Mufflons lonely Zeltnacht — Eine Nacht DRAUSSEN im Zelt! Mit lustigen Geistergeschichten + Dose kalte Ravioli essen!', category: 'special' },
+      { subs: 901, text: 'Extended Goals werden revealed! 👀', category: 'special' }
+    ];
+
+    const MILESTONES = [100, 200, 300, 400, 500, 600, 700, 800, 900];
+
+    const grid = document.getElementById('subathonGrid');
+
+    function formatGoalText(text) {
+      if (text.includes('Strafenrad')) {
+        const match = text.match(/^(Strafenrad)\s*\(([^)]*)\)\s*(.*)$/);
+        if (match) {
+          const headline = match[1];
+          const details = match[2];
+          const rest = match[3] || '';
+          return `
+            <span class="strafenrad-headline">🔥 ${headline}</span>
+            <span class="strafenrad-desc">${details}${rest ? ' — ' + rest : ''}</span>
+          `;
+        }
+        const parts = text.split(/[()]/);
+        if (parts.length >= 3) {
+          return `
+            <span class="strafenrad-headline">🔥 ${parts[0].trim()}</span>
+            <span class="strafenrad-desc">${parts[1].trim()}${parts[2] ? ' — ' + parts[2].trim() : ''}</span>
+          `;
+        }
+      }
+      return text;
+    }
+
+    function renderGoals() {
+      grid.innerHTML = '';
+
+      SUBATHON_GOALS.forEach((goal) => {
+        const isMilestone = MILESTONES.includes(goal.subs);
+
+        const card = document.createElement('div');
+        card.className = 'sub-goal-card' + (isMilestone ? ' milestone' : '');
+
+        const catLabels = {
+          game: '🎮 Game',
+          creative: '🎨 Kreativ',
+          community: '👥 Community',
+          challenge: '⚡ Challenge',
+          punishment: '😈 Strafe',
+          special: '✨ Special'
+        };
+
+        const formattedText = formatGoalText(goal.text);
+
+        card.innerHTML = `
+          <span class="sub-badge ${goal.category}">${catLabels[goal.category] || goal.category}</span>
+          <div class="sub-number">
+            ${goal.subs}
+            <span class="sub-label">Subs</span>
+          </div>
+          <div class="sub-goal-text">${formattedText}</div>
+        `;
+
+        grid.appendChild(card);
+      });
+    }
+
+    renderGoals();
+  </script>
+
 </body>
 </html>
