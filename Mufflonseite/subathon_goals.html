@@ -44,63 +44,6 @@
       color: var(--terracotta-dark);
     }
 
-    /* ---- Management-Bereich (erreichte Goals löschen) ---- */
-    .management-area {
-      max-width: 820px;
-      margin: 0 auto 20px;
-      padding: 16px 24px;
-      background: rgba(255, 140, 0, 0.06);
-      border: 2px solid rgba(255, 140, 0, 0.15);
-      border-radius: var(--radius-md);
-      text-align: center;
-    }
-    .management-area .mgmt-label {
-      font-family: 'Baloo 2', sans-serif;
-      font-size: 0.85rem;
-      color: var(--text-soft);
-      margin-bottom: 6px;
-    }
-    .management-area .mgmt-label strong {
-      color: #f0a448;
-    }
-    .management-area .mgmt-numbers {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 4px 8px;
-      font-family: 'Baloo 2', sans-serif;
-      font-size: 1rem;
-      font-weight: 600;
-      color: var(--horn-brown);
-    }
-    .management-area .mgmt-numbers .mgmt-number {
-      background: rgba(255, 140, 0, 0.10);
-      padding: 2px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(255, 140, 0, 0.15);
-      transition: all 0.15s ease;
-    }
-    .management-area .mgmt-numbers .mgmt-number.done {
-      background: rgba(124, 148, 115, 0.15);
-      border-color: var(--moss);
-      color: var(--moss);
-      text-decoration: line-through;
-      opacity: 0.5;
-    }
-    .management-area .mgmt-hint {
-      font-size: 0.75rem;
-      color: var(--text-soft);
-      margin-top: 6px;
-      font-style: italic;
-    }
-    .management-area .mgmt-hint code {
-      background: rgba(0,0,0,0.06);
-      padding: 1px 6px;
-      border-radius: 4px;
-      font-family: monospace;
-      font-size: 0.75rem;
-    }
-
     .subathon-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -131,7 +74,7 @@
     }
 
     .sub-goal-card.milestone {
-      border-color: #f0a448;
+      border-color: #FF8C00;
       border-width: 3px;
     }
     .sub-goal-card.milestone::before {
@@ -140,7 +83,7 @@
       top: 6px;
       right: 12px;
       font-size: 1.2rem;
-      color: #f0a448;
+      color: #FF8C00;
       opacity: 0.4;
     }
 
@@ -181,7 +124,7 @@
       opacity: 0.15;
     }
 
-    /* ---- Sub-Nummer als Badge mit Peach + HELLEM ORANGE (#f0a448) ---- */
+    /* ---- Sub-Nummer als Badge mit Peach + HELLEM ORANGE (#FF8C00) ---- */
     .sub-goal-card .sub-number-wrap {
       display: flex;
       align-items: baseline;
@@ -195,7 +138,7 @@
       font-size: 3rem;
       font-weight: 900;
       line-height: 1;
-      color: #f0a448;
+      color: #FF8C00;
       background: linear-gradient(135deg, #F6E0C8, #EDD0B5);
       padding: 4px 18px 6px 18px;
       border-radius: 999px;
@@ -219,7 +162,7 @@
     .sub-goal-card .sub-number .sub-label {
       font-size: 0.9rem;
       font-weight: 600;
-      color: #f0a448;
+      color: #FF8C00;
       margin-left: 2px;
     }
 
@@ -289,13 +232,6 @@
       .subathon-header .section-head .sub-desc-small {
         font-size: 0.78rem;
       }
-      .management-area .mgmt-numbers {
-        font-size: 0.85rem;
-        gap: 3px 6px;
-      }
-      .management-area .mgmt-numbers .mgmt-number {
-        padding: 1px 8px;
-      }
     }
   </style>
 </head>
@@ -356,21 +292,6 @@
     </div>
   </section>
 
-  <!-- ============================================================
-       MANAGEMENT-BEREICH
-       ============================================================ -->
-  <div class="management-area" id="managementArea">
-    <div class="mgmt-label">
-      ✂️ <strong>Erreichte Goals löschen:</strong> Entferne einfach die Zahlen aus der Liste!
-    </div>
-    <div class="mgmt-numbers" id="mgmtNumbers">
-      <!-- wird per JavaScript befüllt -->
-    </div>
-    <div class="mgmt-hint">
-      💡 Tipp: <code>10; 20; 30;</code> löschen = diese Goals gelten als erledigt.
-    </div>
-  </div>
-
   <div class="subathon-grid" id="subathonGrid"></div>
 
   <footer class="site-footer">
@@ -381,10 +302,32 @@
   <script src="js/main.js"></script>
   <script>
     // ============================================================
-    // SUBATHON SUBGOALS 2026 — MIT MANAGEMENT
+    // SUBATHON SUBGOALS 2026 — MIT MANUELLER CODE-LISTE
     // ============================================================
 
-    // ---- ALLE GOALS ----
+    // ============================================================
+    // ⚠️ HIER LÖSCHST DU DIE ZAHLEN DER ERREICHTEN GOALS!
+    // ============================================================
+    // Beispiel: Nach Tag 1 sind 10, 20 und 30 erreicht:
+    // const COMPLETED_SUBS = [20, 30, 40];
+    // 
+    // Wenn du 10 und 20 löschst, weil sie erreicht sind:
+    // const COMPLETED_SUBS = [30, 40, 50, 60, ...];
+    // ============================================================
+
+    const COMPLETED_SUBS = [
+      // ⬇️ HIER DIE ZAHLEN DER ERREICHTEN GOALS EINTRAGEN
+      // 10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
+      // 110, 120, 130, 140, 150, 160, 170, 180, 190, 200,
+      // 225, 250, 275, 300, 325, 350, 375, 400, 425, 450,
+      // 475, 500, 525, 550, 575, 600, 625, 650, 675, 700,
+      // 725, 750, 800, 850, 875, 900, 901
+    ];
+
+    // ============================================================
+    // ALLE GOALS (bitte nicht ändern, nur COMPLETED_SUBS oben!)
+    // ============================================================
+
     const ALL_GOALS = [
       { subs: 10,  text: 'Strafenrad (30 Min TTS-Hölle mit Eggin On, Hühnerhut, 1 Ingwershot, doppelte Strafdrehs, privates Foto Reveal + 1 Stunde Spielzeit)', category: 'punishment' },
       { subs: 20,  text: 'Level Devil — 3 Stunden zocken', category: 'game' },
@@ -436,70 +379,37 @@
     ];
 
     const MILESTONES = [100, 200, 300, 400, 500, 600, 700, 800, 900];
-    const STORAGE_KEY = 'subathon_completed_goals';
 
-    // ---- GESPEICHERTE FERTIGE ZIELZAHLEN ----
-    let completedSubs = [];
+    const grid = document.getElementById('subathonGrid');
 
-    // Lade gespeicherte fertige Ziele
-    function loadCompleted() {
-      try {
-        const stored = localStorage.getItem(STORAGE_KEY);
-        if (stored) {
-          completedSubs = JSON.parse(stored);
-        } else {
-          // Standard: ALLE Goals sind noch NICHT fertig
-          completedSubs = [];
+    function formatGoalText(text) {
+      if (text.includes('Strafenrad')) {
+        const match = text.match(/^(Strafenrad)\s*\(([^)]*)\)\s*(.*)$/);
+        if (match) {
+          const headline = match[1];
+          const details = match[2];
+          const rest = match[3] || '';
+          return `
+            <span class="strafenrad-headline">🔥 ${headline}</span>
+            <span class="strafenrad-desc">${details}${rest ? ' — ' + rest : ''}</span>
+          `;
         }
-      } catch (e) {
-        completedSubs = [];
+        const parts = text.split(/[()]/);
+        if (parts.length >= 3) {
+          return `
+            <span class="strafenrad-headline">🔥 ${parts[0].trim()}</span>
+            <span class="strafenrad-desc">${parts[1].trim()}${parts[2] ? ' — ' + parts[2].trim() : ''}</span>
+          `;
+        }
       }
+      return text;
     }
 
-    // Speichere fertige Ziele
-    function saveCompleted() {
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(completedSubs));
-      } catch (e) {}
-    }
-
-    // ---- MANAGEMENT-BEREICH RENDERN ----
-    function renderManagement() {
-      const container = document.getElementById('mgmtNumbers');
-      container.innerHTML = '';
-
-      // Alle Zahlen aus ALL_GOALS sammeln (sortiert)
-      const allNumbers = ALL_GOALS.map(g => g.subs).sort((a, b) => a - b);
-
-      allNumbers.forEach(num => {
-        const span = document.createElement('span');
-        span.className = 'mgmt-number' + (completedSubs.includes(num) ? ' done' : '');
-        span.textContent = num;
-
-        // Klick: Zahl aus completedSubs entfernen/hinzufügen (Toggle)
-        span.addEventListener('click', () => {
-          const index = completedSubs.indexOf(num);
-          if (index > -1) {
-            completedSubs.splice(index, 1);
-          } else {
-            completedSubs.push(num);
-          }
-          saveCompleted();
-          renderManagement();
-          renderGoals();
-        });
-
-        container.appendChild(span);
-      });
-    }
-
-    // ---- GOALS RENDERN ----
     function renderGoals() {
-      const grid = document.getElementById('subathonGrid');
       grid.innerHTML = '';
 
       ALL_GOALS.forEach((goal) => {
-        const isCompleted = completedSubs.includes(goal.subs);
+        const isCompleted = COMPLETED_SUBS.includes(goal.subs);
         const isMilestone = MILESTONES.includes(goal.subs);
 
         const card = document.createElement('div');
@@ -514,28 +424,7 @@
           special: '✨ Special'
         };
 
-        // Text formatieren (Strafenrad)
-        let formattedText = goal.text;
-        if (goal.text.includes('Strafenrad')) {
-          const match = goal.text.match(/^(Strafenrad)\s*\(([^)]*)\)\s*(.*)$/);
-          if (match) {
-            const headline = match[1];
-            const details = match[2];
-            const rest = match[3] || '';
-            formattedText = `
-              <span class="strafenrad-headline">🔥 ${headline}</span>
-              <span class="strafenrad-desc">${details}${rest ? ' — ' + rest : ''}</span>
-            `;
-          } else {
-            const parts = goal.text.split(/[()]/);
-            if (parts.length >= 3) {
-              formattedText = `
-                <span class="strafenrad-headline">🔥 ${parts[0].trim()}</span>
-                <span class="strafenrad-desc">${parts[1].trim()}${parts[2] ? ' — ' + parts[2].trim() : ''}</span>
-              `;
-            }
-          }
-        }
+        const formattedText = formatGoalText(goal.text);
 
         card.innerHTML = `
           <span class="sub-badge ${goal.category}">${catLabels[goal.category] || goal.category}</span>
@@ -552,23 +441,7 @@
       });
     }
 
-    // ---- INIT ----
-    loadCompleted();
-    renderManagement();
     renderGoals();
-
-    // ---- KEYBOARD SHORTCUT: "r" zum Zurücksetzen (alle Goals wieder offen) ----
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'r' && e.ctrlKey) {
-        e.preventDefault();
-        if (confirm('Alle Goals als "nicht erledigt" zurücksetzen?')) {
-          completedSubs = [];
-          saveCompleted();
-          renderManagement();
-          renderGoals();
-        }
-      }
-    });
   </script>
 
 </body>
