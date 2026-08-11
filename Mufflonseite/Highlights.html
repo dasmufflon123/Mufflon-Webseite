@@ -8,13 +8,13 @@
   <link rel="stylesheet" href="css/style.css">
   <style>
     /* ============================================================
-       HIGHLIGHTS — Verbesserte Darstellung
+       HIGHLIGHTS — Bessere Lesbarkeit der Beschreibungstexte
        ============================================================ */
 
     .highlight-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 22px;
       max-width: 1080px;
       margin: 0 auto;
     }
@@ -29,7 +29,7 @@
       box-shadow: var(--shadow-soft);
       text-decoration: none;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
-      min-height: 220px;
+      min-height: 260px;
       cursor: pointer;
     }
     .highlight-tile:hover {
@@ -50,7 +50,7 @@
       position: relative;
       z-index: 1;
       width: 100%;
-      padding: 18px 16px 16px;
+      padding: 24px 20px 18px;
       font-family: 'Baloo 2', sans-serif;
       font-weight: 700;
       color: #fff;
@@ -62,73 +62,108 @@
       align-items: center;
       justify-content: center;
       transition: all 0.3s ease;
-      min-height: 80px;
+      min-height: 90px;
       height: 100%;
-      gap: 2px;
+      gap: 4px;
     }
 
     /* Haupttitel: groß, zentriert */
     .highlight-tile .label .main-label {
       display: block;
-      font-size: 1.6rem;
+      font-size: 1.8rem;
       font-weight: 800;
       line-height: 1.2;
       transition: all 0.3s ease;
+      letter-spacing: 0.02em;
     }
 
     /* Untertitel: standardmäßig versteckt */
     .highlight-tile .label .sub-label {
       display: none;
-      font-size: 0.8rem;
+      font-size: 1.0rem;
       font-weight: 400;
       opacity: 0.95;
       font-family: 'Nunito', sans-serif;
-      line-height: 1.4;
+      line-height: 1.5;
       color: #fff;
-      text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+      text-shadow: 0 1px 4px rgba(0,0,0,0.5);
       max-width: 95%;
       margin-top: 2px;
       transition: all 0.3s ease;
+      padding: 0 4px;
     }
 
     /* Hover: Titel rutscht nach oben, wird kleiner, Untertitel erscheint */
     .highlight-tile:hover .label {
       justify-content: flex-start;
       padding-top: 18px;
+      padding-bottom: 14px;
     }
 
     .highlight-tile:hover .label .main-label {
-      font-size: 1.0rem;
+      font-size: 1.2rem;
       line-height: 1.2;
       margin-bottom: 2px;
     }
 
     .highlight-tile:hover .label .sub-label {
       display: block;
+      font-size: 0.85rem;
+      line-height: 1.4;
     }
 
     /* Responsive Anpassungen */
+    @media (max-width: 820px) {
+      .highlight-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+      }
+      .highlight-tile {
+        min-height: 200px;
+      }
+      .highlight-tile .label {
+        padding: 18px 14px 14px;
+        min-height: 70px;
+      }
+      .highlight-tile .label .main-label {
+        font-size: 1.4rem;
+      }
+      .highlight-tile:hover .label .main-label {
+        font-size: 1.0rem;
+      }
+      .highlight-tile .label .sub-label {
+        font-size: 0.8rem;
+        line-height: 1.4;
+      }
+      .highlight-tile:hover .label .sub-label {
+        font-size: 0.75rem;
+      }
+    }
+
     @media (max-width: 640px) {
       .highlight-grid {
-        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
         gap: 14px;
       }
       .highlight-tile {
-        min-height: 160px;
+        min-height: 170px;
       }
       .highlight-tile .label {
-        min-height: 60px;
         padding: 14px 12px 12px;
+        min-height: 60px;
       }
       .highlight-tile .label .main-label {
         font-size: 1.2rem;
       }
       .highlight-tile:hover .label .main-label {
-        font-size: 0.85rem;
+        font-size: 0.9rem;
       }
       .highlight-tile .label .sub-label {
-        font-size: 0.65rem;
+        font-size: 0.7rem;
         line-height: 1.3;
+      }
+      .highlight-tile:hover .label .sub-label {
+        font-size: 0.65rem;
       }
     }
 
@@ -141,8 +176,8 @@
         min-height: 140px;
       }
       .highlight-tile .label {
-        min-height: 50px;
         padding: 10px 8px 8px;
+        min-height: 50px;
       }
       .highlight-tile .label .main-label {
         font-size: 1.0rem;
@@ -151,8 +186,11 @@
         font-size: 0.75rem;
       }
       .highlight-tile .label .sub-label {
-        font-size: 0.55rem;
+        font-size: 0.6rem;
         line-height: 1.2;
+      }
+      .highlight-tile:hover .label .sub-label {
+        font-size: 0.55rem;
       }
     }
   </style>
@@ -167,7 +205,7 @@
       </a>
       <button class="nav-toggle" aria-label="Menü öffnen">☰</button>
       <nav class="main-nav">
-        <a href="index.html" class="nav-home"><img src="assets/mufflon-mascot.png" alt="Stall" title="Stall"></a>
+        <a href="index.html" class="nav-home"><img src="assets/mufflon-icon.png" alt="Stall" title="Stall"></a>
         <a href="Content.html">Content</a>
         <a href="Highlights.html" class="active">Highlights</a>
         <a href="subathon_goals.html">Subathon Goals</a>
