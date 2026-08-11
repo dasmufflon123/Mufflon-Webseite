@@ -87,40 +87,49 @@
       opacity: 0.4;
     }
 
-    /* ---- Sub-Nummer: TÜRKIS mit ORANGEM GLOW ---- */
+    /* ---- NEU: Sub-Nummer als Badge mit Kreis ---- */
+    .sub-goal-card .sub-number-wrap {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 4px;
+      margin-bottom: 6px;
+    }
+
     .sub-goal-card .sub-number {
       font-family: 'Baloo 2', sans-serif;
-      font-size: 2.8rem;
+      font-size: 3rem;
       font-weight: 900;
       line-height: 1;
-      margin-bottom: 4px;
+      color: #fff;
+      background: linear-gradient(135deg, #FF6B35, #FF4500);
+      padding: 4px 18px 6px 18px;
+      border-radius: 999px;
+      box-shadow: 
+        0 0 20px rgba(255, 69, 0, 0.4),
+        0 0 60px rgba(255, 69, 0, 0.15),
+        inset 0 2px 0 rgba(255,255,255,0.25);
+      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      display: inline-block;
       letter-spacing: 0.02em;
-      color: #00BCD4;
-      text-shadow: 
-        0 0 10px rgba(255, 107, 0, 0.9),
-        0 0 20px rgba(255, 107, 0, 0.7),
-        0 0 40px rgba(255, 107, 0, 0.5),
-        0 0 80px rgba(255, 107, 0, 0.3),
-        0 2px 4px rgba(0, 0, 0, 0.4);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .sub-goal-card:hover .sub-number {
+      transform: scale(1.05);
+      box-shadow: 
+        0 0 30px rgba(255, 69, 0, 0.6),
+        0 0 80px rgba(255, 69, 0, 0.25),
+        inset 0 2px 0 rgba(255,255,255,0.3);
     }
 
     .sub-goal-card .sub-number .sub-label {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--text-soft);
-      text-shadow: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.85);
       margin-left: 2px;
-      display: inline-block;
     }
 
-    .sub-goal-card.completed .sub-number {
-      opacity: 0.6;
-      text-shadow: 
-        0 0 8px rgba(255, 107, 0, 0.4),
-        0 0 16px rgba(255, 107, 0, 0.2),
-        0 2px 4px rgba(0, 0, 0, 0.2);
-    }
-
+    /* ---- Alternativ: dezente Variante mit Umrandung ---- */
     .sub-goal-card .sub-goal-text {
       font-size: 0.92rem;
       color: var(--text);
@@ -169,6 +178,11 @@
       opacity: 0.6;
       border-color: var(--moss) !important;
     }
+    .sub-goal-card.completed .sub-number {
+      background: linear-gradient(135deg, #888, #666);
+      box-shadow: none;
+      opacity: 0.8;
+    }
     .sub-goal-card.completed::after {
       content: "✓";
       position: absolute;
@@ -186,10 +200,11 @@
         padding: 0 16px 30px;
       }
       .sub-goal-card .sub-number {
-        font-size: 2.2rem;
+        font-size: 2.4rem;
+        padding: 2px 14px 4px 14px;
       }
       .sub-goal-card .sub-number .sub-label {
-        font-size: 0.95rem;
+        font-size: 0.8rem;
       }
       .sub-goal-card .sub-goal-text .strafenrad-headline {
         font-size: 1.05rem;
@@ -368,9 +383,11 @@
 
         card.innerHTML = `
           <span class="sub-badge ${goal.category}">${catLabels[goal.category] || goal.category}</span>
-          <div class="sub-number">
-            ${goal.subs}
-            <span class="sub-label">Subs</span>
+          <div class="sub-number-wrap">
+            <span class="sub-number">
+              ${goal.subs}
+              <span class="sub-label">Subs</span>
+            </span>
           </div>
           <div class="sub-goal-text">${formattedText}</div>
         `;
