@@ -106,7 +106,7 @@
       opacity: 0.4;
     }
 
-    /* ---- Sub-Nummer: KNALLIGER FARBVERLAUF Orange → Türkis ---- */
+    /* ---- Sub-Nummer: KNALLIGER FARBVERLAUF + DUNKLE KONTUR ---- */
     .sub-goal-card .sub-number {
       font-family: 'Baloo 2', sans-serif;
       font-size: 2.8rem;
@@ -118,18 +118,29 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      filter: drop-shadow(0 2px 8px rgba(255, 107, 53, 0.3));
-    }
-    .sub-goal-card .sub-number .sub-label {
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: var(--text-soft);
-      -webkit-text-fill-color: var(--text-soft);
-      background: none;
-      filter: none;
+      /* DUNKLE KONTUR */
+      filter: drop-shadow(0 1px 0 #2a1a0e) drop-shadow(0 0 6px rgba(0,0,0,0.6));
+      text-shadow: 
+        0 1px 0 #2a1a0e,
+        0 2px 0 #2a1a0e,
+        0 3px 0 #2a1a0e,
+        0 4px 4px rgba(0,0,0,0.5);
     }
 
-    /* ---- Goal-Text: "Strafenrad" als Überschrift ---- */
+    /* ---- "Subs" schöner sichtbar ---- */
+    .sub-goal-card .sub-number .sub-label {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+      -webkit-text-fill-color: #fff;
+      background: none;
+      filter: none;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.6), 0 2px 8px rgba(0,0,0,0.4);
+      margin-left: 2px;
+      display: inline-block;
+    }
+
+    /* ---- Goal-Text ---- */
     .sub-goal-card .sub-goal-text {
       font-size: 0.92rem;
       color: var(--text);
@@ -139,7 +150,6 @@
       max-width: 100%;
     }
 
-    /* "Strafenrad" als fette Überschrift */
     .sub-goal-card .sub-goal-text .strafenrad-headline {
       display: block;
       font-weight: 800;
@@ -148,8 +158,6 @@
       margin-bottom: 4px;
       letter-spacing: 0.04em;
     }
-
-    /* Beschreibungstext unter der Überschrift (normal) */
     .sub-goal-card .sub-goal-text .strafenrad-desc {
       display: block;
       font-size: 0.85rem;
@@ -157,7 +165,6 @@
       line-height: 1.5;
     }
 
-    /* Badges */
     .sub-badge {
       display: inline-block;
       font-family: 'Baloo 2', sans-serif;
@@ -183,7 +190,7 @@
       border-color: var(--moss) !important;
     }
     .sub-goal-card.completed .sub-number {
-      filter: drop-shadow(0 2px 8px rgba(0, 180, 216, 0.2));
+      filter: drop-shadow(0 1px 0 #2a1a0e) drop-shadow(0 0 6px rgba(0,0,0,0.6));
       opacity: 0.7;
     }
     .sub-goal-card.completed::after {
@@ -234,6 +241,9 @@
       }
       .sub-goal-card .sub-number {
         font-size: 2.2rem;
+      }
+      .sub-goal-card .sub-number .sub-label {
+        font-size: 0.95rem;
       }
       .progress-wrap {
         padding: 0 16px;
@@ -402,7 +412,6 @@
             <span class="strafenrad-desc">${details}${rest ? ' — ' + rest : ''}</span>
           `;
         }
-        // Fallback: nur "Strafenrad" als Überschrift, Rest als Beschreibung
         const parts = text.split(/[()]/);
         if (parts.length >= 3) {
           return `
