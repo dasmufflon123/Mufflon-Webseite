@@ -22,6 +22,27 @@
     .subathon-header .section-head h1 {
       font-size: clamp(2rem, 3.5vw, 2.8rem) !important;
     }
+    .subathon-header .section-head p {
+      max-width: 680px;
+      margin: 0 auto 4px;
+      line-height: 1.5;
+    }
+    .subathon-header .section-head .sub-desc-small {
+      font-size: 0.85rem;
+      color: var(--text-soft);
+      max-width: 640px;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+    .subathon-header .section-head .sub-desc-small a {
+      color: var(--terracotta);
+      font-weight: 700;
+      text-decoration: underline;
+      transition: color 0.15s ease;
+    }
+    .subathon-header .section-head .sub-desc-small a:hover {
+      color: var(--terracotta-dark);
+    }
 
     .progress-wrap {
       max-width: 1080px;
@@ -118,7 +139,6 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      /* DUNKLE KONTUR */
       filter: drop-shadow(0 1px 0 #2a1a0e) drop-shadow(0 0 6px rgba(0,0,0,0.6));
       text-shadow: 
         0 1px 0 #2a1a0e,
@@ -127,7 +147,6 @@
         0 4px 4px rgba(0,0,0,0.5);
     }
 
-    /* ---- "Subs" schöner sichtbar ---- */
     .sub-goal-card .sub-number .sub-label {
       font-size: 1.1rem;
       font-weight: 700;
@@ -140,7 +159,6 @@
       display: inline-block;
     }
 
-    /* ---- Goal-Text ---- */
     .sub-goal-card .sub-goal-text {
       font-size: 0.92rem;
       color: var(--text);
@@ -260,6 +278,9 @@
       .sub-goal-card .sub-goal-text .strafenrad-desc {
         font-size: 0.78rem;
       }
+      .subathon-header .section-head .sub-desc-small {
+        font-size: 0.78rem;
+      }
     }
   </style>
 </head>
@@ -311,7 +332,10 @@
     <div class="section-head">
       <span class="eyebrow">Die große Challenge</span>
       <h1>🎯 SUBATHON SUBGOALS 2026</h1>
-      <p>Jede 10 neue Subs schaltet ein neues Ziel frei!<br>Die Commähnity bestimmt, was Mufflon erwartet.</p>
+      <p>Je nachdem, wie viele Subs zusammenkommen, werden nach und nach neue Goals erreicht</p>
+      <p class="sub-desc-small">
+        Die Goals werden nicht zwangsläufig in der Reihenfolge abgestreamt, in der sie hier aufgelistet sind. Wann welches Goal stattfindet, kann also variieren. Mehr Infos kannst du <a href="faq.html">HIER</a> finden
+      </p>
     </div>
   </section>
 
