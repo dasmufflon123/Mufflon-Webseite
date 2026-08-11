@@ -116,7 +116,6 @@ img { max-width: 100%; display: block; }
 .btn-soon:hover { transform: none; }
 
 /* ---------- Nav ---------- */
-/* ---------- Nav ---------- */
 header.site-header {
   position: sticky;
   top: 0;
@@ -136,8 +135,9 @@ header.site-header {
 .nav-inner {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 18px 24px;
+  justify-content: flex-start;
+  gap: 16px;
+  padding: 12px 20px;
   max-width: 1080px;
   margin: 0 auto;
 }
@@ -145,22 +145,30 @@ header.site-header {
 .brand {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   text-decoration: none;
   font-family: 'Baloo 2', sans-serif;
   font-weight: 800;
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   color: var(--cream);
   text-shadow: 0 1px 2px rgba(0,0,0,0.35);
-  margin-right: auto; /* Schiebt die Brand weiter nach links */
+  flex-shrink: 0;
+  margin-right: 8px;
 }
-.brand { position: relative; overflow: visible; }
-.brand img { width: 58px; height: 58px; object-fit: contain; margin: -4px 0; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.35)); }
+.brand img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.35));
+}
 
 nav.main-nav {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 2px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  flex: 1;
 }
 
 nav.main-nav a {
@@ -168,31 +176,26 @@ nav.main-nav a {
   font-family: 'Baloo 2', sans-serif;
   font-weight: 600;
   color: var(--cream);
-  padding: 8px 14px;
+  padding: 6px 10px;
   border-radius: 999px;
-  font-size: 0.98rem;
+  font-size: 0.82rem;
+  white-space: nowrap;
   transition: background 0.15s ease, color 0.15s ease;
-  text-align: center; /* Text in den Links zentrieren */
 }
 nav.main-nav a:hover,
 nav.main-nav a.active {
   background: var(--terracotta);
   color: var(--white);
 }
-nav.main-nav a.soon {
-  color: rgba(246, 236, 220, 0.5);
-  cursor: default;
-}
-nav.main-nav a.soon:hover { background: none; color: rgba(246, 236, 220, 0.5); }
 
 nav.main-nav a.nav-home {
-  padding: 4px 12px;
+  padding: 2px 6px;
   display: flex;
   align-items: center;
 }
 nav.main-nav a.nav-home img {
-  width: 30px;
-  height: 30px;
+  width: 26px;
+  height: 26px;
   object-fit: contain;
   filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
 }
@@ -219,19 +222,21 @@ nav.main-nav a.nav-home img {
     padding: 10px 20px 18px;
     display: none;
     border-bottom: 3px solid #3d2612;
+    overflow: visible;
+    flex-wrap: wrap;
+    gap: 2px;
   }
   nav.main-nav.open { display: flex; }
   nav.main-nav a {
-    text-align: center; /* Zentriert den Text bei Zeilenumbruch */
-    padding: 10px 14px;
+    text-align: center;
+    padding: 8px 14px;
     font-size: 1rem;
-    word-break: break-word; /* Erlaubt sauberen Zeilenumbruch */
+    white-space: normal;
   }
-  nav.main-nav a.nav-home {
-    justify-content: center;
-  }
+  .brand { font-size: 1.05rem; }
+  .brand img { width: 36px; height: 36px; }
+  .nav-inner { padding: 10px 16px; gap: 10px; }
 }
-
 /* ---------- Hero ---------- */
 .hero {
   padding: 70px 24px 40px;
