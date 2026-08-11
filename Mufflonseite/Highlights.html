@@ -28,7 +28,7 @@
       align-items: flex-end;
       box-shadow: var(--shadow-soft);
       text-decoration: none;
-      transition: transform 0.18s ease, box-shadow 0.18s ease;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
       min-height: 220px;
       cursor: pointer;
     }
@@ -53,56 +53,61 @@
       padding: 18px 16px 16px;
       font-family: 'Baloo 2', sans-serif;
       font-weight: 700;
-      font-size: 1.15rem;
       color: #fff;
       text-shadow: 0 2px 8px rgba(0,0,0,0.5);
       background: linear-gradient(0deg, rgba(0,0,0,0.60) 0%, transparent 100%);
       text-align: center;
-      line-height: 1.1;
-      letter-spacing: 0.02em;
-      min-height: 80px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      word-break: break-word;
-    }
-
-    .highlight-tile .label .main-label {
-      display: block;
-      font-size: 1.15rem;
-      line-height: 1.1;
-    }
-
-    .highlight-tile .label .sub-label {
-      display: none;
-      font-size: 0.72rem;
-      font-weight: 400;
-      opacity: 0.95;
-      margin-top: 4px;
-      font-family: 'Nunito', sans-serif;
-      line-height: 1.15;
-      color: #fff;
-      text-shadow: 0 1px 4px rgba(0,0,0,0.4);
-      max-width: 95%;
-    }
-
-    .highlight-tile:hover .label .sub-label {
-      display: block !important;
-    }
-
-    .highlight-tile:hover .label .main-label {
-      font-size: 1.0rem;
-      line-height: 1.1;
-    }
-
-    .highlight-tile .label-content {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      width: 100%;
+      transition: all 0.3s ease;
+      min-height: 80px;
+      height: 100%;
+      gap: 2px;
     }
 
+    /* Haupttitel: groß, zentriert */
+    .highlight-tile .label .main-label {
+      display: block;
+      font-size: 1.6rem;
+      font-weight: 800;
+      line-height: 1.2;
+      transition: all 0.3s ease;
+    }
+
+    /* Untertitel: standardmäßig versteckt */
+    .highlight-tile .label .sub-label {
+      display: none;
+      font-size: 0.8rem;
+      font-weight: 400;
+      opacity: 0.95;
+      font-family: 'Nunito', sans-serif;
+      line-height: 1.4;
+      color: #fff;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+      max-width: 95%;
+      margin-top: 2px;
+      transition: all 0.3s ease;
+    }
+
+    /* Hover: Titel rutscht nach oben, wird kleiner, Untertitel erscheint */
+    .highlight-tile:hover .label {
+      justify-content: flex-start;
+      padding-top: 18px;
+    }
+
+    .highlight-tile:hover .label .main-label {
+      font-size: 1.0rem;
+      line-height: 1.2;
+      margin-bottom: 2px;
+    }
+
+    .highlight-tile:hover .label .sub-label {
+      display: block;
+    }
+
+    /* Responsive Anpassungen */
     @media (max-width: 640px) {
       .highlight-grid {
         grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -112,19 +117,18 @@
         min-height: 160px;
       }
       .highlight-tile .label {
-        font-size: 0.95rem;
+        min-height: 60px;
         padding: 14px 12px 12px;
-        min-height: 65px;
       }
       .highlight-tile .label .main-label {
-        font-size: 0.95rem;
+        font-size: 1.2rem;
       }
       .highlight-tile:hover .label .main-label {
         font-size: 0.85rem;
       }
       .highlight-tile .label .sub-label {
-        font-size: 0.62rem;
-        line-height: 1.1;
+        font-size: 0.65rem;
+        line-height: 1.3;
       }
     }
 
@@ -137,21 +141,18 @@
         min-height: 140px;
       }
       .highlight-tile .label {
-        font-size: 0.8rem;
+        min-height: 50px;
         padding: 10px 8px 8px;
-        min-height: 55px;
       }
       .highlight-tile .label .main-label {
-        font-size: 0.8rem;
-        line-height: 1.0;
+        font-size: 1.0rem;
       }
       .highlight-tile:hover .label .main-label {
-        font-size: 0.7rem;
+        font-size: 0.75rem;
       }
       .highlight-tile .label .sub-label {
-        font-size: 0.52rem;
-        line-height: 1.05;
-        margin-top: 2px;
+        font-size: 0.55rem;
+        line-height: 1.2;
       }
     }
   </style>
@@ -165,17 +166,17 @@
         Das__Mufflon
       </a>
       <button class="nav-toggle" aria-label="Menü öffnen">☰</button>
-   <nav class="main-nav">
-  <a href="index.html" class="active nav-home"><img src="assets/mufflon-icon.png" alt="Stall" title="Stall"></a>
-  <a href="Content.html">Content</a>
-  <a href="Highlights.html">Highlights</a>
-  <a href="subathon_goals.html">Subathon Goals</a>
-  <a href="subathon_bombs.html">Subathon Bombs</a>  
-  <a href="FAQ.html">FAQ</a>
-  <a href="Opfanze.html">Opfanze</a> 
-  <a href="pomodoro.html">Pomodoro</a>
-  <a href="mahmories.html">Mähmories</a>  
-</nav>
+      <nav class="main-nav">
+        <a href="index.html" class="nav-home"><img src="assets/mufflon-mascot.png" alt="Stall" title="Stall"></a>
+        <a href="Content.html">Content</a>
+        <a href="Highlights.html" class="active">Highlights</a>
+        <a href="subathon_goals.html">Subathon Goals</a>
+        <a href="subathon_bombs.html">Subathon Bombs</a>
+        <a href="FAQ.html">FAQ</a>
+        <a href="Opfanze.html">Opfanze</a>
+        <a href="pomodoro.html">Pomodoro</a>
+        <a href="mahmories.html">Mähmories</a>
+      </nav>
     </div>
   </header>
 
@@ -233,10 +234,8 @@
 
       tile.innerHTML = `
         <span class="label">
-          <span class="label-content">
-            <span class="main-label">${h.label}</span>
-            ${h.sub ? `<span class="sub-label">${h.sub}</span>` : ''}
-          </span>
+          <span class="main-label">${h.label}</span>
+          ${h.sub ? `<span class="sub-label">${h.sub}</span>` : ''}
         </span>
       `;
 
