@@ -99,6 +99,22 @@
     .kiosk-hero .section-head h1 {
       font-size: clamp(1.8rem, 3vw, 2.5rem);
     }
+    .kiosk-hero .section-head .opfanze-desc {
+      font-size: 0.95rem;
+      color: var(--text-soft);
+      line-height: 1.7;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+    .kiosk-hero .section-head .opfanze-desc a {
+      color: var(--terracotta);
+      font-weight: 700;
+      text-decoration: underline;
+      transition: color 0.15s ease;
+    }
+    .kiosk-hero .section-head .opfanze-desc a:hover {
+      color: var(--terracotta-dark);
+    }
 
     /* ---- Hervorgehobene Ausgabe ---- */
     .featured-card {
@@ -400,21 +416,21 @@
         Das__Mufflon
       </a>
       <button class="nav-toggle" aria-label="Menü öffnen">☰</button>
-<nav class="main-nav">
-  <a href="index.html" class="nav-home"><img src="assets/mufflon-icon.png" alt="Stall" title="Stall"></a>
-  <a href="Content.html">Content</a>
-  <a href="Highlights.html">Highlights</a>
-  <a href="subathon_goals.html">Subathon Goals</a>
-  <a href="subathon_bombs.html">Subathon Bombs</a>
-  <a href="FAQ.html">FAQ</a>
-  <a href="Opfanze.html" class="active">Opfanze</a>
-  <a href="pomodoro.html">Pomodoro</a>
-  <a href="mahmories.html">Mähmories</a>
-</nav>
+      <nav class="main-nav">
+        <a href="index.html" class="nav-home"><img src="assets/mufflon-icon.png" alt="Stall" title="Stall"></a>
+        <a href="Content.html">Content</a>
+        <a href="Highlights.html">Highlights</a>
+        <a href="subathon_goals.html">Subathon Goals</a>
+        <a href="subathon_bombs.html">Subathon Bombs</a>
+        <a href="FAQ.html">FAQ</a>
+        <a href="Opfanze.html" class="active">Opfanze</a>
+        <a href="pomodoro.html">Pomodoro</a>
+        <a href="mahmories.html">Mähmories</a>
+      </nav>
     </div>
   </header>
 
-    <div class="social-dock">
+  <div class="social-dock">
     <a href="https://twitch.tv/das__mufflon" target="_blank" rel="noopener" aria-label="Twitch" class="social-btn" style="animation-delay:0s">
       <span class="social-float" style="animation-duration:3.2s; animation-delay:0.6s">
         <img src="assets/social/twitch.png" alt="Twitch">
@@ -430,12 +446,12 @@
         <img src="assets/social/insta.png" alt="Instagram">
       </span>
     </a>
-  <a href="https://www.youtube.com/@dasmufflon" target="_blank" rel="noopener" aria-label="YouTube" class="social-btn" style="animation-delay:0.45s">
-  <span class="social-float" style="animation-duration:3.8s; animation-delay:1.05s">
-    <img src="assets/social/yt.png" alt="YouTube">
-  </span>
-</a>
-   </div>
+    <a href="https://www.youtube.com/@dasmufflon" target="_blank" rel="noopener" aria-label="YouTube" class="social-btn" style="animation-delay:0.45s">
+      <span class="social-float" style="animation-duration:3.8s; animation-delay:1.05s">
+        <img src="assets/social/yt.png" alt="YouTube">
+      </span>
+    </a>
+  </div>
 
   <!-- ============================================================
        OPFANZE-BANNER (Header-Bild)
@@ -456,13 +472,11 @@
         <div class="section-head">
           <span class="eyebrow">Der Opfanze-Kiosk</span>
           <h1>📰 Alle Ausgaben</h1>
-          <p>Die Opfanze
-
-Maggus schaut im Stream ganz genau hin und notiert alles, was besser nicht vergessen werden sollte: Fails, Fakenews, Eskalationen und sonstige historische Ereignisse. 📝🐏
-
-Daraus entsteht nach jedem Streamtag eine neue Ausgabe der Opfanze. Und wenn’s besonders wild wird, gibt’s auch mal eine Sonderausgabe!
-
-Die frischeste Ausgabe gibt’s immer zuerst auf unserem Discord!</p>
+          <p class="opfanze-desc">
+            Maggus schaut im Stream ganz genau hin und notiert alles, was besser nicht vergessen werden sollte: Fails, Fakenews, Eskalationen und sonstige historische Ereignisse.<br>
+            Daraus schnubbt er nach jedem Streamtag eine neue Ausgabe der Opfanze zusammen. Und wenn's besonders wild wird, gibt's auch mal eine Sonderausgabe!<br>
+            <strong>Die frischeste Ausgabe gibt's immer zuerst auf unserem <a href="https://discord.gg/mzW9Hh96S" target="_blank" rel="noopener">Discord</a>!</strong>
+          </p>
         </div>
       </div>
 
