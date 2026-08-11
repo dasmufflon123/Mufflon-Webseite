@@ -65,31 +65,30 @@
     <div class="book" id="book">
       <div class="book-base" id="bookBase">
         <div class="page-half left">
-          <img id="baseLeftImg" src="" alt="">
+          <img id="baseLeftImg" src="" alt="" style="display: none;">
         </div>
         <div class="page-half right">
-          <img id="baseRightImg" src="" alt="">
+          <img id="baseRightImg" src="" alt="" style="display: none;">
         </div>
       </div>
 
       <div class="book-spine"></div>
 
-      <!-- KEIN SEPARATES COVER-ELEMENT MEHR – Cover ist jetzt Seite 0 -->
       <div class="flip-half right" id="flipRight">
         <div class="flip-face front">
-          <img id="flipRightFrontImg" src="" alt="">
+          <img id="flipRightFrontImg" src="" alt="" style="display: none;">
         </div>
         <div class="flip-face back">
-          <img id="flipRightBackImg" src="" alt="">
+          <img id="flipRightBackImg" src="" alt="" style="display: none;">
         </div>
       </div>
 
       <div class="flip-half left" id="flipLeft">
         <div class="flip-face front">
-          <img id="flipLeftFrontImg" src="" alt="">
+          <img id="flipLeftFrontImg" src="" alt="" style="display: none;">
         </div>
         <div class="flip-face back">
-          <img id="flipLeftBackImg" src="" alt="">
+          <img id="flipLeftBackImg" src="" alt="" style="display: none;">
         </div>
       </div>
     </div>
@@ -115,7 +114,6 @@
   <script>
     // ============================================================
     // MAEHMORIES — MIT BUCH COVER (nur rechts) + RÜCKSEITE (nur links)
-    // Beide sind normale Seiten mit Flip-Effekt!
     // ============================================================
 
     const MEMBERS = MAHMORIES_MITGLIEDER;
@@ -141,7 +139,7 @@
     allPages.push(BACK_PAGE);
 
     // ============================================================
-    // BUCH-LOGIK (unverändert, inklusive Flip-Effekt)
+    // BUCH-LOGIK
     // ============================================================
 
     let currentIndex = 0;
@@ -171,35 +169,50 @@
       return data.name || '';
     }
 
+    function setImageWithVisibility(imgElement, src, alt) {
+      if (src && src.length > 0) {
+        imgElement.src = src;
+        imgElement.alt = alt || '';
+        imgElement.style.display = 'block';
+      } else {
+        imgElement.src = '';
+        imgElement.alt = '';
+        imgElement.style.display = 'none';
+      }
+    }
+
     function renderBaseInstant(index) {
       const page = getPage(index);
       const leftSrc = getImageSrc(page, 'left');
       const rightSrc = getImageSrc(page, 'right');
 
-      baseLeftImg.src = leftSrc || '';
-      baseLeftImg.alt = getImageAlt(page, 'left') || 'Leere linke Seite';
-      baseRightImg.src = rightSrc || '';
-      baseRightImg.alt = getImageAlt(page, 'right') || 'Leere rechte Seite';
+      setImageWithVisibility(baseLeftImg, leftSrc, getImageAlt(page, 'left'));
+      setImageWithVisibility(baseRightImg, rightSrc, getImageAlt(page, 'right'));
 
-      // Flip-Bilder immer auf die aktuelle Seite setzen
+      // Flip-Bilder
       const leftMember = page.left;
       const rightMember = page.right;
 
+      const flipRightFront = document.getElementById('flipRightFrontImg');
+      const flipRightBack = document.getElementById('flipRightBackImg');
+      const flipLeftFront = document.getElementById('flipLeftFrontImg');
+      const flipLeftBack = document.getElementById('flipLeftBackImg');
+
       if (rightMember) {
-        document.getElementById('flipRightFrontImg').src = rightMember.seite_rechts || '';
-        document.getElementById('flipRightFrontImg').alt = rightMember.name || '';
+        setImageWithVisibility(flipRightFront, rightMember.seite_rechts || '', rightMember.name || '');
       } else {
-        document.getElementById('flipRightFrontImg').src = '';
-        document.getElementById('flipRightFrontImg').alt = '';
+        setImageWithVisibility(flipRightFront, '', '');
       }
 
       if (leftMember) {
-        document.getElementById('flipLeftFrontImg').src = leftMember.seite_links || '';
-        document.getElementById('flipLeftFrontImg').alt = leftMember.name || '';
+        setImageWithVisibility(flipLeftFront, leftMember.seite_links || '', leftMember.name || '');
       } else {
-        document.getElementById('flipLeftFrontImg').src = '';
-        document.getElementById('flipLeftFrontImg').alt = '';
+        setImageWithVisibility(flipLeftFront, '', '');
       }
+
+      // Flip-Back-Bilder leeren (werden beim Flip gesetzt)
+      setImageWithVisibility(flipRightBack, '', '');
+      setImageWithVisibility(flipLeftBack, '', '');
 
       // Seitenanzeige
       const total = allPages.length;
@@ -213,7 +226,7 @@
       prevBtn.disabled = index === 0;
       nextBtn.disabled = index === total - 1;
 
-      // Klappen zurücksetzen (immer auf 0, damit sie beim nächsten Flip bereit sind)
+      // Klappen zurücksetzen
       resetFlapInstant(flipRight, 'rotateY(0deg)');
       resetFlapInstant(flipLeft, 'rotateY(0deg)');
     }
@@ -235,35 +248,30 @@
       const targetPage = getPage(targetIndex);
 
       if (direction === 1) {
-        // Vorwärts: rechte Seite klappt um
+        // Vorwärts
         flipRight.style.zIndex = '10';
         flipLeft.style.zIndex = '4';
 
         const currentRight = currentPage.right;
         const targetLeft = targetPage.left;
 
-        // Vorderseite der Klappe = aktuelle rechte Seite
+        const flipRightFront = document.getElementById('flipRightFrontImg');
+        const flipRightBack = document.getElementById('flipRightBackImg');
+
         if (currentRight) {
-          document.getElementById('flipRightFrontImg').src = currentRight.seite_rechts || '';
-          document.getElementById('flipRightFrontImg').alt = currentRight.name || '';
+          setImageWithVisibility(flipRightFront, currentRight.seite_rechts || '', currentRight.name || '');
         } else {
-          document.getElementById('flipRightFrontImg').src = '';
-          document.getElementById('flipRightFrontImg').alt = '';
+          setImageWithVisibility(flipRightFront, '', '');
         }
 
-        // Rückseite der Klappe = Ziel linke Seite
         if (targetLeft) {
-          document.getElementById('flipRightBackImg').src = targetLeft.seite_links || '';
-          document.getElementById('flipRightBackImg').alt = targetLeft.name || '';
+          setImageWithVisibility(flipRightBack, targetLeft.seite_links || '', targetLeft.name || '');
         } else {
-          document.getElementById('flipRightBackImg').src = '';
-          document.getElementById('flipRightBackImg').alt = '';
+          setImageWithVisibility(flipRightBack, '', '');
         }
 
-        // Rechte Basis auf Ziel-Rechts setzen (unsichtbar unter Klappe)
         const targetRightSrc = getImageSrc(targetPage, 'right');
-        baseRightImg.src = targetRightSrc || '';
-        baseRightImg.alt = getImageAlt(targetPage, 'right') || '';
+        setImageWithVisibility(baseRightImg, targetRightSrc, getImageAlt(targetPage, 'right'));
 
         resetFlapInstant(flipRight, 'rotateY(0deg)');
         requestAnimationFrame(() => {
@@ -272,10 +280,8 @@
 
         flipRight.addEventListener('transitionend', function onDone() {
           flipRight.removeEventListener('transitionend', onDone);
-          // Linke Basis auf Ziel-Links setzen
           const targetLeftSrc = getImageSrc(targetPage, 'left');
-          baseLeftImg.src = targetLeftSrc || '';
-          baseLeftImg.alt = getImageAlt(targetPage, 'left') || '';
+          setImageWithVisibility(baseLeftImg, targetLeftSrc, getImageAlt(targetPage, 'left'));
 
           resetFlapInstant(flipRight, 'rotateY(0deg)');
           flipRight.style.zIndex = '';
@@ -286,32 +292,30 @@
         }, { once: true });
 
       } else {
-        // Rückwärts: linke Seite klappt um
+        // Rückwärts
         flipLeft.style.zIndex = '10';
         flipRight.style.zIndex = '4';
 
         const currentLeft = currentPage.left;
         const targetRight = targetPage.right;
 
+        const flipLeftFront = document.getElementById('flipLeftFrontImg');
+        const flipLeftBack = document.getElementById('flipLeftBackImg');
+
         if (currentLeft) {
-          document.getElementById('flipLeftFrontImg').src = currentLeft.seite_links || '';
-          document.getElementById('flipLeftFrontImg').alt = currentLeft.name || '';
+          setImageWithVisibility(flipLeftFront, currentLeft.seite_links || '', currentLeft.name || '');
         } else {
-          document.getElementById('flipLeftFrontImg').src = '';
-          document.getElementById('flipLeftFrontImg').alt = '';
+          setImageWithVisibility(flipLeftFront, '', '');
         }
 
         if (targetRight) {
-          document.getElementById('flipLeftBackImg').src = targetRight.seite_rechts || '';
-          document.getElementById('flipLeftBackImg').alt = targetRight.name || '';
+          setImageWithVisibility(flipLeftBack, targetRight.seite_rechts || '', targetRight.name || '');
         } else {
-          document.getElementById('flipLeftBackImg').src = '';
-          document.getElementById('flipLeftBackImg').alt = '';
+          setImageWithVisibility(flipLeftBack, '', '');
         }
 
         const targetLeftSrc = getImageSrc(targetPage, 'left');
-        baseLeftImg.src = targetLeftSrc || '';
-        baseLeftImg.alt = getImageAlt(targetPage, 'left') || '';
+        setImageWithVisibility(baseLeftImg, targetLeftSrc, getImageAlt(targetPage, 'left'));
 
         resetFlapInstant(flipLeft, 'rotateY(0deg)');
         requestAnimationFrame(() => {
@@ -321,8 +325,7 @@
         flipLeft.addEventListener('transitionend', function onDone() {
           flipLeft.removeEventListener('transitionend', onDone);
           const targetRightSrc = getImageSrc(targetPage, 'right');
-          baseRightImg.src = targetRightSrc || '';
-          baseRightImg.alt = getImageAlt(targetPage, 'right') || '';
+          setImageWithVisibility(baseRightImg, targetRightSrc, getImageAlt(targetPage, 'right'));
 
           resetFlapInstant(flipLeft, 'rotateY(0deg)');
           flipLeft.style.zIndex = '';
