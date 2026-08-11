@@ -302,21 +302,24 @@
   <script src="js/main.js"></script>
   <script>
     // ============================================================
-    // SUBATHON SUBGOALS 2026 — MIT MANUELLER CODE-LISTE
+    // SUBATHON SUBGOALS 2026 — MIT CODE-LISTE
     // ============================================================
 
     // ============================================================
-    // ⚠️ HIER LÖSCHST DU DIE ZAHLEN DER ERREICHTEN GOALS!
+    // ⚠️ HIER TRÄGST DU DIE ZAHLEN DER ERREICHTEN GOALS EIN!
     // ============================================================
     // Beispiel: Nach Tag 1 sind 10, 20 und 30 erreicht:
-    // const COMPLETED_SUBS = [20, 30, 40];
-    // 
-    // Wenn du 10 und 20 löschst, weil sie erreicht sind:
-    // const COMPLETED_SUBS = [30, 40, 50, 60, ...];
+    // const COMPLETED_SUBS = [10, 20, 30];
+    //
+    // Wenn später auch 40 und 50 erreicht sind, fügst du sie hinzu:
+    // const COMPLETED_SUBS = [10, 20, 30, 40, 50];
     // ============================================================
 
     const COMPLETED_SUBS = [
       // ⬇️ HIER DIE ZAHLEN DER ERREICHTEN GOALS EINTRAGEN
+      10,
+      20,
+      30
       // 40, 50, 60, 70, 80, 90, 100,
       // 110, 120, 130, 140, 150, 160, 170, 180, 190, 200,
       // 225, 250, 275, 300, 325, 350, 375, 400, 425, 450,
@@ -409,6 +412,7 @@
       grid.innerHTML = '';
 
       ALL_GOALS.forEach((goal) => {
+        // NEUE LOGIK: Zahl in COMPLETED_SUBS = erreicht!
         const isCompleted = COMPLETED_SUBS.includes(goal.subs);
         const isMilestone = MILESTONES.includes(goal.subs);
 
