@@ -44,7 +44,6 @@
       color: var(--terracotta-dark);
     }
 
-    /* ---- Timer-Info-Box ---- */
     .timer-info {
       max-width: 820px;
       margin: 0 auto 30px;
@@ -70,7 +69,6 @@
       color: var(--terracotta-dark);
     }
 
-    /* ---- Subathon-Grid ---- */
     .subathon-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
@@ -181,7 +179,6 @@
       margin: 8px 0 10px;
     }
 
-    /* ---- Normale Subs Tabelle ---- */
     .table-wrap {
       max-width: 820px;
       margin: 0 auto 40px;
@@ -219,7 +216,6 @@
       color: var(--terracotta-dark);
     }
 
-    /* ---- Bits & Donations ---- */
     .bits-section {
       max-width: 820px;
       margin: 0 auto 40px;
@@ -255,7 +251,6 @@
       font-weight: 700;
     }
 
-    /* ---- Responsive ---- */
     @media (max-width: 640px) {
       .subathon-grid {
         grid-template-columns: 1fr;
@@ -295,17 +290,17 @@
         Das__Mufflon
       </a>
       <button class="nav-toggle" aria-label="Menü öffnen">☰</button>
-   <nav class="main-nav">
-  <a href="index.html" class="active nav-home"><img src="assets/mufflon-icon.png" alt="Stall" title="Stall"></a>
-  <a href="Content.html">Content</a>
-  <a href="Highlights.html">Highlights</a>
-  <a href="subathon_goals.html">Subathon Goals</a>
-  <a href="subathon_bombs.html">Subathon Bombs</a>  
-  <a href="FAQ.html">FAQ</a>
-  <a href="Opfanze.html">Opfanze</a> 
-  <a href="pomodoro.html">Pomodoro</a>
-  <a href="mahmories.html">Mähmories</a>  
-</nav>
+      <nav class="main-nav">
+        <a href="index.html" class="nav-home"><img src="assets/mufflon-mascot.png" alt="Stall" title="Stall"></a>
+        <a href="Content.html">Content</a>
+        <a href="Highlights.html">Highlights</a>
+        <a href="subathon_goals.html">Subathon Goals</a>
+        <a href="subathon_bombs.html" class="active">Subathon Bombs</a>
+        <a href="FAQ.html">FAQ</a>
+        <a href="Opfanze.html">Opfanze</a>
+        <a href="pomodoro.html">Pomodoro</a>
+        <a href="mahmories.html">Mähmories</a>
+      </nav>
     </div>
   </header>
 
@@ -332,22 +327,17 @@
     </a>
   </div>
 
-  <!-- ============================================================
-       HEADER
-       ============================================================ -->
   <section class="subathon-header">
     <div class="section-head">
-      <h1> SUBATHON BOMBS 3.0</h1>
-      <p>Alles kann, nichts muss – hier sind die besonderen Belohnungen für große Unterstützungen ♥ </p>
+      <span class="eyebrow">💥 Die große Explosion</span>
+      <h1>🐏 SUBATHON BOMBS 3.0</h1>
+      <p>Alles kann, nichts muss – hier sind die besonderen Belohnungen für große Unterstützungen.</p>
       <p class="sub-desc-small">
         Die Subbombs werden nicht zwangsläufig in der Reihenfolge eingelöst, in der sie hier aufgelistet sind. Wann welche Aktion stattfindet, wird während des Subathons entschieden und natürlich vorher mit euch kommuniziert.
       </p>
     </div>
   </section>
 
-  <!-- ============================================================
-       TIMER-INFO
-       ============================================================ -->
   <div class="timer-info">
     <div class="timer-date">📅 Freitag, 18. September 2026 um 18:00 Uhr</div>
     <div class="timer-desc">
@@ -359,9 +349,6 @@
     </div>
   </div>
 
-  <!-- ============================================================
-       NORMALE SUBS (Tabelle)
-       ============================================================ -->
   <div class="table-wrap">
     <table>
       <thead>
@@ -387,16 +374,8 @@
     </table>
   </div>
 
-  <!-- ============================================================
-       SUBBOMBS
-       ============================================================ -->
-  <div class="subathon-grid" id="subathonGrid">
-    <!-- wird per JavaScript befüllt -->
-  </div>
+  <div class="subathon-grid" id="subathonGrid"></div>
 
-  <!-- ============================================================
-       BITS & DONATIONS
-       ============================================================ -->
   <div class="bits-section">
     <div class="bits-card">
       <h3>💎 Bits & Donations</h3>
@@ -405,24 +384,17 @@
         <span class="bit-item">💜 <strong>500 Bits</strong> = +10 Minuten</span>
         <span class="bit-item">💶 <strong>5 € Donation</strong> = +10 Minuten</span>
       </div>
-      <p style="color: var(--text-soft); font-size:0.8rem; margin-top:8px;">Die zusätzliche Zeit wird direkt zum Livetimer addiert</p>
+      <p style="color: var(--text-soft); font-size:0.8rem; margin-top:8px;">Die zusätzliche Zeit wird direkt zum Livetimer addiert.</p>
     </div>
   </div>
 
-  <!-- ============================================================
-       FOOTER
-       ============================================================ -->
   <footer class="site-footer">
-    <div class="footer-brand">Das__Mufflon 🐏 </div>
+    <div class="footer-brand">Das__Mufflon 🐑</div>
     <p><a href="https://twitch.tv/das__mufflon" target="_blank" rel="noopener">twitch.tv/das__mufflon</a></p>
   </footer>
 
   <script src="js/main.js"></script>
   <script>
-    // ============================================================
-    // SUBATHON BOMBS — Daten
-    // ============================================================
-
     const BOMBS_DATA = [
       {
         size: "5er",
@@ -550,10 +522,6 @@
       }
     ];
 
-    // ============================================================
-    // RENDER-FUNKTION
-    // ============================================================
-
     const grid = document.getElementById('subathonGrid');
 
     function renderBombs() {
@@ -569,7 +537,7 @@
         card.innerHTML = `
           <span class="bomb-badge${badgeClass}">${badgeText}</span>
           <div class="bomb-headline">
-            ${bomb.size}er <span class="bomb-label">${bomb.label}</span>
+            ${bomb.size} <span class="bomb-label">${bomb.label}</span>
           </div>
           <span class="bomb-time">⏱️ ${bomb.time}</span>
           <div class="bomb-divider"></div>
