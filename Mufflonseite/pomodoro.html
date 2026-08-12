@@ -933,9 +933,23 @@
   let entries = [];
   let addMode = 'todo';
 
+  // ---- LOCK gegen gleichzeitige Speichervorgänge ----
+  let isSaving = false;
+  let saveQueue = [];
+
   async function saveTodos() {
     if (!currentUser || !currentPasswordHash) return;
+
+    // Wenn gerade gespeichert wird, in die Warteschlange
+    if (isSaving) {
+      return new Promise((resolve) => {
+        saveQueue.push(resolve);
+      });
+    }
+
+    isSaving = true;
     const notes = getNotesArray();
+
     try {
       await fetch(`${API_URL}/api/save`, {
         method: 'POST',
@@ -949,6 +963,13 @@
       });
     } catch (e) {
       console.warn('Fehler beim Synchronisieren mit Cloudflare:', e);
+    } finally {
+      isSaving = false;
+      // Warteschlange abarbeiten
+      while (saveQueue.length > 0) {
+        const resolve = saveQueue.shift();
+        resolve();
+      }
     }
   }
 
