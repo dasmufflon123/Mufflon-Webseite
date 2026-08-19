@@ -166,7 +166,7 @@ nav.main-nav {
   align-items: center;
   gap: 2px 4px;
   flex-wrap: wrap;
-  overflow: visible;
+  overflow: hidden; /* Verhindert den Scrollbalken */
   flex: 1;
   padding: 2px 0;
 }
