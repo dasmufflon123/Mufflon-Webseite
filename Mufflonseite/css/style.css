@@ -165,8 +165,8 @@ nav.main-nav {
   display: flex;
   align-items: center;
   gap: 4px;
-  flex-wrap: nowrap;
-  overflow-x: auto;
+  flex-wrap: wrap;
+  overflow-x: visible;
   flex: 1;
   padding: 2px 0;
 }
@@ -209,6 +209,71 @@ nav.main-nav a.nav-home img {
   cursor: pointer;
 }
 
+@media (max-width: 820px) {
+  nav.main-nav a {
+    font-size: 0.78rem;
+    padding: 4px 10px;
+  }
+  nav.main-nav a.nav-home img {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+@media (max-width: 720px) {
+  .nav-toggle { display: block; }
+  
+  .brand { font-size: 1.1rem; }
+  .brand img { width: 40px; height: 40px; }
+  .nav-inner { padding: 10px 16px; gap: 12px; }
+
+  nav.main-nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: linear-gradient(180deg, #6B4226, #4f3119);
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 12px 14px;
+    display: none;
+    border-bottom: 3px solid #3d2612;
+    gap: 4px 8px;
+    overflow: visible;
+  }
+  nav.main-nav.open { display: flex; }
+  
+  nav.main-nav a {
+    text-align: center;
+    padding: 4px 10px;
+    font-size: 0.78rem;
+    white-space: nowrap;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.05);
+    flex: 0 1 auto;
+  }
+  
+  nav.main-nav a.nav-home {
+    padding: 2px 8px;
+  }
+  nav.main-nav a.nav-home img {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  nav.main-nav a {
+    font-size: 0.65rem;
+    padding: 3px 7px;
+  }
+  nav.main-nav a.nav-home img {
+    width: 20px;
+    height: 20px;
+  }
+}
 /* ---------- Mobile Navigation (Mehrzeilig, ohne Scrollbalken) ---------- */
 @media (max-width: 720px) {
   .nav-toggle { display: block; }
