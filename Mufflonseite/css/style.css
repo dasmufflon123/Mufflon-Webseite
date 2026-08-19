@@ -169,9 +169,9 @@ header.site-header {
 nav.main-nav {
   display: flex;
   align-items: center;
-  gap: 2px 4px;
-  flex-wrap: wrap;
-  overflow: hidden;
+  gap: 4px 6px;
+  flex-wrap: wrap; /* Erlaubt das Umbrechen in die nächste Zeile */
+  overflow: hidden; /* Verhindert jegliche Scrollbalken im Menü */
   flex: 1;
   padding: 2px 0;
 }
@@ -181,9 +181,9 @@ nav.main-nav a {
   font-family: 'Baloo 2', sans-serif;
   font-weight: 600;
   color: var(--cream);
-  padding: 4px 6px;
+  padding: 3px 6px; /* Etwas kompakter, damit mehr nebeneinander passt */
   border-radius: 999px;
-  font-size: 0.8rem;
+  font-size: 0.78rem; /* Minimal kleiner für bessere Passform */
   white-space: nowrap;
   transition: background 0.15s ease, color 0.15s ease;
 }
