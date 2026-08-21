@@ -19,6 +19,7 @@
 const MAHMORIES_MITGLIEDER = [
    { name: "Taisteija",  seite_links: "assets/mähmories/links_taisteija.png",  seite_rechts: "assets/mähmories/rechts_taisteija.png" },
    { name: "Nunnie",     seite_links: "assets/mähmories/links_nunnie.png",     seite_rechts: "assets/mähmories/rechts_nunnie.png" },
+    { name: "Puffin",     seite_links: "assets/mähmories/links_puffin.png",     seite_rechts: "assets/mähmories/rechts_puffin.png" },
    { name: "Avi",        seite_links: "assets/mähmories/links_avi.png",        seite_rechts: "assets/mähmories/rechts_avi.png" },
   { name: "Benchi",     seite_links: "assets/mähmories/links_benchi.png",     seite_rechts: "assets/mähmories/rechts_benchi.png" },
   { name: "Conny",      seite_links: "assets/mähmories/links_conny.png",      seite_rechts: "assets/mähmories/rechts_conny.png" },
