@@ -579,7 +579,7 @@ nav.main-nav .dropdown {
   display: inline-block;
 }
 
-/* Dropdown Button */
+/* Dropdown Button - wie die anderen Nav-Links */
 nav.main-nav .dropbtn {
   background: none;
   border: none;
@@ -592,10 +592,18 @@ nav.main-nav .dropbtn {
   cursor: pointer;
   transition: background 0.15s ease, color 0.15s ease;
   white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 nav.main-nav .dropbtn:hover {
   background: rgba(221, 138, 70, 0.25);
   color: #fff;
+}
+/* Aktives Dropdown (wenn geöffnet) */
+nav.main-nav .dropdown.open .dropbtn {
+  background: var(--terracotta);
+  color: var(--white);
 }
 
 /* Dropdown Content (versteckt) */
@@ -611,12 +619,13 @@ nav.main-nav .dropdown-content {
   box-shadow: 0 8px 24px rgba(0,0,0,0.3);
   padding: 6px 0;
   z-index: 100;
+  flex-direction: column;
 }
 
-/* Dropdown Links */
+/* Dropdown Links - UNTEREINANDER */
 nav.main-nav .dropdown-content a {
   display: block;
-  padding: 8px 16px;
+  padding: 10px 20px;
   color: var(--cream);
   font-family: 'Baloo 2', sans-serif;
   font-weight: 600;
@@ -625,15 +634,16 @@ nav.main-nav .dropdown-content a {
   border-radius: 0;
   white-space: nowrap;
   transition: background 0.15s ease, color 0.15s ease;
+  text-align: left;
 }
 nav.main-nav .dropdown-content a:hover {
   background: var(--terracotta);
   color: var(--white);
 }
 
-/* Dropdown öffnen beim Hover oder Klick */
-nav.main-nav .dropdown:hover .dropdown-content {
-  display: block;
+/* Dropdown öffnen beim Klick (nicht Hover) */
+nav.main-nav .dropdown.open .dropdown-content {
+  display: flex;
 }
 
 /* Mobile: Dropdown unterhalb */
@@ -652,8 +662,13 @@ nav.main-nav .dropdown:hover .dropdown-content {
     border-radius: 0;
     background: rgba(255,255,255,0.05);
     margin-top: 2px;
+    border: none;
   }
   nav.main-nav .dropdown-content a {
     padding-left: 24px;
+  }
+  nav.main-nav .dropbtn {
+    width: 100%;
+    justify-content: center;
   }
 }
