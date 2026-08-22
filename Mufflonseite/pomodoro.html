@@ -1,278 +1,551 @@
-  // ---------- Datenspeicher ----------
-  const DEFAULT_USER = 'Allgemein';
-  let allData = { nextId: 1, notes: {} };
-  let entries = [];
-  let addMode = 'todo';
-  let isLoggedIn = false;
-
-  // ---- LOCK gegen gleichzeitige Speichervorgänge ----
-  let isSaving = false;
-  let saveQueue = [];
-
-  async function saveTodos() {
-    if (!currentUser || !currentPasswordHash) {
-      // Lokal speichern, wenn nicht eingeloggt
-      try {
-        localStorage.setItem('mufflon_local_todos', JSON.stringify(entries));
-        localStorage.setItem('mufflon_local_notes', JSON.stringify(getNotesArray()));
-      } catch (e) {}
-      return;
-    }
-
-    if (isSaving) {
-      return new Promise((resolve) => {
-        saveQueue.push(resolve);
-      });
-    }
-
-    isSaving = true;
-    const notes = getNotesArray();
-
-    try {
-      await fetch(`${API_URL}/api/save`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          username: currentUser,
-          passwordHash: currentPasswordHash,
-          todos: entries,
-          notes: notes
-        })
-      });
-    } catch (e) {
-      console.warn('Fehler beim Synchronisieren mit Cloudflare:', e);
-    } finally {
-      isSaving = false;
-      while (saveQueue.length > 0) {
-        const resolve = saveQueue.shift();
-        resolve();
-      }
-    }
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pomodoro — Das__Mufflon</title>
+<link rel="icon" type="image/png" href="assets/mufflon-mascot.png">
+<link rel="stylesheet" href="css/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-deep: #241b15;
+    --bg-mid: #3d2b20;
+    --bg-warm: #4d392b;
+    --cream: #f7ead9;
+    --cream-dim: #d9c4a9;
+    --ember: #ef8a5c;
+    --ember-soft: #f5a96b;
+    --peach-glow: #ffbf8a;
+    --rust: #c1666b;
+    --rust-dark: #a34e53;
+    --sage: #8fa681;
+    --sage-dark: #6d8560;
+    --prio-high: #d9635e;
+    --prio-medium: #e3a548;
+    --prio-low: #8fa681;
+    --glass: rgba(255, 221, 189, 0.14);
+    --glass-border: rgba(255, 224, 196, 0.28);
+    --text-dark: #3E2C1E;
   }
 
-  function nextId() {
-    allData.nextId = (allData.nextId || 1) + 1;
-    return allData.nextId - 1;
+  * { box-sizing: border-box; }
+
+  body{
+    margin:0;
+    min-height:100vh;
+    font-family:'Quicksand', sans-serif;
+    background:
+      radial-gradient(circle at 10% 12%, rgba(124, 148, 115, 0.10), transparent 38%),
+      radial-gradient(circle at 18% 94%, rgba(255, 179, 138, 0.40), transparent 55%),
+      radial-gradient(circle at 82% 98%, rgba(246, 184, 196, 0.42), transparent 55%),
+      radial-gradient(circle at 50% 102%, rgba(255, 200, 176, 0.30), transparent 60%),
+      linear-gradient(180deg, #F6ECDC 0%, #F6ECDC 58%, #FBDBC7 80%, #F6C7D1 100%);
+    color: var(--text-dark);
+    overflow-x:hidden;
+    position:relative;
   }
 
-  // ---------- Login (Name + Passwort via Cloudflare API) - OPTIONAL ----------
-  let currentUser = localStorage.getItem('mufflon_user') || '';
-  let currentPasswordHash = localStorage.getItem('mufflon_pwhash') || '';
-
-  const userTag = document.getElementById('userTag');
-  const loginBackdrop = document.getElementById('loginBackdrop');
-  const loginName = document.getElementById('loginName');
-  const loginPassword = document.getElementById('loginPassword');
-  const loginError = document.getElementById('loginError');
-  const loginSubmit = document.getElementById('loginSubmit');
-
-  async function hashPassword(pw) {
-    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw));
-    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+  .pomodoro-main{
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    padding: 32px 16px;
+    min-height: calc(100vh - 76px);
   }
 
-  function openLogin() {
-    loginError.textContent = '';
-    loginName.value = currentUser || '';
-    loginPassword.value = '';
-    loginBackdrop.classList.add('open');
-    (currentUser ? loginPassword : loginName).focus();
+  .firefly{
+    position:fixed;
+    width:4px; height:4px;
+    border-radius:50%;
+    background: var(--ember-soft);
+    box-shadow: 0 0 6px 2px rgba(242,193,78,0.7);
+    opacity:0;
+    pointer-events:none;
+    animation: drift linear infinite, twinkle ease-in-out infinite;
+  }
+  @keyframes drift{
+    from { transform: translateY(0) translateX(0); }
+    to   { transform: translateY(-120px) translateX(30px); }
+  }
+  @keyframes twinkle{
+    0%, 100% { opacity: 0; }
+    50% { opacity: 0.9; }
   }
 
-  function closeLogin() {
-    loginBackdrop.classList.remove('open');
+  .vine{
+    position:fixed;
+    top:0; left:0;
+    width:120px;
+    height:100vh;
+    opacity:0.55;
+    pointer-events:none;
+    z-index:1;
+    filter: drop-shadow(0 2px 3px rgba(0,0,0,0.25));
+  }
+  .vine.right{ left:auto; right:0; transform: scaleX(-1); }
+
+  .app{
+    position:relative;
+    z-index:2;
+    display:flex;
+    flex-wrap:wrap;
+    gap:28px;
+    align-items:flex-start;
+    justify-content:center;
+    max-width: 1080px;
+    width:100%;
+    margin-top: 65px;
   }
 
-  async function attemptLogin() {
-    const name = loginName.value.trim();
-    const pw = loginPassword.value;
-    if (!name) { loginError.textContent = 'Bitte einen Namen eingeben.'; return; }
-    if (!pw) { loginError.textContent = 'Bitte ein Passwort eingeben.'; return; }
-
-    const pwHash = await hashPassword(pw);
-
-    try {
-      const res = await fetch(`${API_URL}/api/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: name, passwordHash: pwHash })
-      });
-
-      const result = await res.json();
-
-      if (!result.success) {
-        loginError.textContent = result.error || 'Login fehlgeschlagen.';
-        loginPassword.value = '';
-        loginPassword.focus();
-        return;
-      }
-
-      currentUser = name;
-      currentPasswordHash = pwHash;
-      localStorage.setItem('mufflon_user', currentUser);
-      localStorage.setItem('mufflon_pwhash', currentPasswordHash);
-      isLoggedIn = true;
-
-      entries = result.data.todos || [];
-      if (!allData.notes) allData.notes = {};
-      allData.notes[currentUser] = result.data.notes || [];
-
-      closeLogin();
-      renderUserTag();
-      renderTodos();
-      restoreStickyNoteForCurrentUser();
-
-    } catch (err) {
-      loginError.textContent = 'Fehler beim Verbinden mit dem Server.';
-      console.error(err);
-    }
+  .card{
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 28px;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.04);
+    padding: 28px 30px 32px;
   }
 
-  function logoutUser() {
-    currentUser = '';
-    currentPasswordHash = '';
-    isLoggedIn = false;
-    localStorage.removeItem('mufflon_user');
-    localStorage.removeItem('mufflon_pwhash');
-    // Lokale Daten laden
-    loadLocalData();
-    renderUserTag();
-    renderTodos();
-    restoreStickyNoteForCurrentUser();
+  .card.todo-card{
+    --cream: #3E2C1E;
+    --cream-dim: #6B5645;
+    background: rgba(251, 245, 234, 0.92);
+    border: 1px solid rgba(107, 66, 38, 0.14);
+    box-shadow: 0 16px 40px rgba(107, 66, 38, 0.14);
+    margin-top: 0;
+  }
+  .card.todo-card h1{ color: #C1662E; text-shadow: none; }
+
+  .user-tag{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.88rem;
+    color: var(--cream-dim);
+    margin: -6px 0 14px;
+  }
+  .user-tag .who{ font-weight: 700; color: var(--cream); }
+  .user-tag button{
+    background: none;
+    border: none;
+    color: inherit;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: inherit;
+    padding: 0;
   }
 
-  function loadLocalData() {
-    try {
-      const localTodos = localStorage.getItem('mufflon_local_todos');
-      if (localTodos) {
-        entries = JSON.parse(localTodos);
-      } else {
-        entries = [];
-      }
-      const localNotes = localStorage.getItem('mufflon_local_notes');
-      if (localNotes) {
-        allData.notes = {};
-        allData.notes[DEFAULT_USER] = JSON.parse(localNotes);
-      } else {
-        allData.notes = {};
-        allData.notes[DEFAULT_USER] = [];
-      }
-    } catch (e) {
-      entries = [];
-      allData.notes = {};
-      allData.notes[DEFAULT_USER] = [];
-    }
+  h1{
+    font-family:'Caveat', cursive;
+    font-size: 2.6rem;
+    margin: 0 0 4px;
+    color: var(--ember-soft);
+    text-shadow: 0 0 18px rgba(242,193,78,0.35);
+    text-align:center;
+  }
+  .subtitle{
+    text-align:center;
+    color: var(--cream-dim);
+    font-size:0.85rem;
+    letter-spacing:0.04em;
+    margin-bottom: 18px;
   }
 
-  loginSubmit.addEventListener('click', attemptLogin);
-  [loginName, loginPassword].forEach(el => {
-    el.addEventListener('keydown', (e) => { if (e.key === 'Enter') attemptLogin(); });
-  });
+  .timer-wrap{ position: relative; }
+  .card.timer-card{
+    position: relative;
+    z-index: 2;
+    background:
+      radial-gradient(circle at 18% 12%, rgba(255,255,255,0.38), transparent 42%),
+      radial-gradient(circle at 88% 92%, rgba(120,70,45,0.28), transparent 55%),
+      linear-gradient(155deg,
+        rgba(246,210,168,0.92) 0%,
+        rgba(231,164,114,0.92) 32%,
+        rgba(217,138,92,0.92) 65%,
+        rgba(185,107,74,0.92) 100%);
+    backdrop-filter: none;
+    border: 1px solid rgba(255,238,220,0.3);
+  }
+  .card.timer-card h1{ color: #5c3319; text-shadow: 0 1px 1px rgba(255,255,255,0.35); }
+  .card.timer-card .subtitle, .card.timer-card .status{ color: rgba(58,32,16,0.72); }
+  .card.timer-card .time{ color: #3d2313; }
 
-  function renderUserTag() {
-    userTag.innerHTML = '';
-    const container = document.createElement('div');
-    container.style.display = 'flex';
-    container.style.alignItems = 'center';
-    container.style.gap = '10px';
-    container.style.flexWrap = 'wrap';
-
-    const loginBtn = document.createElement('button');
-    loginBtn.style.cssText = `
-      background: none;
-      border: none;
-      color: var(--cream-dim);
-      font-size: 0.88rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-family: 'Quicksand', sans-serif;
-      padding: 4px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(107,66,38,0.15);
-      transition: background 0.15s ease;
-    `;
-    loginBtn.innerHTML = currentUser ? `👤 ${currentUser}` : '🔑 Anmelden';
-    loginBtn.title = currentUser ? 'Klicken zum Abmelden oder Wechseln' : 'Anmelden';
-    loginBtn.addEventListener('click', () => {
-      if (currentUser) {
-        if (confirm(`Möchtest du dich als "${currentUser}" abmelden?`)) {
-          logoutUser();
-        }
-      } else {
-        openLogin();
-      }
-    });
-
-    container.appendChild(loginBtn);
-
-    if (currentUser) {
-      const status = document.createElement('span');
-      status.style.cssText = `
-        font-size: 0.7rem;
-        color: var(--moss);
-        background: rgba(124,148,115,0.12);
-        padding: 2px 10px;
-        border-radius: 999px;
-      `;
-      status.textContent = '✅ online';
-      container.appendChild(status);
-    } else {
-      const hint = document.createElement('span');
-      hint.style.cssText = `
-        font-size: 0.7rem;
-        color: var(--text-soft);
-        opacity: 0.6;
-      `;
-      hint.textContent = '💾 lokal gespeichert';
-      container.appendChild(hint);
-    }
-
-    userTag.appendChild(container);
+  .mascot{
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 140px;
+    z-index: 1;
+    opacity: 0;
+    transform: translate(-50%, 40px);
+    transition: transform 0.6s cubic-bezier(.32, 1.25, .38, 1), opacity 0.4s ease;
+    pointer-events: none;
+  }
+  .mascot.peek{ opacity: 1; transform: translate(-50%, -82%); pointer-events: auto; }
+  .mascot-img{
+    display:block;
+    width: 100%;
+    cursor: pointer;
+    transform-origin: center center;
+    filter: drop-shadow(0 12px 16px rgba(0,0,0,0.35));
+    animation: mascotPulse 4s ease-in-out infinite;
+    animation-play-state: paused;
+  }
+  .mascot.peek .mascot-img{ animation-play-state: running; }
+  @keyframes mascotPulse{
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.045); }
   }
 
-  // ---------- Initialisierung ----------
-  // Zuerst: Lokale Daten laden
-  loadLocalData();
-
-  // Wenn Login-Daten vorhanden sind, versuche automatisch einzuloggen
-  if (currentUser && currentPasswordHash) {
-    fetch(`${API_URL}/api/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username: currentUser, passwordHash: currentPasswordHash })
-    })
-    .then(res => res.json())
-    .then(result => {
-      if (result.success) {
-        entries = result.data.todos || [];
-        if (!allData.notes) allData.notes = {};
-        allData.notes[currentUser] = result.data.notes || [];
-        isLoggedIn = true;
-      } else {
-        // Login fehlgeschlagen -> lokale Daten verwenden
-        loadLocalData();
-        isLoggedIn = false;
-        localStorage.removeItem('mufflon_user');
-        localStorage.removeItem('mufflon_pwhash');
-        currentUser = '';
-        currentPasswordHash = '';
-      }
-      renderUserTag();
-      renderTodos();
-      restoreStickyNoteForCurrentUser();
-    })
-    .catch(() => {
-      // Offline oder Fehler -> lokale Daten verwenden
-      loadLocalData();
-      renderUserTag();
-      renderTodos();
-      restoreStickyNoteForCurrentUser();
-    });
-  } else {
-    // Keine Login-Daten -> lokale Daten
-    renderUserTag();
-    renderTodos();
-    restoreStickyNoteForCurrentUser();
+  .timer-card{
+    width: 300px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    margin-top: 0;
   }
+
+  .ring-wrap{ position:relative; width: 220px; height: 220px; margin: 6px 0 22px; }
+  .ring-wrap svg{ transform: rotate(-90deg); overflow: visible; }
+  .ring-bg{ fill:none; stroke: rgba(70,40,18,0.14); stroke-width: 10; }
+  .ring-progress{
+    fill:none;
+    stroke: url(#emberGradient);
+    stroke-width: 10;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.4s linear;
+    filter: url(#ringGlow);
+  }
+
+  .custom-timer-btn{
+    position:absolute;
+    left: -14px; top: 50%;
+    transform: translateY(-50%);
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: #3d2313;
+    color: #f5dcc0;
+    border: 2px solid rgba(255,255,255,0.25);
+    font-size: 1.15rem; font-weight: 700; line-height:1;
+    cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.35);
+    z-index: 5;
+    transition: transform 0.15s ease;
+  }
+  .custom-timer-btn:hover{ transform: translateY(-50%) scale(1.1); }
+
+  .custom-timer-popover{
+    position:absolute;
+    left: -14px; top: 50%;
+    transform: translate(-100%, -50%) scale(0.95);
+    margin-left: -10px;
+    background: rgba(33,21,16,0.96);
+    border: 1px solid rgba(247,234,217,0.18);
+    border-radius: 14px;
+    padding: 12px 14px 14px;
+    display:flex; flex-direction:column; gap:8px;
+    width: 140px;
+    opacity:0; pointer-events:none;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    z-index: 6;
+    box-shadow: 0 10px 24px rgba(0,0,0,0.4);
+  }
+  .custom-timer-popover.open{ opacity:1; pointer-events:auto; transform: translate(-100%, -50%) scale(1); }
+  .ctp-title{ font-family:'Caveat', cursive; font-size: 1.2rem; color: var(--ember-soft); text-align:center; margin-bottom:2px; }
+  .custom-timer-popover .field-row{ display:flex; align-items:center; gap:8px; }
+  .custom-timer-popover input{
+    width: 54px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(247,234,217,0.2);
+    border-radius: 8px;
+    padding: 5px 6px;
+    color: var(--cream);
+    font-family:'Quicksand', sans-serif;
+    font-size: 0.85rem; outline:none;
+  }
+  .custom-timer-popover input:focus{ border-color: var(--ember-soft); }
+  .custom-timer-popover label{ font-size: 0.78rem; color: var(--cream-dim); }
+  .custom-timer-popover button{
+    margin-top: 4px; border:none; border-radius: 10px;
+    padding: 7px 8px;
+    background: linear-gradient(155deg, var(--ember-soft), var(--ember));
+    color: #2b1810; font-weight:700; font-size: 0.82rem;
+    cursor:pointer; transition: transform 0.15s ease, filter 0.15s ease;
+  }
+  .custom-timer-popover button:hover{ transform: translateY(-1px); filter:brightness(1.06); }
+
+  .login-backdrop{
+    position: fixed; inset: 0;
+    background: rgba(20,12,8,0.55);
+    backdrop-filter: blur(2px);
+    display: none; align-items: center; justify-content: center;
+    z-index: 100; padding: 20px;
+  }
+  .login-backdrop.open{ display: flex; }
+  .login-panel{
+    background: rgba(33,21,16,0.97);
+    border: 1px solid rgba(247,234,217,0.18);
+    border-radius: 18px;
+    padding: 26px 26px 22px;
+    width: 100%; max-width: 280px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    text-align: center;
+  }
+  .login-panel .ctp-title{ font-size: 1.5rem; margin-bottom: 4px; }
+  .login-panel .login-sub{ font-size: 0.82rem; color: var(--cream-dim); margin-bottom: 16px; line-height: 1.4; }
+  .login-panel input{
+    width: 100%; box-sizing: border-box;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(247,234,217,0.2);
+    border-radius: 10px; padding: 9px 12px;
+    color: var(--cream);
+    font-family: 'Quicksand', sans-serif; font-size: 0.92rem; outline: none; margin-bottom: 10px;
+  }
+  .login-panel input:focus{ border-color: var(--ember-soft); }
+  .login-panel button.login-submit{
+    width: 100%; border: none; border-radius: 10px; padding: 10px;
+    background: linear-gradient(155deg, var(--ember-soft), var(--ember));
+    color: #2b1810; font-weight: 700; font-size: 0.92rem;
+    cursor: pointer; transition: transform 0.15s ease, filter 0.15s ease;
+  }
+  .login-panel button.login-submit:hover{ transform: translateY(-1px); filter: brightness(1.06); }
+  .login-error{ color: #ff9d8a; font-size: 0.8rem; margin: -4px 0 10px; min-height: 1em; }
+
+  .sticky-trigger{
+    position: absolute; top: -10px; right: 18px;
+    width: 40px; height: 40px;
+    background: linear-gradient(160deg, #FFF3A0, #FFE066);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.22);
+    border: none; cursor: pointer; transform: rotate(6deg);
+    animation: stickyWiggle 3.6s ease-in-out infinite; z-index: 5;
+  }
+  .sticky-trigger::before{
+    content: ""; position: absolute; bottom: -1px; right: -1px;
+    width: 12px; height: 12px;
+    background: linear-gradient(135deg, transparent 50%, rgba(0,0,0,0.14) 50%);
+  }
+  .sticky-trigger:hover{ animation-play-state: paused; transform: rotate(0deg) scale(1.06); }
+
+  @keyframes stickyWiggle{
+    0%, 100% { transform: rotate(6deg); }
+    50%      { transform: rotate(-4deg); }
+  }
+
+  .sticky-notes-layer{ position: fixed; inset: 0; pointer-events: none; z-index: 200; }
+  .sticky-note{
+    position: fixed; width: 220px; min-height: 200px;
+    background: linear-gradient(165deg, #FFF6B8, #FFE873);
+    box-shadow: 0 14px 34px rgba(0,0,0,0.32);
+    padding: 14px 14px 16px; transform: rotate(-2deg);
+    display: flex; flex-direction: column;
+    font-family: 'Patrick Hand', 'Quicksand', sans-serif;
+    pointer-events: auto;
+  }
+  .sticky-note::after{
+    content: ""; position: absolute; bottom: -2px; right: -2px;
+    width: 26px; height: 26px;
+    background: linear-gradient(135deg, transparent 50%, rgba(0,0,0,0.14) 50%);
+  }
+  .sticky-drag-handle{
+    height: 18px; margin: -14px -14px 8px; cursor: grab;
+    touch-action: none; display: flex; align-items: center; justify-content: flex-end;
+    padding: 4px 6px 0 0;
+  }
+  .sticky-drag-handle:active{ cursor: grabbing; }
+  .sticky-palette{
+    background: none; border: none; font-size: 1rem;
+    color: rgba(80, 65, 10, 0.55); cursor: pointer; line-height: 1;
+    padding: 2px 4px; margin-right: auto;
+  }
+  .sticky-palette:hover{ color: rgba(80, 65, 10, 0.9); }
+  .sticky-color-input{ position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+  .sticky-resize-handle{ position: absolute; bottom: 0; right: 0; width: 22px; height: 22px; cursor: nwse-resize; touch-action: none; z-index: 2; }
+  .sticky-close{ background: none; border: none; font-size: 1rem; color: rgba(80, 65, 10, 0.55); cursor: pointer; line-height: 1; padding: 2px 4px; }
+  .sticky-close:hover{ color: rgba(80, 65, 10, 0.9); }
+  .sticky-note textarea{
+    flex: 1; resize: none; border: none; background: transparent; outline: none;
+    font-family: inherit; font-size: 1.1rem; line-height: 1.4; color: #4a3c05;
+    min-height: 150px; overflow: hidden;
+  }
+
+  .ring-center{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+  .time{ font-size: 2.6rem; font-weight: 700; letter-spacing: 0.02em; font-variant-numeric: tabular-nums; }
+  .status{ font-size: 0.75rem; color: var(--cream-dim); margin-top: 4px; letter-spacing: 0.08em; text-transform: uppercase; }
+
+  .controls{ display:flex; gap: 12px; }
+  .btn{
+    border:none; cursor:pointer; font-family:'Quicksand', sans-serif; font-weight:600; font-size:0.9rem;
+    padding: 12px 18px; border-radius: 16px; display:flex; align-items:center; gap:7px; color: var(--bg-deep);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+  }
+  .btn:hover{ transform: translateY(-2px); filter: brightness(1.06); }
+  .btn:active{ transform: translateY(0px) scale(0.97); }
+  .btn svg{ width:16px; height:16px; }
+
+  .btn-play{ background: linear-gradient(155deg, var(--sage) 0%, var(--sage-dark) 100%); color:#1d2b18;}
+  .btn-pause{ background: linear-gradient(155deg, var(--ember-soft) 0%, var(--ember) 100%); }
+  .btn-stop{ background: linear-gradient(155deg, var(--rust) 0%, var(--rust-dark) 100%); color:#2c1416;}
+
+  .todo-card{ width: 540px; display:flex; flex-direction:column; position: relative; }
+
+  .add-row{ display:flex; gap:8px; margin-bottom: 16px; }
+  .add-row input{
+    flex:1; background: rgba(0,0,0,0.18); border: 1px solid var(--glass-border);
+    border-radius: 14px; padding: 10px 14px; color: var(--cream);
+    font-family:'Quicksand', sans-serif; font-size: 0.92rem; outline:none;
+  }
+  .add-row input::placeholder{ color: rgba(247,234,217,0.4); }
+  .add-row input:focus{ border-color: var(--ember-soft); }
+
+  .add-btn{
+    width: 42px; height: 42px; flex-shrink:0; border:none; cursor:pointer;
+    border-radius: 14px; background: linear-gradient(155deg, var(--ember-soft), var(--ember));
+    color: var(--bg-deep); font-size: 1.4rem; font-weight:700;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+    transition: transform 0.15s ease, filter 0.15s ease;
+  }
+  .add-btn:hover{ transform: translateY(-2px) rotate(90deg); filter:brightness(1.08); }
+
+  .todo-list{
+    list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:9px;
+    max-height: 480px; overflow-y:auto; padding-top: 34px; padding-left: 8px; padding-right: 8px;
+    margin-top: -34px; margin-left: -8px; margin-right: -8px;
+  }
+  .todo-list::-webkit-scrollbar{ width:6px; }
+  .todo-list::-webkit-scrollbar-thumb{ background: rgba(247,234,217,0.2); border-radius:4px; }
+
+  .todo-item{
+    display:flex; align-items:center; gap:10px;
+    background: rgba(0,0,0,0.14); border: 2px solid rgba(247,234,217,0.08);
+    border-radius: 14px; padding: 10px 12px; position: relative;
+    transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+  }
+  .todo-item:hover{ transform: scale(1.02); box-shadow: 0 6px 16px rgba(0,0,0,0.15); }
+  .todo-item.prio-high{ border-color: var(--prio-high); background: rgba(217,99,94,0.10); }
+  .todo-item.prio-medium{ border-color: var(--prio-medium); background: rgba(227,165,72,0.10); }
+  .todo-item.prio-low{ border-color: var(--prio-low); background: rgba(143,166,129,0.10); }
+
+  .edit-btn{
+    background:none; border:none; color: rgba(107, 66, 38, 0.5); cursor:pointer;
+    font-size: 0.95rem; line-height:1; padding: 2px 4px; opacity: 0;
+    transform: translateX(-4px); transition: opacity 0.15s ease, transform 0.15s ease, color 0.15s ease;
+  }
+  .todo-item:hover .edit-btn{ opacity: 1; transform: translateX(0); }
+  .edit-btn:hover{ color: var(--terracotta); }
+
+  .drag-handle{
+    flex-shrink: 0; width: 18px; height: 22px; display: flex; align-items: center; justify-content: center;
+    color: rgba(107, 66, 38, 0.4); cursor: grab; touch-action: none; user-select: none;
+    font-size: 1rem; letter-spacing: -2px; transition: color 0.15s ease;
+  }
+  .drag-handle:hover{ color: var(--terracotta); }
+  .drag-handle:active{ cursor: grabbing; }
+
+  .todo-item, .subtask-item{ touch-action: pan-y; }
+  .todo-item.dragging, .subtask-item.dragging{
+    cursor: grabbing; transform: scale(1.03); box-shadow: 0 10px 24px rgba(0,0,0,0.25); z-index: 30; transition: none !important;
+  }
+
+  @keyframes dropSettle {
+    0%   { box-shadow: 0 0 0 3px rgba(221, 138, 70, 0.55); }
+    100% { box-shadow: 0 0 0 0 rgba(221, 138, 70, 0); }
+  }
+  .todo-item.just-dropped, .subtask-item.just-dropped{ animation: dropSettle 0.6s ease-out; }
+
+  .todo-edit-input{
+    flex:1; font-family:'Quicksand', sans-serif; font-size: 1rem; line-height: 1.4;
+    color: var(--text-dark); background: #fff; border: 1px solid rgba(107,66,38,0.3);
+    border-radius: 8px; padding: 3px 8px; min-width: 0;
+  }
+
+  .prio-picker{ position:relative; flex-shrink:0; }
+  .prio-dot-btn{
+    width: 20px; height: 20px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.35);
+    cursor:pointer; padding:0; transition: transform 0.15s ease;
+  }
+  .prio-dot-btn:hover{ transform: scale(1.1); }
+  .prio-dot-btn.high{ background: var(--prio-high); box-shadow: 0 0 7px rgba(217,99,94,0.8); }
+  .prio-dot-btn.medium{ background: var(--prio-medium); box-shadow: 0 0 7px rgba(227,165,72,0.8); }
+  .prio-dot-btn.low{ background: var(--prio-low); box-shadow: 0 0 7px rgba(143,166,129,0.8); }
+
+  .prio-options{
+    position:absolute; bottom: 26px; right: 0; display:flex; gap:6px;
+    background: rgba(33,21,16,0.92); border: 1px solid rgba(247,234,217,0.14);
+    padding: 6px; border-radius: 12px; box-shadow: 0 8px 18px rgba(0,0,0,0.4);
+    opacity:0; pointer-events:none; transform: translateY(4px); transition: opacity 0.15s ease, transform 0.15s ease; z-index: 6;
+  }
+  .prio-picker.open{ z-index: 6; }
+  .prio-picker.open .prio-options{ opacity:1; pointer-events:auto; transform: translateY(0); }
+  .prio-options button{ width: 18px; height: 18px; border-radius: 50%; border: 2px solid transparent; cursor:pointer; padding:0; transition: transform 0.15s ease; }
+  .prio-options button:hover{ transform: scale(1.15); }
+  .prio-options button.high{ background: var(--prio-high); }
+  .prio-options button.medium{ background: var(--prio-medium); }
+  .prio-options button.low{ background: var(--prio-low); }
+
+  .check{
+    width: 22px; height: 22px; flex-shrink:0; border-radius: 8px; border: 2px solid var(--sage);
+    cursor:pointer; display:flex; align-items:center; justify-content:center; transition: background 0.15s ease;
+  }
+  .check.done{ background: var(--sage); }
+  .check svg{ width:13px; height:13px; opacity:0; transition:opacity 0.15s ease; }
+  .check.done svg{ opacity:1; }
+
+  .todo-text{ flex:1; font-size: 1rem; line-height: 1.4; word-break: break-word; color: var(--cream); }
+  .todo-text.done{ text-decoration: line-through; color: var(--cream-dim); opacity: 0.65; }
+
+  .del-btn{
+    background:none; border:none; color: rgba(107, 66, 38, 0.5); cursor:pointer;
+    font-size: 1rem; line-height:1; padding: 2px 4px; transition: color 0.15s ease;
+  }
+  .del-btn:hover{ color: var(--rust); }
+
+  .empty-hint{ color: var(--cream-dim); font-size: 0.85rem; text-align:center; padding: 18px 6px; opacity: 0.7; font-style: italic; }
+
+  .mode-toggle{ display:flex; gap:6px; margin-bottom: 10px; }
+  .mode-chip{
+    flex:1; border:none; cursor:pointer; font-family:'Quicksand', sans-serif; font-size: 0.78rem; font-weight:600;
+    padding: 7px 10px; border-radius: 12px; background: rgba(0,0,0,0.16); color: var(--cream-dim);
+    border: 1px solid transparent; transition: all 0.15s ease; display:flex; align-items:center; justify-content:center; gap:5px;
+  }
+  .mode-chip svg{ width:13px; height:13px; }
+  .mode-chip.active{ background: rgba(242,193,78,0.14); border-color: rgba(242,193,78,0.4); color: var(--ember-soft); }
+
+  .group-item{ background: rgba(0,0,0,0.16); border: 1px solid rgba(247,234,217,0.1); border-radius: 16px; padding: 12px 12px 10px; }
+  .group-header{ display:flex; align-items:center; gap:8px; cursor:pointer; }
+  .group-caret{ width:10px; height:10px; flex-shrink:0; border-right:2px solid var(--ember-soft); border-bottom:2px solid var(--ember-soft); transform: rotate(-45deg); transition: transform 0.2s ease; margin-left:2px; }
+  .group-item.collapsed .group-caret{ transform: rotate(45deg); }
+  .group-title{ flex:1; font-weight:700; font-size:0.95rem; color: var(--cream); }
+  .group-progress{ font-size:0.72rem; color: var(--cream-dim); background: rgba(143,166,129,0.18); border-radius: 8px; padding: 2px 8px; white-space:nowrap; }
+  .group-del{ background:none; border:none; color: rgba(247,234,217,0.35); cursor:pointer; font-size: 0.95rem; padding: 2px 4px; transition: color 0.15s ease; }
+  .group-del:hover{ color: var(--rust); }
+
+  .subtask-list{ list-style:none; margin: 10px 0 0; padding: 0 0 0 6px; display:flex; flex-direction:column; gap:6px; border-left: 2px dashed rgba(247,234,217,0.14); }
+  .group-item.collapsed .subtask-list, .group-item.collapsed .sub-add-row{ display:none; }
+
+  .subtask-item{
+    display:flex; align-items:center; gap:9px; padding: 6px 8px; border: 2px solid transparent; border-radius: 10px; position: relative;
+    transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+  }
+  .subtask-item:hover{ transform: scale(1.02); box-shadow: 0 4px 12px rgba(0,0,0,0.12); }
+  .subtask-item.prio-high{ border-color: var(--prio-high); background: rgba(217,99,94,0.10); }
+  .subtask-item.prio-medium{ border-color: var(--prio-medium); background: rgba(227,165,72,0.10); }
+  .subtask-item.prio-low{ border-color: var(--prio-low); background: rgba(143,166,129,0.10); }
+
+  .sub-add-row{ display:flex; gap:6px; margin-top: 8px; padding-left: 12px; }
+  .sub-add-row input{
+    flex:1; background: rgba(0,0,0,0.2); border: 1px solid rgba(247,234,217,0.12);
+    border-radius: 10px; padding: 6px 10px; color: var(--cream);
+    font-family:'Quicksand', sans-serif; font-size: 0.82rem; outline:none;
+  }
+  .sub-add-row input:focus{ border-color: var(--ember-soft); }
+  .sub-add-row button{ border:none; cursor:pointer; border-radius: 10px; width: 30px; background: linear-gradient(155deg, var(--sage), var(--sage-dark)); color:#1d2b18; font-weight:700; font-size:1rem; }
+
+  @media (max-width: 640px){
+    .app{ flex-direction:column; align-items:center; margin-top: 20px; }
+    .timer-card, .todo-card{ width: 100%; max-width: 540px; }
+    .todo-list{ max-height:
