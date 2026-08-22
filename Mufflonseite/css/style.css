@@ -562,3 +562,98 @@ footer.site-footer .footer-brand {
   .card-grid { gap: 16px; }
   .btn { padding: 11px 20px; font-size: 0.94rem; }
 }
+/* ---------- Dropdown Menü ---------- */
+nav.main-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px 8px;
+  flex-wrap: wrap;
+  overflow: visible;
+  flex: 1;
+  padding: 2px 0;
+}
+
+/* Dropdown Container */
+nav.main-nav .dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown Button */
+nav.main-nav .dropbtn {
+  background: none;
+  border: none;
+  font-family: 'Baloo 2', sans-serif;
+  font-weight: 600;
+  color: var(--cream);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.92rem;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+  white-space: nowrap;
+}
+nav.main-nav .dropbtn:hover {
+  background: rgba(221, 138, 70, 0.25);
+  color: #fff;
+}
+
+/* Dropdown Content (versteckt) */
+nav.main-nav .dropdown-content {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: linear-gradient(180deg, #6B4226, #4f3119);
+  min-width: 180px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 224, 196, 0.15);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  padding: 6px 0;
+  z-index: 100;
+}
+
+/* Dropdown Links */
+nav.main-nav .dropdown-content a {
+  display: block;
+  padding: 8px 16px;
+  color: var(--cream);
+  font-family: 'Baloo 2', sans-serif;
+  font-weight: 600;
+  font-size: 0.92rem;
+  text-decoration: none;
+  border-radius: 0;
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+nav.main-nav .dropdown-content a:hover {
+  background: var(--terracotta);
+  color: var(--white);
+}
+
+/* Dropdown öffnen beim Hover oder Klick */
+nav.main-nav .dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* Mobile: Dropdown unterhalb */
+@media (max-width: 720px) {
+  nav.main-nav {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+  }
+  nav.main-nav .dropdown {
+    position: static;
+  }
+  nav.main-nav .dropdown-content {
+    position: static;
+    box-shadow: none;
+    border-radius: 0;
+    background: rgba(255,255,255,0.05);
+    margin-top: 2px;
+  }
+  nav.main-nav .dropdown-content a {
+    padding-left: 24px;
+  }
+}
