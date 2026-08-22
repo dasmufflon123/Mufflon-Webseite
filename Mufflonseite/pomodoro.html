@@ -573,25 +573,15 @@
     </a>
     <button class="nav-toggle" aria-label="Menü öffnen">☰</button>
 <nav class="main-nav">
-  <!-- Startseite -->
-  <a href="index.html" class="nav-home"><img src="assets/mufflon-icon.png" alt="Stall" title="Stall"> Das__Mufflon</a>
-  
-  <!-- Subathon-Seiten -->
-  <a href="subathon_goals.html">SUBATHON GOALS</a>
-  <a href="subathon_bombs.html">SUBATHON BOMBS</a>
-  <a href="FAQ.html">SUBATHON FAQ</a>
-  
-  <!-- Dropdown MÄHR -->
-  <div class="dropdown" id="mahrDropdown">
-    <button class="dropbtn" id="mahrBtn">MÄHR ▼</button>
-    <div class="dropdown-content">
-      <a href="Content.html">Content</a>
-      <a href="Highlights.html">Events</a>
-      <a href="Opfanze.html">Opfanze</a>
-      <a href="pomodoro.html">Pomodoro</a>
-      <a href="mahmories.html">Mähmories</a>
-    </div>
-  </div>
+  <a href="index.html" class="nav-home"><img src="assets/mufflon-icon.png" alt="Stall" title="Stall"></a>
+  <a href="Content.html">Content</a>
+  <a href="Highlights.html">Events</a>
+  <a href="subathon_goals.html">SUB Goals</a>
+  <a href="subathon_bombs.html">SUB Bombs</a>
+  <a href="FAQ.html" class="active">SUB FAQ</a>
+  <a href="Opfanze.html">Opfanze</a>
+  <a href="pomodoro.html">Pomodoro</a>
+  <a href="mahmories.html">Mähmories</a>
 </nav>
   </div>
 </header>
@@ -942,22 +932,15 @@
   let allData = { nextId: 1, notes: {} };
   let entries = [];
   let addMode = 'todo';
-  let isLoggedIn = false;
 
   // ---- LOCK gegen gleichzeitige Speichervorgänge ----
   let isSaving = false;
   let saveQueue = [];
 
   async function saveTodos() {
-    if (!currentUser || !currentPasswordHash) {
-      // Lokal speichern, wenn nicht eingeloggt
-      try {
-        localStorage.setItem('mufflon_local_todos', JSON.stringify(entries));
-        localStorage.setItem('mufflon_local_notes', JSON.stringify(getNotesArray()));
-      } catch (e) {}
-      return;
-    }
+    if (!currentUser || !currentPasswordHash) return;
 
+    // Wenn gerade gespeichert wird, in die Warteschlange
     if (isSaving) {
       return new Promise((resolve) => {
         saveQueue.push(resolve);
@@ -982,6 +965,7 @@
       console.warn('Fehler beim Synchronisieren mit Cloudflare:', e);
     } finally {
       isSaving = false;
+      // Warteschlange abarbeiten
       while (saveQueue.length > 0) {
         const resolve = saveQueue.shift();
         resolve();
@@ -994,7 +978,7 @@
     return allData.nextId - 1;
   }
 
-  // ---------- Login (Name + Passwort via Cloudflare API) - OPTIONAL ----------
+  // ---------- Login (Name + Passwort via Cloudflare API) ----------
   let currentUser = localStorage.getItem('mufflon_user') || '';
   let currentPasswordHash = localStorage.getItem('mufflon_pwhash') || '';
 
@@ -1050,7 +1034,6 @@
       currentPasswordHash = pwHash;
       localStorage.setItem('mufflon_user', currentUser);
       localStorage.setItem('mufflon_pwhash', currentPasswordHash);
-      isLoggedIn = true;
 
       entries = result.data.todos || [];
       if (!allData.notes) allData.notes = {};
@@ -1067,42 +1050,6 @@
     }
   }
 
-  function logoutUser() {
-    currentUser = '';
-    currentPasswordHash = '';
-    isLoggedIn = false;
-    localStorage.removeItem('mufflon_user');
-    localStorage.removeItem('mufflon_pwhash');
-    // Lokale Daten laden
-    loadLocalData();
-    renderUserTag();
-    renderTodos();
-    restoreStickyNoteForCurrentUser();
-  }
-
-  function loadLocalData() {
-    try {
-      const localTodos = localStorage.getItem('mufflon_local_todos');
-      if (localTodos) {
-        entries = JSON.parse(localTodos);
-      } else {
-        entries = [];
-      }
-      const localNotes = localStorage.getItem('mufflon_local_notes');
-      if (localNotes) {
-        allData.notes = {};
-        allData.notes[DEFAULT_USER] = JSON.parse(localNotes);
-      } else {
-        allData.notes = {};
-        allData.notes[DEFAULT_USER] = [];
-      }
-    } catch (e) {
-      entries = [];
-      allData.notes = {};
-      allData.notes[DEFAULT_USER] = [];
-    }
-  }
-
   loginSubmit.addEventListener('click', attemptLogin);
   [loginName, loginPassword].forEach(el => {
     el.addEventListener('keydown', (e) => { if (e.key === 'Enter') attemptLogin(); });
@@ -1110,72 +1057,28 @@
 
   function renderUserTag() {
     userTag.innerHTML = '';
-    const container = document.createElement('div');
-    container.style.display = 'flex';
-    container.style.alignItems = 'center';
-    container.style.gap = '10px';
-    container.style.flexWrap = 'wrap';
-
-    const loginBtn = document.createElement('button');
-    loginBtn.style.cssText = `
-      background: none;
-      border: none;
-      color: var(--cream-dim);
-      font-size: 0.88rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-family: 'Quicksand', sans-serif;
-      padding: 4px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(107,66,38,0.15);
-      transition: background 0.15s ease;
-    `;
-    loginBtn.innerHTML = currentUser ? `👤 ${currentUser}` : '🔑 Anmelden';
-    loginBtn.title = currentUser ? 'Klicken zum Abmelden oder Wechseln' : 'Anmelden';
-    loginBtn.addEventListener('click', () => {
-      if (currentUser) {
-        if (confirm(`Möchtest du dich als "${currentUser}" abmelden?`)) {
-          logoutUser();
-        }
-      } else {
-        openLogin();
-      }
-    });
-
-    container.appendChild(loginBtn);
-
+    const span = document.createElement('span');
     if (currentUser) {
-      const status = document.createElement('span');
-      status.style.cssText = `
-        font-size: 0.7rem;
-        color: var(--moss);
-        background: rgba(124,148,115,0.12);
-        padding: 2px 10px;
-        border-radius: 999px;
-      `;
-      status.textContent = '✅ online';
-      container.appendChild(status);
+      span.innerHTML = 'Angemeldet als <span class="who">' + escapeHtml(currentUser) + '</span>';
     } else {
-      const hint = document.createElement('span');
-      hint.style.cssText = `
-        font-size: 0.7rem;
-        color: var(--text-soft);
-        opacity: 0.6;
-      `;
-      hint.textContent = '💾 lokal gespeichert';
-      container.appendChild(hint);
+      span.textContent = 'Nicht angemeldet';
     }
-
-    userTag.appendChild(container);
+    const changeBtn = document.createElement('button');
+    changeBtn.textContent = currentUser ? '· wechseln' : '· anmelden';
+    changeBtn.addEventListener('click', openLogin);
+    userTag.appendChild(span);
+    userTag.appendChild(changeBtn);
   }
 
-  // ---------- Initialisierung ----------
-  // Zuerst: Lokale Daten laden
-  loadLocalData();
+  function escapeHtml(str) {
+    const d = document.createElement('div');
+    d.textContent = str;
+    return d.innerHTML;
+  }
 
-  // Wenn Login-Daten vorhanden sind, versuche automatisch einzuloggen
+  renderUserTag();
+
+  // Automatischer Login, falls bereits Daten lokal gespeichert sind
   if (currentUser && currentPasswordHash) {
     fetch(`${API_URL}/api/login`, {
       method: 'POST',
@@ -1188,32 +1091,15 @@
         entries = result.data.todos || [];
         if (!allData.notes) allData.notes = {};
         allData.notes[currentUser] = result.data.notes || [];
-        isLoggedIn = true;
+        renderTodos();
+        restoreStickyNoteForCurrentUser();
       } else {
-        // Login fehlgeschlagen -> lokale Daten verwenden
-        loadLocalData();
-        isLoggedIn = false;
-        localStorage.removeItem('mufflon_user');
-        localStorage.removeItem('mufflon_pwhash');
-        currentUser = '';
-        currentPasswordHash = '';
+        openLogin();
       }
-      renderUserTag();
-      renderTodos();
-      restoreStickyNoteForCurrentUser();
     })
-    .catch(() => {
-      // Offline oder Fehler -> lokale Daten verwenden
-      loadLocalData();
-      renderUserTag();
-      renderTodos();
-      restoreStickyNoteForCurrentUser();
-    });
+    .catch(() => openLogin());
   } else {
-    // Keine Login-Daten -> lokale Daten
-    renderUserTag();
-    renderTodos();
-    restoreStickyNoteForCurrentUser();
+    openLogin();
   }
 
   // ---------- Gelbe Klebezettel ----------
