@@ -109,7 +109,7 @@
 
   <h1>OPFANZE Ausgaben & Dokumente</h1>
 
-<!-- Filter-Buttons -->
+  <!-- Filter-Buttons -->
   <div class="filter-container">
     <button class="filter-btn" onclick="filterPDFs('all')">Alle anzeigen</button>
     <button class="filter-btn" onclick="filterPDFs('Extrablatt')">Nur Extrablatt</button>
@@ -119,10 +119,68 @@
   <!-- Container für die PDFs -->
   <div id="pdf-container" class="pdf-grid"></div>
 
-  <!-- 1. Erst die Daten laden -->
-  <script src="./opfanze-data.js"></script>
+  <!-- 1. Zuerst deine Daten einbinden -->
+  <script src="opfanze-data.js"></script>
 
-  <!-- 2. Dann die Logik ausführen -->
-  <script src="./script.js"></script>
+  <!-- 2. Hier steckt direkt der Anzeige-Code drin (keine script.js nötig!) -->
+  <script>
+    function renderPDFs(items) {
+      const container = document.getElementById("pdf-container");
+      if (!container) return;
+
+      container.innerHTML = "";
+
+      if (!items || items.length === 0) {
+        container.innerHTML = "<p style='text-align:center;'>Keine Dokumente gefunden. Bitte prüfen, ob opfanze-data.js richtig hochgeladen ist.</p>";
+        return;
+      }
+
+      items.forEach(item => {
+        const card = document.createElement("div");
+        card.className = "pdf-card";
+
+        const badgeClass = item.typ === "Eventblatt" ? "badge-eventblatt" : "badge-extrablatt";
+        
+        const fileName = item.file || item.pdf || item.dateiname || item.link;
+        const title = item.titel || item.title || item.name || `Ausgabe ${item.id || ''}`;
+        const pdfPath = `./pdf/${encodeURIComponent(fileName)}`;
+
+        card.innerHTML = `
+          <span class="badge ${badgeClass}">${item.typ || 'Dokument'}</span>
+          <h3>${title}</h3>
+          <iframe class="pdf-viewer" src="${pdfPath}"></iframe>
+          <div class="pdf-actions">
+            <a href="${pdfPath}" target="_blank">PDF öffnen ↗</a>
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+    }
+
+    function getData() {
+      if (typeof opfanzePDFs !== 'undefined') return opfanzePDFs;
+      if (typeof opfanzeData !== 'undefined') return opfanzeData;
+      if (typeof data !== 'undefined') return data;
+      if (window.opfanzePDFs) return window.opfanzePDFs;
+      if (window.opfanzeData) return window.opfanzeData;
+      return [];
+    }
+
+    function filterPDFs(typ) {
+      const allData = getData();
+      if (typ === 'all') {
+        renderPDFs(allData);
+      } else {
+        const filtered = allData.filter(item => item.typ === typ);
+        renderPDFs(filtered);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const allData = getData();
+      renderPDFs(allData);
+    });
+  </script>
 </body>
 </html>
