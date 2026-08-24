@@ -583,7 +583,7 @@
       renderGrid(rest);
     }
 
-    // ---- Featured rendern ----
+// ---- Featured rendern ----
     function renderFeatured(ausgabe) {
       if (!ausgabe) {
         featuredContainer.innerHTML = `
@@ -594,7 +594,8 @@
         return;
       }
 
-      const anzeigeNummer = ausgabe.nummer;
+      // HIER GEÄNDERT: Zeigt die vollständige Nummer (z. B. "001") an
+      const anzeigeNummer = ausgabe.nummer; 
       const typLabel = ausgabe.typ;
       const typClass = ausgabe.typ === 'Eventblatt' ? 'event' : '';
       const datumFormatiert = ausgabe.datum ? formatiereDatum(ausgabe.datum) : '';
@@ -626,7 +627,8 @@
 
       let html = '';
       ausgaben.forEach(ausgabe => {
-        const anzeigeNummer = ausgabe.nummer;
+        // HIER GEÄNDERT: Zeigt die vollständige Nummer (z. B. "001") an
+        const anzeigeNummer = ausgabe.nummer; 
         const typLabel = ausgabe.typ;
         const typClass = ausgabe.typ === 'Eventblatt' ? 'event' : '';
         const datumFormatiert = ausgabe.datum ? formatiereDatum(ausgabe.datum) : '';
@@ -643,7 +645,6 @@
 
       grid.innerHTML = html;
     }
-
     // ---- Event-Listener ----
     searchInput.addEventListener('input', (e) => {
       currentSearch = e.target.value;
