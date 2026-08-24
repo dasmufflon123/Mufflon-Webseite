@@ -553,7 +553,7 @@
       });
     }
 
-    // ---- Render-Funktion ----
+// ---- Render-Funktion ----
     function render() {
       const alle = sortByNumber(OPFANZE_AUSGABEN);
 
@@ -561,6 +561,8 @@
         if (currentFilter === 'alle') return true;
         return ausgabe.typ === currentFilter;
       });
+
+      const isSearchingOrFiltering = currentSearch.trim() !== '' || currentFilter !== 'alle';
 
       if (currentSearch.trim()) {
         const query = currentSearch.toLowerCase().trim();
@@ -574,9 +576,16 @@
 
       let featured = null;
       let rest = [];
+
       if (gefiltert.length > 0) {
         featured = gefiltert[0];
-        rest = gefiltert.slice(1);
+        
+        // Wenn weder gesucht noch gefiltert wird: Nur die nächsten 3 anzeigen (insgesamt 4)
+        if (!isSearchingOrFiltering) {
+          rest = gefiltert.slice(1, 4);
+        } else {
+          rest = gefiltert.slice(1);
+        }
       }
 
       renderFeatured(featured);
