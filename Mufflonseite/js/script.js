@@ -1,21 +1,28 @@
-// Funktion zum Rendern der PDFs
 function renderPDFs(items) {
   const container = document.getElementById("pdf-container");
   if (!container) return;
 
   container.innerHTML = "";
 
+  if (!items || items.length === 0) {
+    container.innerHTML = "<p style='text-align:center;'>Keine Dokumente gefunden.</p>";
+    return;
+  }
+
   items.forEach(item => {
     const card = document.createElement("div");
     card.className = "pdf-card";
 
     const badgeClass = item.typ === "Eventblatt" ? "badge-eventblatt" : "badge-extrablatt";
-    // Achte darauf, ob das Eigenschafts-Feld bei dir "file", "pdf" oder "dateiname" heißt:
-    const pdfPath = `./pdf/${encodeURIComponent(item.file || item.pdf)}`;
+    
+    // Greift auf die passenden Feldernamen deines Datensatzes zu
+    const fileName = item.file || item.pdf || item.dateiname || item.link;
+    const title = item.titel || item.title || item.name || `Ausgabe ${item.id || ''}`;
+    const pdfPath = `./pdf/${encodeURIComponent(fileName)}`;
 
     card.innerHTML = `
-      <span class="badge ${badgeClass}">${item.typ}</span>
-      <h3>${item.titel || item.title || 'Ausgabe'}</h3>
+      <span class="badge ${badgeClass}">${item.typ || 'Dokument'}</span>
+      <h3>${title}</h3>
       <iframe class="pdf-viewer" src="${pdfPath}"></iframe>
       <div class="pdf-actions">
         <a href="${pdfPath}" target="_blank">PDF öffnen ↗</a>
@@ -26,19 +33,27 @@ function renderPDFs(items) {
   });
 }
 
+// Sucht automatisch nach bekannten Variablennamen aus deiner opfanze-data.js
+function getData() {
+  if (typeof opfanzePDFs !== 'undefined') return opfanzePDFs;
+  if (typeof opfanzeData !== 'undefined') return opfanzeData;
+  if (typeof data !== 'undefined') return data;
+  if (window.opfanzePDFs) return window.opfanzePDFs;
+  if (window.opfanzeData) return window.opfanzeData;
+  return [];
+}
+
 function filterPDFs(typ) {
-  // Hier nutzen wir das Array aus opfanze-data.js
-  const data = window.opfanzeData || opfanzePDFs; 
+  const allData = getData();
   if (typ === 'all') {
-    renderPDFs(data);
+    renderPDFs(allData);
   } else {
-    const filtered = data.filter(item => item.typ === typ);
+    const filtered = allData.filter(item => item.typ === typ);
     renderPDFs(filtered);
   }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Nimmt automatisch deine 104 Einträge aus opfanze-data.js
-  const data = window.opfanzeData || opfanzePDFs;
-  renderPDFs(data);
+  const allData = getData();
+  renderPDFs(allData);
 });
