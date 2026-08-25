@@ -10,6 +10,46 @@ const OPFANZE_AUSGABEN = [
   },
   {
     "typ": "Extrablatt",
+    "nummer": "098",
+    "jahr": 2026,
+    "titel": "Krank und Untot",
+    "datum": "2026-08-22",
+    "pfad": "assets/Opfanze_assets/Extrablatt_2026/Extrablatt, 0982026, Krank und Untot, 20260822.pdf"
+  },
+  {
+    "typ": "Extrablatt",
+    "nummer": "097",
+    "jahr": 2026,
+    "titel": "Geschichten aus 1001 Baustelle",
+    "datum": "2026-08-21",
+    "pfad": "assets/Opfanze_assets/Extrablatt_2026/Extrablatt, 0972026, Geschichten aus 1001 Baustelle, 20260821.pdf"
+  },
+  {
+    "typ": "Extrablatt",
+    "nummer": "096",
+    "jahr": 2026,
+    "titel": "Blitze Bahnen und Boberflucht",
+    "datum": "2026-08-20",
+    "pfad": "assets/Opfanze_assets/Extrablatt_2026/Extrablatt, 0962026, Blitze Bahnen und Boberflucht, 20260820.pdf"
+  },
+  {
+    "typ": "Extrablatt",
+    "nummer": "094",
+    "jahr": 2026,
+    "titel": "Die unendliche Geschichte vom Mähgic Mountain",
+    "datum": "2026-08-13",
+    "pfad": "assets/Opfanze_assets/Extrablatt_2026/Extrablatt, 0942026, Die unendliche Geschichte vom Mähgic Mountain, 20260813.pdf"
+  },
+  {
+    "typ": "Extrablatt",
+    "nummer": "095",
+    "jahr": 2026,
+    "titel": "Mit alles und Schaf",
+    "datum": "2026-08-13",
+    "pfad": "assets/Opfanze_assets/Extrablatt_2026/Extrablatt, 0952026, Mit alles und Schaf, 20260813.pdf"
+  },
+  {
+    "typ": "Extrablatt",
     "nummer": "087",
     "jahr": 2026,
     "titel": "Mufflon auf der Flucht",
