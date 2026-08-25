@@ -252,36 +252,6 @@
 
     @media (min-width: 1620px) {
       .maggus-sidebar { display: block; }
-      .maggus-inline { display: none; }
-    }
-
-    /* --- Maggus-Vorstellung: kompakte Inline-Variante (Standard-Fallback) --- */
-    .maggus-inline {
-      max-width: 560px;
-      margin: 0 auto;
-      background: var(--cream-soft);
-      border: 2px solid rgba(107, 66, 38, 0.10);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-soft);
-      padding: 16px 22px;
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      text-align: left;
-      transition: transform 0.18s ease, box-shadow 0.18s ease;
-    }
-    .maggus-inline:hover { transform: translateY(-3px); box-shadow: var(--shadow-lift); }
-    .maggus-inline .maggus-img {
-      width: 74px;
-      flex-shrink: 0;
-      border-radius: var(--radius-sm);
-    }
-    .maggus-inline h3 { margin-bottom: 2px; font-size: 1.05rem; }
-    .maggus-inline .eyebrow { display: block; font-size: 0.85rem; margin-bottom: 6px; transform: none; }
-    .maggus-inline p { font-size: 0.85rem; line-height: 1.45; margin-bottom: 0; }
-
-    @media (max-width: 560px) {
-      .maggus-inline { flex-direction: column; text-align: center; }
     }
   </style>
 </head>
@@ -348,17 +318,6 @@
 
   <section style="padding-top:0;">
     <div id="opfanze-highlight-wrap"></div>
-  </section>
-
-  <section style="padding-top:20px; padding-bottom:10px;">
-    <div class="maggus-inline wrap">
-      <img src="assets/Opfanze_assets/Maggus%20OPfanze.png" alt="Maggus, der Herausgeber der Opfanze" class="maggus-img">
-      <div class="maggus-body">
-        <h3>Maggus</h3>
-        <span class="eyebrow">🖋️ Herausgeber der Opfanze</span>
-        <p>Seit der ersten Ausgabe schreibt, illustriert, produziert und schnubbt Maggus jede Opfanze persönlich. Danke für deine wöchentlichen Geschichten aus dem Stall! ♥</p>
-      </div>
-    </div>
   </section>
 
   <section style="padding-top:20px;">
