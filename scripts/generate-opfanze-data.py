@@ -96,12 +96,21 @@ def parse_extrablatt_2025(filename: str):
 
 
 def parse_extrablatt_2026(filename: str):
+    # Variante A (bisher üblich): Extrablatt_0942026_Titel_20260813
     m = re.match(r"^Extrablatt_(\d{2,4})2026_(.+)$", filename, re.IGNORECASE)
-    if not m:
-        return None
-    nummer, rest = m.group(1), m.group(2)
-    rest, datum = finde_datum_am_ende(rest)
-    return {"nummer": f"{int(nummer):03d}", "jahr": 2026, "titel": saeubere_titel(rest), "datum": datum}
+    if m:
+        nummer, rest = m.group(1), m.group(2)
+        rest, datum = finde_datum_am_ende(rest)
+        return {"nummer": f"{int(nummer):03d}", "jahr": 2026, "titel": saeubere_titel(rest), "datum": datum}
+
+    # Variante B (Komma-Format wie Eventblatt): Extrablatt, 0942026, Titel, 20260813
+    m = re.match(r"^Extrablatt,\s*(\d{2,4})2026,\s*(.+)$", filename, re.IGNORECASE)
+    if m:
+        nummer, rest = m.group(1), m.group(2)
+        rest, datum = finde_datum_am_ende(rest)
+        return {"nummer": f"{int(nummer):03d}", "jahr": 2026, "titel": saeubere_titel(rest), "datum": datum}
+
+    return None
 
 
 def parse_eventblatt(filename: str):
