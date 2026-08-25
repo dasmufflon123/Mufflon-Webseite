@@ -45,6 +45,6 @@ jobs:
           if git diff --staged --quiet; then
             echo "Keine Änderungen vorhanden."
           else
-            git commit -m "Opfanze-Datenbank automatisch aktualisiert [skip ci]"
+            git commit -m "Opfanze-Datenbank automatisch aktualisiert"
             git push origin HEAD:${{ github.ref_name }}
           fi
