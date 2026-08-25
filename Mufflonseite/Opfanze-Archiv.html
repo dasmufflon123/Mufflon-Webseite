@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Opfanze Archiv — Das__Mufflon</title>
+  <meta name="description" content="Das komplette Opfanze-Archiv — alle Extrablätter und Eventblätter von Das__Mufflon.">
+  <link rel="icon" type="image/png" href="assets/mufflon-mascot.png">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .archiv-controls {
+      max-width: 720px;
+      margin: 0 auto 30px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      justify-content: center;
+      padding: 0 24px;
+    }
+    .archiv-search {
+      flex: 1 1 260px;
+      padding: 12px 18px;
+      border-radius: 999px;
+      border: 2px solid rgba(107, 66, 38, 0.15);
+      background: var(--cream-soft);
+      color: var(--text);
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.95rem;
+    }
+    .archiv-search:focus { outline: none; border-color: var(--terracotta); }
+
+    .archiv-filters { display: flex; gap: 8px; }
+    .archiv-filter-btn {
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 10px 18px;
+      border-radius: 999px;
+      border: 2px solid rgba(107, 66, 38, 0.15);
+      background: var(--cream-soft);
+      color: var(--horn-brown);
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+    .archiv-filter-btn.active,
+    .archiv-filter-btn:hover {
+      background: var(--terracotta);
+      color: #fff;
+      border-color: var(--terracotta);
+    }
+
+    .archiv-count {
+      text-align: center;
+      color: var(--text-soft);
+      font-family: 'Patrick Hand', cursive;
+      font-size: 1.1rem;
+      margin-bottom: 18px;
+    }
+
+    .archiv-list {
+      max-width: 860px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 0 24px 60px;
+    }
+
+    .archiv-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: var(--cream-soft);
+      border: 2px solid rgba(107, 66, 38, 0.08);
+      border-radius: var(--radius-sm);
+      padding: 14px 18px;
+      text-decoration: none;
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+    }
+    .archiv-row:hover {
+      transform: translateX(4px);
+      box-shadow: var(--shadow-soft);
+    }
+    .archiv-row .tag { margin-bottom: 0; flex-shrink: 0; }
+    .archiv-row .archiv-titel {
+      flex: 1;
+      min-width: 0;
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 700;
+      color: var(--text);
+      font-size: 0.96rem;
+    }
+    .archiv-row .archiv-datum {
+      flex-shrink: 0;
+      color: var(--text-soft);
+      font-size: 0.85rem;
+      white-space: nowrap;
+    }
+    .archiv-row .archiv-open {
+      flex-shrink: 0;
+      color: var(--terracotta-dark);
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    @media (max-width: 600px) {
+      .archiv-row { flex-wrap: wrap; }
+      .archiv-row .archiv-titel { flex: 1 1 100%; order: 1; }
+      .archiv-row .tag { order: 0; }
+      .archiv-row .archiv-datum { order: 2; }
+      .archiv-row .archiv-open { order: 3; margin-left: auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="nav-inner">
+      <a href="index.html" class="brand">
+        <img src="assets/mufflon-mascot.png" alt="Mufflon Maskottchen">
+        Das__Mufflon
+      </a>
+      <button class="nav-toggle" aria-label="Menü öffnen">☰</button>
+<nav class="main-nav">
+  <a href="index.html" class="nav-home"><img src="assets/mufflon-icon.png" alt="Stall" title="Stall"></a>
+  <a href="Content.html">Content</a>
+  <a href="Highlights.html">Events</a>
+  <a href="subathon_goals.html">SUB Goals</a>
+  <a href="subathon_bombs.html">SUB Bombs</a>
+  <a href="FAQ.html">SUB FAQ</a>
+  <a href="Opfanze.html" class="active">Opfanze</a>
+  <a href="pomodoro.html">Pomodoro</a>
+  <a href="mahmories.html">Mähmories</a>
+</nav>
+    </div>
+  </header>
+
+  <div class="social-dock">
+    <a href="https://twitch.tv/das__mufflon" target="_blank" rel="noopener" aria-label="Twitch" class="social-btn" style="animation-delay:0s">
+      <span class="social-float" style="animation-duration:3.2s; animation-delay:0.6s">
+        <img src="assets/social/twitch.png" alt="Twitch">
+      </span>
+    </a>
+    <a href="https://discord.gg/mzW9Hh96S" target="_blank" rel="noopener" aria-label="Discord" class="social-btn" style="animation-delay:0.15s">
+      <span class="social-float" style="animation-duration:3.6s; animation-delay:0.75s">
+        <img src="assets/social/dc.png" alt="Discord">
+      </span>
+    </a>
+    <a href="https://www.instagram.com/das__mufflon/" target="_blank" rel="noopener" aria-label="Instagram" class="social-btn" style="animation-delay:0.3s">
+      <span class="social-float" style="animation-duration:4.0s; animation-delay:0.9s">
+        <img src="assets/social/insta.png" alt="Instagram">
+      </span>
+    </a>
+    <a href="https://www.youtube.com/@Das__Mufflon" target="_blank" rel="noopener" aria-label="YouTube" class="social-btn" style="animation-delay:0.45s">
+      <span class="social-float" style="animation-duration:3.8s; animation-delay:1.05s">
+        <img src="assets/social/yt.png" alt="YouTube">
+      </span>
+    </a>
+  </div>
+
+  <section style="padding-top:50px; padding-bottom:10px;">
+    <div class="section-head">
+      <span class="eyebrow">Der ganze Kiosk</span>
+      <h1>📚 Opfanze Archiv</h1>
+      <p>Alle Ausgaben an einem Ort — durchsuchbar und nach Typ filterbar.</p>
+    </div>
+    <p style="text-align:center; margin-bottom:24px;">
+      <a href="Opfanze.html" class="btn btn-ghost">← Zurück zur Opfanze-Startseite</a>
+    </p>
+  </section>
+
+  <div class="archiv-controls">
+    <input type="text" id="archiv-search" class="archiv-search" placeholder="🔍 Titel durchsuchen …">
+    <div class="archiv-filters">
+      <button class="archiv-filter-btn active" data-filter="all">Alle</button>
+      <button class="archiv-filter-btn" data-filter="Extrablatt">Extrablatt</button>
+      <button class="archiv-filter-btn" data-filter="Eventblatt">Eventblatt</button>
+    </div>
+  </div>
+
+  <div class="archiv-count" id="archiv-count"></div>
+  <div id="archiv-list" class="archiv-list"></div>
+
+  <footer class="site-footer">
+    <div class="footer-brand">Das__Mufflon 🐑</div>
+    <p><a href="https://twitch.tv/das__mufflon" target="_blank" rel="noopener">twitch.tv/das__mufflon</a></p>
+  </footer>
+
+  <script src="js/Opfanze-data.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    function formatiereDatum(isoDatum) {
+      const monate = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
+      const [jahr, monat, tag] = isoDatum.split("-").map(Number);
+      return `${tag}. ${monate[monat - 1]} ${jahr}`;
+    }
+
+    const alle = (typeof OPFANZE_AUSGABEN !== 'undefined' ? OPFANZE_AUSGABEN : [])
+      .slice()
+      .sort((a, b) => b.datum.localeCompare(a.datum));
+
+    const listEl = document.getElementById('archiv-list');
+    const countEl = document.getElementById('archiv-count');
+    const searchEl = document.getElementById('archiv-search');
+    const filterBtns = document.querySelectorAll('.archiv-filter-btn');
+
+    let aktiverFilter = 'all';
+
+    function render() {
+      const suchbegriff = searchEl.value.trim().toLowerCase();
+
+      const gefiltert = alle.filter(a => {
+        const typPasst = aktiverFilter === 'all' || a.typ === aktiverFilter;
+        const suchePasst = !suchbegriff || a.titel.toLowerCase().includes(suchbegriff);
+        return typPasst && suchePasst;
+      });
+
+      countEl.textContent = gefiltert.length === alle.length
+        ? `${alle.length} Ausgaben insgesamt`
+        : `${gefiltert.length} von ${alle.length} Ausgaben`;
+
+      if (gefiltert.length === 0) {
+        listEl.innerHTML = '<div class="empty-state">Nichts gefunden — versuch einen anderen Suchbegriff 🌱</div>';
+        return;
+      }
+
+      listEl.innerHTML = gefiltert.map(a => `
+        <a href="${encodeURI(a.pfad)}" target="_blank" rel="noopener" class="archiv-row">
+          <span class="tag ${a.typ === 'Eventblatt' ? 'twilight' : 'terracotta'}">${a.typ}</span>
+          <span class="archiv-titel">${a.titel}</span>
+          <span class="archiv-datum">${formatiereDatum(a.datum)}</span>
+          <span class="archiv-open">Öffnen ↗</span>
+        </a>
+      `).join('');
+    }
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        aktiverFilter = btn.dataset.filter;
+        render();
+      });
+    });
+
+    searchEl.addEventListener('input', render);
+
+    render();
+  </script>
+</body>
+</html>
