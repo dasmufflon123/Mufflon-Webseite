@@ -36,6 +36,12 @@ ORDNER_LISTE = [
 MANUELLE_DATUMS = {
     "0042025_OPFANZE_Boberlizoo-Chefin_Das_Mufflon_spricht.pdf": "2025-06-27",
     "1092025_OPFANZE_Subathon_Tag_13_2025925.pdf": "2025-09-25",
+    # 9-stellige Zahlendreher: automatisches Raten (erste 8 Ziffern) lag hier
+    # daneben, weil die Extra-Ziffer nicht am Ende, sondern in der Mitte steckt.
+    # Anhand der Nachbar-Ausgaben (063 = 11.08., 065 = 13.08.) korrigiert:
+    "0642025_OPFANZE_Enthullung_um_Pumper-Puffin_und_Nunniemaus_202508012.pdf": "2025-08-12",
+    # Anhand der Nachbar-Ausgaben (079 = 23.06., 081 = 01.07.) korrigiert:
+    "Extrablatt_0802026_Endlich_ein_Eingang_202606024.pdf": "2026-06-24",
 }
 
 # Literale Marker, die vor dem Titel stehen können (Tippfehler-tolerant)
@@ -148,13 +154,12 @@ for ordner_name, typ in ORDNER_LISTE:
             unerkannt.append(pdf.name)
             continue
 
-        if ergebnis["datum"] is None:
-            if pdf.name in MANUELLE_DATUMS:
-                ergebnis["datum"] = MANUELLE_DATUMS[pdf.name]
-                manuell_verwendet.append(pdf.name)
-            else:
-                unerkannt.append(f"{pdf.name}  (kein Datum im Namen gefunden — bitte in MANUELLE_DATUMS eintragen)")
-                continue
+        if pdf.name in MANUELLE_DATUMS:
+            ergebnis["datum"] = MANUELLE_DATUMS[pdf.name]
+            manuell_verwendet.append(pdf.name)
+        elif ergebnis["datum"] is None:
+            unerkannt.append(f"{pdf.name}  (kein Datum im Namen gefunden — bitte in MANUELLE_DATUMS eintragen)")
+            continue
 
         relativer_pfad = pdf.relative_to(BASE_DIR / "Mufflonseite").as_posix()
 
@@ -179,6 +184,28 @@ for a in ausgaben:
     gesehen.add(key)
     eindeutig.append(a)
 
+# ------------------------------------------------------------
+# Plausibilitätsprüfung: Ausgabe X kann nicht NACH einer
+# höher nummerierten Ausgabe (gleicher Typ + Jahr) datiert sein.
+# Statt das Datum zu erraten (fehleranfällig), wird die Ausgabe
+# nur als "unsicher" markiert — sie bleibt ganz normal in der
+# Liste/Suche, wird aber nie als "neueste Ausgabe" vorgeschlagen.
+# ------------------------------------------------------------
+gruppen = {}
+for a in eindeutig:
+    a["unsicher"] = False
+    gruppen.setdefault((a["typ"], a["jahr"]), []).append(a)
+
+unsicher_liste = []
+for (typ, jahr), gruppe in gruppen.items():
+    gruppe.sort(key=lambda x: int(x["nummer"]))
+    suffix_min = None
+    for a in reversed(gruppe):
+        if suffix_min is not None and a["datum"] > suffix_min:
+            a["unsicher"] = True
+            unsicher_liste.append(a)
+        suffix_min = a["datum"] if suffix_min is None else min(suffix_min, a["datum"])
+
 eindeutig.sort(key=lambda x: x["datum"], reverse=True)
 
 OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)
@@ -189,6 +216,10 @@ with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
 print(f"✅ {len(eindeutig)} Ausgaben verarbeitet ({len(ausgaben) - len(eindeutig)} Duplikate entfernt).")
 if manuell_verwendet:
     print(f"ℹ️  {len(manuell_verwendet)} Datei(en) über MANUELLE_DATUMS aufgelöst.")
+if unsicher_liste:
+    print(f"\n⚠️  {len(unsicher_liste)} Ausgabe(n) mit unplausiblem Datum (widerspricht der Nummern-Reihenfolge) — bleiben in Liste/Suche, gelten aber nicht als 'neueste Ausgabe':")
+    for a in unsicher_liste:
+        print(f"   - {a['typ']} {a['nummer']}/{a['jahr']} '{a['titel']}' ({a['datum']}) — bitte Original-Dateiname prüfen")
 if unerkannt:
     print(f"\n❌ {len(unerkannt)} Datei(en) konnten NICHT verarbeitet werden:")
     for u in unerkannt:
