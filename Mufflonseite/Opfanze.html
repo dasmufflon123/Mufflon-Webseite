@@ -132,6 +132,68 @@
     @media (max-width: 560px) {
       .opfanze-grid { grid-template-columns: 1fr; }
     }
+
+    /* --- Filter + Suche --- */
+    .opfanze-browser-head {
+      max-width: 1080px;
+      margin: 0 auto 20px;
+      padding: 0 24px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .opfanze-filter-btn {
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 700;
+      font-size: 0.92rem;
+      padding: 11px 22px;
+      border-radius: 999px;
+      border: 2px solid rgba(107, 66, 38, 0.15);
+      background: var(--cream-soft);
+      color: var(--horn-brown);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .opfanze-filter-btn:hover { transform: translateY(-2px); }
+    .opfanze-filter-btn.active {
+      background: var(--terracotta);
+      color: #fff;
+      border-color: var(--terracotta);
+      box-shadow: var(--shadow-soft);
+    }
+    .opfanze-filter-btn[data-filter="Eventblatt"].active {
+      background: var(--twilight);
+      border-color: var(--twilight);
+    }
+
+    .opfanze-search {
+      flex: 1 1 240px;
+      max-width: 320px;
+      padding: 11px 20px;
+      border-radius: 999px;
+      border: 2px solid rgba(107, 66, 38, 0.15);
+      background: var(--cream-soft);
+      color: var(--text);
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.92rem;
+    }
+    .opfanze-search:focus { outline: none; border-color: var(--terracotta); }
+
+    .opfanze-result-hint {
+      text-align: center;
+      color: var(--text-soft);
+      font-family: 'Patrick Hand', cursive;
+      font-size: 1.05rem;
+      margin: -8px auto 18px;
+      max-width: 1080px;
+      padding: 0 24px;
+    }
   </style>
 </head>
 <body>
@@ -195,23 +257,16 @@
   <div class="ivy-divider"></div>
 
   <section style="padding-top:20px;">
-    <div class="opfanze-row-head">
-      <span>📰</span>
-      <span>Weitere Extrablätter</span>
-      <span class="line"></span>
+    <div class="opfanze-browser-head">
+      <button class="opfanze-filter-btn active" data-filter="all">📚 Alle</button>
+      <button class="opfanze-filter-btn" data-filter="Extrablatt">📰 Extrablatt</button>
+      <button class="opfanze-filter-btn" data-filter="Eventblatt">🎉 Eventblatt</button>
+      <input type="text" id="opfanze-search" class="opfanze-search" placeholder="🔍 Nach Titel oder Datum suchen …">
     </div>
-    <div id="opfanze-extrablatt-grid" class="opfanze-grid"></div>
-  </section>
-
-  <section style="padding-top:0;">
-    <div class="opfanze-row-head">
-      <span>🎉</span>
-      <span>Eventblätter</span>
-      <span class="line"></span>
-    </div>
-    <div id="opfanze-eventblatt-grid" class="opfanze-grid"></div>
+    <div class="opfanze-result-hint" id="opfanze-result-hint"></div>
+    <div id="opfanze-result-grid" class="opfanze-grid"></div>
     <div class="archiv-link-wrap">
-      <a href="Opfanze-Archiv.html" class="btn btn-ghost">📚 Alle Ausgaben im Archiv ansehen</a>
+      <a href="Opfanze-Archiv.html" class="btn btn-ghost">📚 Komplettes Archiv ansehen</a>
     </div>
   </section>
 
@@ -234,8 +289,6 @@
       .sort((a, b) => b.datum.localeCompare(a.datum));
 
     const highlightWrap = document.getElementById('opfanze-highlight-wrap');
-    const extrablattGrid = document.getElementById('opfanze-extrablatt-grid');
-    const eventblattGrid = document.getElementById('opfanze-eventblatt-grid');
 
     if (alle.length === 0) {
       highlightWrap.innerHTML = '<div class="empty-state">Die erste Ausgabe keimt noch — schau bald wieder vorbei! 🌱</div>';
@@ -257,20 +310,47 @@
         </a>
       `;
 
-      const weitereExtrablaetter = alle
-        .filter(a => a.typ === 'Extrablatt' && a !== neueste)
-        .slice(0, 3);
+      const filterBtns = document.querySelectorAll('.opfanze-filter-btn');
+      const searchInput = document.getElementById('opfanze-search');
+      const resultGrid = document.getElementById('opfanze-result-grid');
+      const resultHint = document.getElementById('opfanze-result-hint');
 
-      const eventblaetter = alle
-        .filter(a => a.typ === 'Eventblatt')
-        .slice(0, 3);
+      let aktiverFilter = 'all';
+      const ANZAHL_OHNE_SUCHE = 3;
 
-      function renderKarten(container, items) {
-        if (items.length === 0) {
-          container.innerHTML = '<div class="empty-state" style="grid-column:1/-1;">Noch nichts hier — bald mehr!</div>';
+      function passtZurSuche(a, suchbegriff) {
+        if (!suchbegriff) return true;
+        const titelText = a.titel.toLowerCase();
+        const datumText = formatiereDatum(a.datum).toLowerCase();
+        const isoText = a.datum.toLowerCase();
+        return titelText.includes(suchbegriff) || datumText.includes(suchbegriff) || isoText.includes(suchbegriff);
+      }
+
+      function render() {
+        const suchbegriff = searchInput.value.trim().toLowerCase();
+
+        let basis = alle.filter(a => a !== neueste);
+        if (aktiverFilter !== 'all') {
+          basis = basis.filter(a => a.typ === aktiverFilter);
+        }
+        basis = basis.filter(a => passtZurSuche(a, suchbegriff));
+
+        const gekuerzt = suchbegriff ? basis : basis.slice(0, ANZAHL_OHNE_SUCHE);
+
+        if (suchbegriff) {
+          resultHint.textContent = `${basis.length} Treffer für "${searchInput.value.trim()}"`;
+        } else {
+          resultHint.textContent = aktiverFilter === 'all'
+            ? 'Die neuesten Ausgaben'
+            : `Die neuesten ${aktiverFilter === 'Eventblatt' ? 'Eventblätter' : 'Extrablätter'}`;
+        }
+
+        if (gekuerzt.length === 0) {
+          resultGrid.innerHTML = '<div class="empty-state" style="grid-column:1/-1;">Nichts gefunden 🌱</div>';
           return;
         }
-        container.innerHTML = items.map(a => `
+
+        resultGrid.innerHTML = gekuerzt.map(a => `
           <a href="${encodeURI(a.pfad)}" target="_blank" rel="noopener" class="opfanze-card">
             <span class="tag ${a.typ === 'Eventblatt' ? 'twilight' : 'terracotta'}" style="align-self:flex-start;">${a.typ}</span>
             <h3>${a.titel}</h3>
@@ -280,8 +360,18 @@
         `).join('');
       }
 
-      renderKarten(extrablattGrid, weitereExtrablaetter);
-      renderKarten(eventblattGrid, eventblaetter);
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          filterBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          aktiverFilter = btn.dataset.filter;
+          render();
+        });
+      });
+
+      searchInput.addEventListener('input', render);
+
+      render();
     }
   </script>
 </body>
