@@ -148,8 +148,8 @@
     .opfanze-filter-btn {
       font-family: 'Baloo 2', sans-serif;
       font-weight: 700;
-      font-size: 0.92rem;
-      padding: 11px 22px;
+      font-size: 1.05rem;
+      padding: 15px 30px;
       border-radius: 999px;
       border: 2px solid rgba(107, 66, 38, 0.15);
       background: var(--cream-soft);
@@ -322,9 +322,9 @@
 
   <section style="padding-top:0;">
     <div class="opfanze-browser-head">
-      <button class="opfanze-filter-btn active" data-filter="all">📚 Alle</button>
-      <button class="opfanze-filter-btn" data-filter="Extrablatt">📰 Extrablatt</button>
-      <button class="opfanze-filter-btn" data-filter="Eventblatt">🎉 Eventblatt</button>
+      <button class="opfanze-filter-btn active" data-filter="all">Alle</button>
+      <button class="opfanze-filter-btn" data-filter="Extrablatt">Extrablatt</button>
+      <button class="opfanze-filter-btn" data-filter="Eventblatt">Eventblatt</button>
       <input type="text" id="opfanze-search" class="opfanze-search" placeholder="🔍 Nach Titel oder Datum suchen …">
     </div>
     <div id="opfanze-year-row" class="opfanze-year-row"></div>
@@ -358,7 +358,7 @@
     if (alle.length === 0) {
       highlightWrap.innerHTML = '<div class="empty-state">Die erste Ausgabe keimt noch — schau bald wieder vorbei! 🌱</div>';
     } else {
-      const neueste = alle[0];
+      const neueste = alle.find(a => !a.unsicher) || alle[0];
 
       highlightWrap.innerHTML = `
         <a href="${encodeURI(neueste.pfad)}" target="_blank" rel="noopener" class="opfanze-highlight wrap">
@@ -424,9 +424,10 @@
         basis = basis.filter(a => passtZurSuche(a, suchbegriff));
 
         // Deckel bei 3 nur, wenn weder gesucht noch ein Jahr gewählt wurde —
-        // bei Jahresauswahl (oder Suche) wird wirklich ALLES gezeigt.
+        // bei Jahresauswahl (oder Suche) wird wirklich ALLES gezeigt (auch unsichere Daten).
         const ohneDeckel = Boolean(suchbegriff) || aktivesJahr !== 'all';
-        const gekuerzt = ohneDeckel ? basis : basis.slice(0, ANZAHL_OHNE_SUCHE);
+        const anzeigeBasis = ohneDeckel ? basis : basis.filter(a => !a.unsicher);
+        const gekuerzt = ohneDeckel ? anzeigeBasis : anzeigeBasis.slice(0, ANZAHL_OHNE_SUCHE);
 
         const typLabel = aktiverFilter === 'all' ? 'Ausgaben' : (aktiverFilter === 'Eventblatt' ? 'Eventblätter' : 'Extrablätter');
 
