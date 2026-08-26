@@ -193,15 +193,46 @@ nav.main-nav a.active {
   color: var(--white);
 }
 
-/* Subathon-Saison: die 3 Subathon-Buttons bekommen "Schnacky" als
-   Hintergrund-Maskottchen spendiert. */
+/* Subathon-Saison: die 3 Subathon-Buttons bekommen "Schnacky" spendiert.
+   Das Gesicht sitzt als eigenes kleines Icon rechts im Button (nie vom Text
+   überdeckt), der Button selbst ist in Schnackys Lila gehalten. Beim Hover/
+   als aktive Seite kein Orange (das würde Schnacky ja komplett übermalen),
+   stattdessen ein "Plop" (leicht größer) + violettes Glühen drumrum. */
 nav.main-nav a[href="subathon_goals.html"],
 nav.main-nav a[href="subathon_bombs.html"],
 nav.main-nav a[href="FAQ.html"] {
-  background-image: url('../assets/subathon%20schnacky.png');
-  background-size: cover;
+  position: relative;
+  padding-right: 44px;
+  background: linear-gradient(135deg, #a06bff, #7c3ef0);
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+  transition: transform 0.18s cubic-bezier(.34, 1.56, .64, 1), box-shadow 0.18s ease, background 0.18s ease;
+}
+nav.main-nav a[href="subathon_goals.html"]::after,
+nav.main-nav a[href="subathon_bombs.html"]::after,
+nav.main-nav a[href="FAQ.html"]::after {
+  content: "";
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 30px;
+  background-image: url('../assets/subathon-schnacky-face.png');
+  background-size: contain;
+  background-repeat: no-repeat;
   background-position: center;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.75);
+  pointer-events: none;
+}
+nav.main-nav a[href="subathon_goals.html"]:hover,
+nav.main-nav a[href="subathon_goals.html"].active,
+nav.main-nav a[href="subathon_bombs.html"]:hover,
+nav.main-nav a[href="subathon_bombs.html"].active,
+nav.main-nav a[href="FAQ.html"]:hover,
+nav.main-nav a[href="FAQ.html"].active {
+  background: linear-gradient(135deg, #b184ff, #8c52f5);
+  color: var(--white);
+  transform: scale(1.08);
+  box-shadow: 0 0 0 4px rgba(145, 71, 254, 0.35), 0 6px 16px rgba(124, 62, 240, 0.45);
 }
 
 nav.main-nav a.nav-home {
@@ -310,6 +341,18 @@ nav.main-nav a.nav-home img {
   nav.main-nav a.nav-home img {
     width: 22px;
     height: 22px;
+  }
+  nav.main-nav a[href="subathon_goals.html"],
+  nav.main-nav a[href="subathon_bombs.html"],
+  nav.main-nav a[href="FAQ.html"] {
+    padding-right: 26px;
+  }
+  nav.main-nav a[href="subathon_goals.html"]::after,
+  nav.main-nav a[href="subathon_bombs.html"]::after,
+  nav.main-nav a[href="FAQ.html"]::after {
+    width: 18px;
+    height: 17px;
+    right: 4px;
   }
 }
 
