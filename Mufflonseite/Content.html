@@ -56,18 +56,18 @@
     .kachel-section .kachel-head {
       display: flex;
       align-items: center;
-      gap: 10px;
-      margin-bottom: 12px;
+      gap: 14px;
+      margin-bottom: 16px;
       font-family: 'Baloo 2', sans-serif;
       font-weight: 700;
-      font-size: 1.2rem;
+      font-size: 1.75rem;
       color: var(--horn-brown);
     }
     .kachel-section .kachel-head .icon {
       font-size: 1.4rem;
     }
     .kachel-section .kachel-head .platform-logo {
-      height: 28px;
+      height: 46px;
       width: auto;
       object-fit: contain;
       filter: drop-shadow(0 2px 4px rgba(62,44,30,0.25));
@@ -110,21 +110,35 @@
 
     .kachel-item.insta {
       aspect-ratio: unset;
-      height: 600px;
+      height: auto;
+      min-height: 300px;
       background: linear-gradient(45deg, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5);
       padding: 4px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
     }
-    .kachel-item.insta iframe {
+    .insta-scale-wrap {
+      position: relative;
       width: 100%;
       height: 100%;
+      overflow: hidden;
       border-radius: calc(var(--radius-md) - 4px);
+      background: var(--cream-soft);
     }
-
-    @media (max-width: 820px) {
-      .kachel-item.insta { height: 560px; }
-    }
-    @media (max-width: 600px) {
-      .kachel-item.insta { height: 520px; }
+    /* Instagrams eingebettete Ansicht hat eine feste Breite (540px) und eine
+       naturliche, variable Höhe. Statt sie in eine fremde Box zu quetschen
+       (= Verzerrung), wird sie in ihrer echten Größe gerendert und dann per
+       transform GLEICHMÄSSIG (x und y identisch) herunterskaliert. So bleibt
+       jedes Seitenverhältnis exakt erhalten, egal welches Format der Post hat. */
+    .insta-frame {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 540px;
+      height: 760px;
+      border: none;
+      transform-origin: top left;
     }
 
     .content-social-row {
@@ -172,7 +186,11 @@
         width: 100px;
       }
       .kachel-section .kachel-head {
-        font-size: 1rem;
+        font-size: 1.3rem;
+        gap: 10px;
+      }
+      .kachel-section .kachel-head .platform-logo {
+        height: 34px;
       }
     }
 
@@ -262,7 +280,7 @@
       <div class="kachel-row">
         <div class="kachel-item yt">
           <iframe
-            src="https://www.youtube.com/embed/JzgkwUYSpWQ?origin=https%3A%2F%2Fdasmufflon.de"
+            src="https://www.youtube.com/embed/tI7Zts7ZtYc?origin=https%3A%2F%2Fdasmufflon.de"
             title="YouTube Short 1"
             frameborder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -271,10 +289,10 @@
           </iframe>
         </div>
         <div class="kachel-item yt">
-          <iframe src="https://www.youtube.com/embed/gR-jdmmPnbg" allowfullscreen></iframe>
+          <iframe src="https://www.youtube.com/embed/ZFTNRkzxSmY" allowfullscreen></iframe>
         </div>
         <div class="kachel-item yt">
-          <iframe src="https://www.youtube.com/embed/LAhdkQ4w1wQ" allowfullscreen></iframe>
+          <iframe src="https://www.youtube.com/embed/cFbkY_fxL8M" allowfullscreen></iframe>
         </div>
       </div>
     </div>
@@ -287,25 +305,34 @@
       </div>
       <div class="kachel-row">
         <div class="kachel-item insta">
-          <iframe
-            src="https://www.instagram.com/p/DaX1dtjq3pb/embed/captioned/?cr=1&v=14&wp=540&rd=https%3A%2F%2Fdasmufflon.de"
-            frameborder="0"
-            allowfullscreen>
-          </iframe>
+          <div class="insta-scale-wrap">
+            <iframe
+              class="insta-frame"
+              src="https://www.instagram.com/p/Dbgsby7kX40/embed/captioned/?cr=1&v=14&wp=540&rd=https%3A%2F%2Fdasmufflon.de"
+              frameborder="0"
+              allowfullscreen>
+            </iframe>
+          </div>
         </div>
         <div class="kachel-item insta">
-          <iframe
-            src="https://www.instagram.com/p/DZQCNCIKsE8/embed/captioned/?cr=1&v=14&wp=540&rd=https%3A%2F%2Fdasmufflon.de"
-            frameborder="0"
-            allowfullscreen>
-          </iframe>
+          <div class="insta-scale-wrap">
+            <iframe
+              class="insta-frame"
+              src="https://www.instagram.com/p/DZNbFbYq7yI/embed/captioned/?cr=1&v=14&wp=540&rd=https%3A%2F%2Fdasmufflon.de"
+              frameborder="0"
+              allowfullscreen>
+            </iframe>
+          </div>
         </div>
         <div class="kachel-item insta">
-          <iframe
-            src="https://www.instagram.com/p/DZKkstEq1TV/embed/captioned/?cr=1&v=14&wp=540&rd=https%3A%2F%2Fdasmufflon.de"
-            frameborder="0"
-            allowfullscreen>
-          </iframe>
+          <div class="insta-scale-wrap">
+            <iframe
+              class="insta-frame"
+              src="https://www.instagram.com/p/DaX1dtjq3pb/embed/captioned/?cr=1&v=14&wp=540&rd=https%3A%2F%2Fdasmufflon.de"
+              frameborder="0"
+              allowfullscreen>
+            </iframe>
+          </div>
         </div>
       </div>
     </div>
@@ -318,6 +345,29 @@
   </footer>
 
   <script src="js/main.js?v=7"></script>
+  <script>
+    // Instagram-Einbettungen gleichmäßig skalieren statt verzerren.
+    (function () {
+      const NATURAL_WIDTH = 540;
+      const NATURAL_HEIGHT = 760;
+
+      function skaliereInstaEmbeds() {
+        document.querySelectorAll('.insta-scale-wrap').forEach(wrap => {
+          const frame = wrap.querySelector('.insta-frame');
+          if (!frame) return;
+          const breite = wrap.clientWidth;
+          const scale = breite / NATURAL_WIDTH;
+          frame.style.transform = `scale(${scale})`;
+          wrap.style.height = (NATURAL_HEIGHT * scale) + 'px';
+        });
+      }
+
+      window.addEventListener('load', skaliereInstaEmbeds);
+      window.addEventListener('resize', skaliereInstaEmbeds);
+      // Direkt auch einmal ausführen, falls "load" schon vorbei ist
+      if (document.readyState === 'complete') skaliereInstaEmbeds();
+    })();
+  </script>
 
 </body>
 </html>
