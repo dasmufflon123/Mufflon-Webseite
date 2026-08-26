@@ -169,11 +169,11 @@ header.site-header {
 nav.main-nav {
   display: flex;
   align-items: center;
-  gap: 4px 6px;
+  gap: 6px 10px;
   flex-wrap: wrap; /* Erlaubt das Umbrechen in die nächste Zeile */
   overflow: hidden; /* Verhindert jegliche Scrollbalken im Menü */
   flex: 1;
-  padding: 2px 0;
+  padding: 4px 0;
 }
 
 nav.main-nav a {
@@ -181,9 +181,9 @@ nav.main-nav a {
   font-family: 'Baloo 2', sans-serif;
   font-weight: 600;
   color: var(--cream);
-  padding: 3px 6px; /* Etwas kompakter, damit mehr nebeneinander passt */
+  padding: 6px 12px;
   border-radius: 999px;
-  font-size: 0.78rem; /* Minimal kleiner für bessere Passform */
+  font-size: 1.33rem; /* ~70% größer als vorher (0.78rem) - jetzt ist ja Platz */
   white-space: nowrap;
   transition: background 0.15s ease, color 0.15s ease;
 }
@@ -210,28 +210,31 @@ nav.main-nav a.nav-home img {
   position: relative;
 }
 .nav-dropdown-trigger {
-  background: none;
-  border: none;
+  background: rgba(221, 138, 70, 0.22);
+  border: 2px solid var(--terracotta);
   cursor: pointer;
   font-family: 'Baloo 2', sans-serif;
-  font-weight: 600;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
   color: var(--cream);
-  padding: 3px 6px;
+  padding: 5px 14px;
   border-radius: 999px;
-  font-size: 0.78rem;
+  font-size: 1.33rem;
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  transition: background 0.15s ease, color 0.15s ease;
+  gap: 6px;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
 }
 .nav-dropdown-trigger .caret {
-  font-size: 0.65em;
+  font-size: 0.7em;
   transition: transform 0.15s ease;
 }
 .nav-dropdown-trigger:hover,
 .nav-dropdown.active .nav-dropdown-trigger {
   background: var(--terracotta);
   color: var(--white);
+  transform: translateY(-1px);
 }
 .nav-dropdown.open .nav-dropdown-trigger .caret {
   transform: rotate(180deg);
@@ -245,7 +248,7 @@ nav.main-nav a.nav-home img {
   border: 1px solid rgba(0,0,0,0.28);
   border-radius: 14px;
   padding: 6px;
-  min-width: 170px;
+  min-width: 220px;
   display: none;
   flex-direction: column;
   gap: 2px;
@@ -256,9 +259,9 @@ nav.main-nav a.nav-home img {
   display: flex;
 }
 .nav-dropdown-menu a {
-  padding: 9px 12px;
+  padding: 11px 16px;
   border-radius: 9px;
-  font-size: 0.82rem;
+  font-size: 1.4rem;
   white-space: nowrap;
 }
 .nav-dropdown-menu a:hover,
