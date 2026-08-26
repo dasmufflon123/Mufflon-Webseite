@@ -202,13 +202,16 @@ nav.main-nav a[href="subathon_goals.html"],
 nav.main-nav a[href="subathon_bombs.html"],
 nav.main-nav a[href="FAQ.html"] {
   position: relative;
-  padding: 6px 14% 6px 20px;
-  border-radius: 0;
+  padding: 6px 36px 6px 20px;
+  border-radius: 999px 0 0 999px;
+  background-color: #7c3ef0;
   background-image: url('../assets/subathon-schnacky-trimmed.png');
   background-repeat: no-repeat;
-  background-size: 100% 100%;
+  background-size: auto 100%;
+  background-position: right center;
   text-shadow: 0 1px 3px rgba(0,0,0,0.5);
   outline: none;
+  -webkit-tap-highlight-color: transparent;
   transition: transform 0.18s cubic-bezier(.34, 1.56, .64, 1), filter 0.18s ease;
 }
 nav.main-nav a[href="subathon_goals.html"]:hover,
@@ -333,7 +336,7 @@ nav.main-nav a.nav-home img {
   nav.main-nav a[href="subathon_goals.html"],
   nav.main-nav a[href="subathon_bombs.html"],
   nav.main-nav a[href="FAQ.html"] {
-    padding: 3px 16% 3px 12px;
+    padding: 3px 24px 3px 12px;
   }
 }
 
