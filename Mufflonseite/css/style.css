@@ -193,6 +193,17 @@ nav.main-nav a.active {
   color: var(--white);
 }
 
+/* Subathon-Saison: die 3 Subathon-Buttons bekommen "Schnacky" als
+   Hintergrund-Maskottchen spendiert. */
+nav.main-nav a[href="subathon_goals.html"],
+nav.main-nav a[href="subathon_bombs.html"],
+nav.main-nav a[href="FAQ.html"] {
+  background-image: url('../assets/subathon%20schnacky.png');
+  background-size: cover;
+  background-position: center;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.75);
+}
+
 nav.main-nav a.nav-home {
   padding: 2px 6px;
   display: flex;
