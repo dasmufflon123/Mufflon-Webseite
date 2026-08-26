@@ -83,6 +83,12 @@
       grid-template-columns: repeat(3, 1fr);
       gap: 16px;
     }
+    .kachel-row.insta-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: flex-start;
+    }
 
     .kachel-item {
       aspect-ratio: 9 / 16;
@@ -111,23 +117,22 @@
     .kachel-item.insta {
       aspect-ratio: unset;
       height: auto;
-      min-height: 300px;
+      width: auto;
+      max-width: 100%;
       background: linear-gradient(45deg, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5);
       padding: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       overflow: visible;
+      box-shadow: var(--shadow-soft);
     }
     /* Instagrams offizielles Einbettungs-Skript (embed.js) ersetzt diese
-       blockquote automatisch durch einen korrekt dimensionierten iframe —
-       kein Raten von Höhen/Skalierung mehr nötig, das übernimmt Instagram
-       selbst pro Post individuell, genau wie beim YouTube-Embed oben. */
+       blockquote automatisch durch einen korrekt dimensionierten iframe.
+       WICHTIG: Breite wird NICHT erzwungen — Instagram berechnet die Höhe
+       anhand der Breite, die es beim Laden vorfindet. Wird die Breite später
+       per CSS überschrieben, passt die (bereits berechnete) Höhe nicht mehr
+       zum Inhalt und es wird abgeschnitten. Instagram bekommt hier also
+       bewusst freie Hand über seine eigene, natürliche Größe. */
     .kachel-item.insta .instagram-media {
       margin: 0 !important;
-      width: 100% !important;
-      max-width: 100% !important;
-      min-width: 0 !important;
       border-radius: calc(var(--radius-md) - 4px);
       overflow: hidden;
     }
@@ -294,7 +299,7 @@
         <span>Instagram</span>
         <span class="line"></span>
       </div>
-      <div class="kachel-row">
+      <div class="kachel-row insta-row">
         <div class="kachel-item insta">
           <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/Dbgsby7kX40/" data-instgrm-version="14"></blockquote>
         </div>
