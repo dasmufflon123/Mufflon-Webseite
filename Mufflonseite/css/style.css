@@ -193,36 +193,22 @@ nav.main-nav a.active {
   color: var(--white);
 }
 
-/* Subathon-Saison: die 3 Subathon-Buttons bekommen "Schnacky" spendiert.
-   Rechts ist der Button eckig (nicht rund) — dort sitzt Schnackys Gesicht
-   in voller Höhe, unbeschnitten. Der Text bleibt links davon, wird nie
-   überdeckt. Beim Hover/als aktive Seite kein Orange (das würde Schnacky
-   ja übermalen), stattdessen ein "Plop" (leicht größer) + violettes
-   Glühen drumrum. */
+/* Subathon-Saison: die 3 Subathon-Buttons SIND jetzt Schnacky — das ganze
+   Bild (mit transparentem Rand, echte Wurm-Silhouette) als Button-Form,
+   Text auf dem Körper, Gesicht unbeschnitten am rechten Ende. Beim Hover/
+   als aktive Seite kein Orange-Overlay (würde Schnacky übermalen),
+   stattdessen ein "Plop" (leicht größer) + violettes Glühen drumrum. */
 nav.main-nav a[href="subathon_goals.html"],
 nav.main-nav a[href="subathon_bombs.html"],
 nav.main-nav a[href="FAQ.html"] {
   position: relative;
-  padding-right: 52px;
-  border-radius: 999px 10px 10px 999px;
-  background: linear-gradient(135deg, #a06bff, #7c3ef0);
+  padding: 6px 58px 6px 20px;
+  border-radius: 0;
+  background-image: url('../assets/subathon-schnacky-trimmed.png');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
   text-shadow: 0 1px 3px rgba(0,0,0,0.5);
-  transition: transform 0.18s cubic-bezier(.34, 1.56, .64, 1), box-shadow 0.18s ease, background 0.18s ease;
-}
-nav.main-nav a[href="subathon_goals.html"]::after,
-nav.main-nav a[href="subathon_bombs.html"]::after,
-nav.main-nav a[href="FAQ.html"]::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  width: 46px;
-  border-radius: 0 10px 10px 0;
-  background-image: url('../assets/subathon-schnacky-face.png');
-  background-size: cover;
-  background-position: right center;
-  pointer-events: none;
+  transition: transform 0.18s cubic-bezier(.34, 1.56, .64, 1), filter 0.18s ease;
 }
 nav.main-nav a[href="subathon_goals.html"]:hover,
 nav.main-nav a[href="subathon_goals.html"].active,
@@ -230,9 +216,9 @@ nav.main-nav a[href="subathon_bombs.html"]:hover,
 nav.main-nav a[href="subathon_bombs.html"].active,
 nav.main-nav a[href="FAQ.html"]:hover,
 nav.main-nav a[href="FAQ.html"].active {
-  background: linear-gradient(135deg, #b184ff, #8c52f5);
   color: var(--white);
   transform: scale(1.08);
+  filter: brightness(1.08);
   box-shadow: 0 0 0 4px rgba(145, 71, 254, 0.35), 0 6px 16px rgba(124, 62, 240, 0.45);
 }
 
@@ -346,12 +332,7 @@ nav.main-nav a.nav-home img {
   nav.main-nav a[href="subathon_goals.html"],
   nav.main-nav a[href="subathon_bombs.html"],
   nav.main-nav a[href="FAQ.html"] {
-    padding-right: 28px;
-  }
-  nav.main-nav a[href="subathon_goals.html"]::after,
-  nav.main-nav a[href="subathon_bombs.html"]::after,
-  nav.main-nav a[href="FAQ.html"]::after {
-    width: 24px;
+    padding: 3px 34px 3px 12px;
   }
 }
 
