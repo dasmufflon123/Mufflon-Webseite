@@ -137,6 +137,39 @@
     padding: 0;
   }
 
+  /* --- Kleiner, dezenter Login-Button oben rechts (fix, immer sichtbar) --- */
+  .login-corner{
+    position: fixed;
+    top: 84px;
+    right: 18px;
+    z-index: 45;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(6px);
+    color: var(--cream);
+    font-family: 'Quicksand', sans-serif;
+    font-size: 0.8rem;
+    padding: 8px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(36, 27, 21, 0.25);
+    transition: transform 0.15s ease, background 0.15s ease;
+  }
+  .login-corner:hover{ transform: translateY(-2px); background: rgba(255, 221, 189, 0.22); }
+  .login-corner .dot{
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--prio-low);
+    flex-shrink: 0;
+  }
+  .login-corner.logged-out .dot{ background: var(--cream-dim); opacity: 0.6; }
+
+  @media (max-width: 640px){
+    .login-corner{ top: auto; bottom: 14px; right: 14px; font-size: 0.75rem; padding: 7px 12px; }
+  }
+
   h1{
     font-family:'Caveat', cursive;
     font-size: 2.6rem;
@@ -586,6 +619,11 @@
   </div>
 </header>
 
+<button class="login-corner logged-out" id="loginCornerBtn" type="button">
+  <span class="dot"></span>
+  <span id="loginCornerLabel">Anmelden</span>
+</button>
+
 <div class="social-dock">
   <a href="https://twitch.tv/das__mufflon" target="_blank" rel="noopener" aria-label="Twitch" class="social-btn" style="animation-delay:0s">
     <span class="social-float" style="animation-duration:3.2s; animation-delay:0.6s"><img src="assets/social/twitch.png" alt="Twitch"></span>
@@ -983,6 +1021,9 @@
   let currentPasswordHash = localStorage.getItem('mufflon_pwhash') || '';
 
   const userTag = document.getElementById('userTag');
+  const loginCornerBtn = document.getElementById('loginCornerBtn');
+  const loginCornerLabel = document.getElementById('loginCornerLabel');
+  if (loginCornerBtn) loginCornerBtn.addEventListener('click', () => openLogin());
   const loginBackdrop = document.getElementById('loginBackdrop');
   const loginName = document.getElementById('loginName');
   const loginPassword = document.getElementById('loginPassword');
@@ -1068,6 +1109,15 @@
     changeBtn.addEventListener('click', openLogin);
     userTag.appendChild(span);
     userTag.appendChild(changeBtn);
+
+    // Kleiner Button oben rechts spiegelt denselben Status
+    if (loginCornerBtn) {
+      loginCornerLabel.textContent = currentUser ? currentUser : 'Anmelden';
+      loginCornerBtn.classList.toggle('logged-out', !currentUser);
+      loginCornerBtn.title = currentUser
+        ? 'Angemeldet als ' + currentUser + ' — klicken zum Wechseln'
+        : 'Anmelden, um To-dos geräteübergreifend zu speichern';
+    }
   }
 
   function escapeHtml(str) {
@@ -1078,7 +1128,9 @@
 
   renderUserTag();
 
-  // Automatischer Login, falls bereits Daten lokal gespeichert sind
+  // Automatischer (stiller) Login-Versuch, falls bereits Daten lokal gespeichert sind.
+  // Für neue/nicht angemeldete Besucher öffnet sich NICHTS automatisch mehr —
+  // die Anmeldung erfolgt freiwillig über den Button oben rechts.
   if (currentUser && currentPasswordHash) {
     fetch(`${API_URL}/api/login`, {
       method: 'POST',
@@ -1093,13 +1145,11 @@
         allData.notes[currentUser] = result.data.notes || [];
         renderTodos();
         restoreStickyNoteForCurrentUser();
-      } else {
-        openLogin();
       }
+      // Bei Fehlschlag kein Auto-Popup mehr — renderUserTag() zeigt einfach
+      // "Nicht angemeldet", der Button oben rechts bleibt die Einladung.
     })
-    .catch(() => openLogin());
-  } else {
-    openLogin();
+    .catch(() => {});
   }
 
   // ---------- Gelbe Klebezettel ----------
