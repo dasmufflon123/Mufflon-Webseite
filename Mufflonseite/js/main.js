@@ -63,7 +63,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const pdfCloseBtn = pdfOverlay.querySelector('.pdf-lightbox-close');
 
   function openPdfLightbox(url, title) {
-    pdfFrame.src = url;
+    // #navpanes=0 klappt die Miniaturansichten-Seitenleiste im PDF-Viewer ein,
+    // #view=FitH sorgt dafür, dass die Seite auf die volle Breite skaliert wird.
+    pdfFrame.src = url + '#navpanes=0&toolbar=1&view=FitH';
     pdfNewTabLink.href = url;
     pdfTitleEl.textContent = title || '';
     pdfOverlay.classList.add('open');
