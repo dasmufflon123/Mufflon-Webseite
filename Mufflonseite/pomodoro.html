@@ -137,37 +137,41 @@
     padding: 0;
   }
 
-  /* --- Kleiner, dezenter Login-Button oben rechts (fix, immer sichtbar) --- */
+  /* --- Kleiner, dezenter Login-Button oben rechts an der "Meine Liste"-Karte --- */
   .login-corner{
-    position: fixed;
-    top: 84px;
-    right: 18px;
-    z-index: 45;
+    position: absolute;
+    top: -14px;
+    right: 66px;
+    z-index: 6;
     display: flex;
     align-items: center;
     gap: 6px;
-    background: var(--glass);
-    border: 1px solid var(--glass-border);
-    backdrop-filter: blur(6px);
-    color: var(--cream);
+    background: rgba(251, 245, 234, 0.98);
+    border: 1px solid rgba(107, 66, 38, 0.22);
+    color: #6B5645;
     font-family: 'Quicksand', sans-serif;
-    font-size: 0.8rem;
-    padding: 8px 14px;
+    font-weight: 600;
+    font-size: 0.78rem;
+    padding: 7px 14px;
     border-radius: 999px;
     cursor: pointer;
-    box-shadow: 0 6px 18px rgba(36, 27, 21, 0.25);
+    box-shadow: 0 4px 12px rgba(62, 44, 30, 0.18);
     transition: transform 0.15s ease, background 0.15s ease;
+    max-width: 150px;
   }
-  .login-corner:hover{ transform: translateY(-2px); background: rgba(255, 221, 189, 0.22); }
+  .login-corner span#loginCornerLabel{
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .login-corner:hover{ transform: translateY(-2px); background: #fff; }
   .login-corner .dot{
     width: 7px; height: 7px; border-radius: 50%;
-    background: var(--prio-low);
+    background: var(--sage-dark);
     flex-shrink: 0;
   }
-  .login-corner.logged-out .dot{ background: var(--cream-dim); opacity: 0.6; }
+  .login-corner.logged-out .dot{ background: #b8a488; }
 
   @media (max-width: 640px){
-    .login-corner{ top: auto; bottom: 14px; right: 14px; font-size: 0.75rem; padding: 7px 12px; }
+    .login-corner{ top: -12px; right: 58px; font-size: 0.72rem; padding: 6px 11px; max-width: 110px; }
   }
 
   h1{
@@ -619,11 +623,6 @@
   </div>
 </header>
 
-<button class="login-corner logged-out" id="loginCornerBtn" type="button">
-  <span class="dot"></span>
-  <span id="loginCornerLabel">Anmelden</span>
-</button>
-
 <div class="social-dock">
   <a href="https://twitch.tv/das__mufflon" target="_blank" rel="noopener" aria-label="Twitch" class="social-btn" style="animation-delay:0s">
     <span class="social-float" style="animation-duration:3.2s; animation-delay:0.6s"><img src="assets/social/twitch.png" alt="Twitch"></span>
@@ -770,6 +769,10 @@
 
   <div class="card todo-card">
     <button class="sticky-trigger" id="stickyTrigger" title="Klebezettel" aria-label="Klebezettel öffnen"></button>
+    <button class="login-corner logged-out" id="loginCornerBtn" type="button">
+      <span class="dot"></span>
+      <span id="loginCornerLabel">Anmelden</span>
+    </button>
     <h1 style="font-size:2.1rem;">Meine Liste</h1>
     <div class="subtitle">für diese Runde</div>
 
