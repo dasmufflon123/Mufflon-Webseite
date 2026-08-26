@@ -6,7 +6,7 @@
   <title>Opfanze — Das__Mufflon</title>
   <meta name="description" content="Opfanze — die Streamingzeitung von Das__Mufflon. Alle Extrablätter und Eventblätter zum Nachlesen.">
   <link rel="icon" type="image/png" href="assets/mufflon-mascot.png">
-  <link rel="stylesheet" href="css/style.css?v=5">
+  <link rel="stylesheet" href="css/style.css?v=6">
   <style>
     /* ============================================================
        OPFANZE — Kiosk-Seite
@@ -345,12 +345,16 @@
   </footer>
 
   <script src="js/Opfanze-data.js"></script>
-  <script src="js/main.js?v=5"></script>
+  <script src="js/main.js?v=6"></script>
   <script>
     function formatiereDatum(isoDatum) {
       const monate = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
       const [jahr, monat, tag] = isoDatum.split("-").map(Number);
       return `${tag}. ${monate[monat - 1]} ${jahr}`;
+    }
+
+    function escAttr(str) {
+      return String(str).replace(/&/g, '&amp;').replace(/"/g, '&quot;');
     }
 
     const alle = (typeof OPFANZE_AUSGABEN !== 'undefined' ? OPFANZE_AUSGABEN : [])
@@ -365,7 +369,7 @@
       const neueste = alle.find(a => !a.unsicher) || alle[0];
 
       highlightWrap.innerHTML = `
-        <a href="${encodeURI(neueste.pfad)}" target="_blank" rel="noopener" class="opfanze-highlight wrap">
+        <a href="${encodeURI(neueste.pfad)}" class="opfanze-highlight wrap js-pdf-link" data-pdf-title="${escAttr(neueste.titel)}">
           <img src="assets/Opfanze_assets/opfanze zeitung blatt.png" alt="Opfanze">
           <div class="highlight-body">
             <div class="badges">
@@ -449,7 +453,7 @@
         }
 
         resultGrid.innerHTML = gekuerzt.map(a => `
-          <a href="${encodeURI(a.pfad)}" target="_blank" rel="noopener" class="opfanze-card">
+          <a href="${encodeURI(a.pfad)}" class="opfanze-card js-pdf-link" data-pdf-title="${escAttr(a.titel)}">
             <span class="tag ${a.typ === 'Eventblatt' ? 'twilight' : 'terracotta'}" style="align-self:flex-start;">${a.typ}</span>
             <h3>${a.titel}</h3>
             <div class="datum">${formatiereDatum(a.datum)}</div>
