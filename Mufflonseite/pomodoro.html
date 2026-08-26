@@ -980,42 +980,47 @@
 
   // ---- LOCK gegen gleichzeitige Speichervorgänge ----
   let isSaving = false;
-  let saveQueue = [];
+  let saveAgainNeeded = false;
+  let pendingResolvers = [];
 
   async function saveTodos() {
     if (!currentUser || !currentPasswordHash) return;
 
-    // Wenn gerade gespeichert wird, in die Warteschlange
+    // Falls gerade schon gespeichert wird: nicht ignorieren, sondern vormerken,
+    // dass NACH dem aktuellen Speichervorgang nochmal mit dem neuesten Stand
+    // gespeichert werden muss. So geht nie eine Änderung "leise" verloren.
     if (isSaving) {
+      saveAgainNeeded = true;
       return new Promise((resolve) => {
-        saveQueue.push(resolve);
+        pendingResolvers.push(resolve);
       });
     }
 
     isSaving = true;
-    const notes = getNotesArray();
 
-    try {
-      await fetch(`${API_URL}/api/save`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          username: currentUser,
-          passwordHash: currentPasswordHash,
-          todos: entries,
-          notes: notes
-        })
-      });
-    } catch (e) {
-      console.warn('Fehler beim Synchronisieren mit Cloudflare:', e);
-    } finally {
-      isSaving = false;
-      // Warteschlange abarbeiten
-      while (saveQueue.length > 0) {
-        const resolve = saveQueue.shift();
-        resolve();
+    do {
+      saveAgainNeeded = false;
+      const notes = getNotesArray();
+      try {
+        await fetch(`${API_URL}/api/save`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: currentUser,
+            passwordHash: currentPasswordHash,
+            todos: entries,
+            notes: notes
+          })
+        });
+      } catch (e) {
+        console.warn('Fehler beim Synchronisieren mit Cloudflare:', e);
       }
-    }
+    } while (saveAgainNeeded);
+
+    isSaving = false;
+    const resolvers = pendingResolvers;
+    pendingResolvers = [];
+    resolvers.forEach(resolve => resolve());
   }
 
   function nextId() {
@@ -1059,6 +1064,16 @@
     const pw = loginPassword.value;
     if (!name) { loginError.textContent = 'Bitte einen Namen eingeben.'; return; }
     if (!pw) { loginError.textContent = 'Bitte ein Passwort eingeben.'; return; }
+
+    // Falls gerade jemand angemeldet war: erst sicherstellen, dass wirklich
+    // ALLE lokalen Änderungen gespeichert sind, bevor wir (den gleichen oder
+    // einen anderen) Account neu vom Server laden. Sonst kann ein noch
+    // laufender Speichervorgang vom frischen Login überholt werden und
+    // gerade erst hinzugefügte Aufgaben gehen verloren.
+    if (currentUser && currentPasswordHash) {
+      loginError.textContent = 'Speichere …';
+      await saveTodos();
+    }
 
     const pwHash = await hashPassword(pw);
 
