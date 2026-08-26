@@ -205,6 +205,78 @@ nav.main-nav a.nav-home img {
   filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
 }
 
+/* ---------- "Mähr" Dropdown ---------- */
+.nav-dropdown {
+  position: relative;
+}
+.nav-dropdown-trigger {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: 'Baloo 2', sans-serif;
+  font-weight: 600;
+  color: var(--cream);
+  padding: 3px 6px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.nav-dropdown-trigger .caret {
+  font-size: 0.65em;
+  transition: transform 0.15s ease;
+}
+.nav-dropdown-trigger:hover,
+.nav-dropdown.active .nav-dropdown-trigger {
+  background: var(--terracotta);
+  color: var(--white);
+}
+.nav-dropdown.open .nav-dropdown-trigger .caret {
+  transform: rotate(180deg);
+}
+
+.nav-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  background: linear-gradient(180deg, #7d5636, #4f3119);
+  border: 1px solid rgba(0,0,0,0.28);
+  border-radius: 14px;
+  padding: 6px;
+  min-width: 170px;
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.38);
+  z-index: 80;
+}
+.nav-dropdown.open .nav-dropdown-menu {
+  display: flex;
+}
+.nav-dropdown-menu a {
+  padding: 9px 12px;
+  border-radius: 9px;
+  font-size: 0.82rem;
+  white-space: nowrap;
+}
+.nav-dropdown-menu a:hover,
+.nav-dropdown-menu a.active {
+  background: var(--terracotta);
+  color: var(--white);
+}
+
+@media (max-width: 720px) {
+  .nav-dropdown-menu {
+    position: static;
+    width: 100%;
+    box-shadow: none;
+    margin-top: 6px;
+    background: rgba(0,0,0,0.18);
+  }
+}
+
 .nav-toggle {
   display: none;
   background: none;
