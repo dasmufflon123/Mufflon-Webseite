@@ -219,6 +219,8 @@ nav.main-nav a[href="subathon_bombs.html"]:hover,
 nav.main-nav a[href="subathon_bombs.html"].active,
 nav.main-nav a[href="FAQ.html"]:hover,
 nav.main-nav a[href="FAQ.html"].active {
+  background-color: transparent !important;
+  background-image: url('../assets/subathon-schnacky-trimmed.png') !important;
   color: var(--white);
   transform: scale(1.08);
   filter: brightness(1.08);
