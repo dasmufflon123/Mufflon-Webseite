@@ -56,6 +56,60 @@ const OPFANZE_AUSGABEN = [
   },
   {
     "typ": "Extrablatt",
+    "nummer": "093",
+    "jahr": 2026,
+    "titel": "Mufflon macht’s weiß",
+    "datum": "2026-08-08",
+    "pfad": "assets/Opfanze_assets/Extrablatt_2026/Extrablatt, 0932026, Mufflon macht’s weiß, 20260808.pdf",
+    "unsicher": false
+  },
+  {
+    "typ": "Extrablatt",
+    "nummer": "092",
+    "jahr": 2026,
+    "titel": "Wieder zu viel versprochen",
+    "datum": "2026-08-07",
+    "pfad": "assets/Opfanze_assets/Extrablatt_2026/Extrablatt, 0922026, Wieder zu viel versprochen, 20260807.pdf",
+    "unsicher": false
+  },
+  {
+    "typ": "Extrablatt",
+    "nummer": "091",
+    "jahr": 2026,
+    "titel": "Aus dem Urlaub in die Schlacht",
+    "datum": "2026-08-06",
+    "pfad": "assets/Opfanze_assets/Extrablatt_2026/Extrablatt, 0912026, Aus dem Urlaub in die Schlacht, 20260806.pdf",
+    "unsicher": false
+  },
+  {
+    "typ": "Extrablatt",
+    "nummer": "090",
+    "jahr": 2026,
+    "titel": "Ich will wieder an die Nordsee",
+    "datum": "2026-08-03",
+    "pfad": "assets/Opfanze_assets/Extrablatt_2026/Extrablatt, 0902026, Ich will wieder an die Nordsee, 20260803.pdf",
+    "unsicher": false
+  },
+  {
+    "typ": "Extrablatt",
+    "nummer": "089",
+    "jahr": 2026,
+    "titel": "Mufflon lässt garantiert niemanden verhungern",
+    "datum": "2026-07-24",
+    "pfad": "assets/Opfanze_assets/Extrablatt_2026/Extrablatt, 0892026, Mufflon lässt garantiert niemanden verhungern, 20260724.pdf",
+    "unsicher": false
+  },
+  {
+    "typ": "Extrablatt",
+    "nummer": "088",
+    "jahr": 2026,
+    "titel": "Chaotische Zustände im Zoo",
+    "datum": "2026-07-23",
+    "pfad": "assets/Opfanze_assets/Extrablatt_2026/Extrablatt, 0882026, Chaotische Zustände im Zoo, 20260723.pdf",
+    "unsicher": false
+  },
+  {
+    "typ": "Extrablatt",
     "nummer": "087",
     "jahr": 2026,
     "titel": "Mufflon auf der Flucht",
