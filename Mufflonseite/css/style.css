@@ -171,7 +171,7 @@ nav.main-nav {
   align-items: center;
   gap: 6px 10px;
   flex-wrap: wrap; /* Erlaubt das Umbrechen in die nächste Zeile */
-  overflow: hidden; /* Verhindert jegliche Scrollbalken im Menü */
+  overflow: visible;
   flex: 1;
   padding: 4px 0;
 }
