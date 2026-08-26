@@ -6,7 +6,7 @@
   <title>Opfanze Archiv — Das__Mufflon</title>
   <meta name="description" content="Das komplette Opfanze-Archiv — alle Extrablätter und Eventblätter von Das__Mufflon.">
   <link rel="icon" type="image/png" href="assets/mufflon-mascot.png">
-  <link rel="stylesheet" href="css/style.css?v=5">
+  <link rel="stylesheet" href="css/style.css?v=6">
   <style>
     .archiv-controls {
       max-width: 720px;
@@ -193,12 +193,16 @@
   </footer>
 
   <script src="js/Opfanze-data.js"></script>
-  <script src="js/main.js?v=5"></script>
+  <script src="js/main.js?v=6"></script>
   <script>
     function formatiereDatum(isoDatum) {
       const monate = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
       const [jahr, monat, tag] = isoDatum.split("-").map(Number);
       return `${tag}. ${monate[monat - 1]} ${jahr}`;
+    }
+
+    function escAttr(str) {
+      return String(str).replace(/&/g, '&amp;').replace(/"/g, '&quot;');
     }
 
     const alle = (typeof OPFANZE_AUSGABEN !== 'undefined' ? OPFANZE_AUSGABEN : [])
@@ -231,7 +235,7 @@
       }
 
       listEl.innerHTML = gefiltert.map(a => `
-        <a href="${encodeURI(a.pfad)}" target="_blank" rel="noopener" class="archiv-row">
+        <a href="${encodeURI(a.pfad)}" class="archiv-row js-pdf-link" data-pdf-title="${escAttr(a.titel)}">
           <span class="tag ${a.typ === 'Eventblatt' ? 'twilight' : 'terracotta'}">${a.typ}</span>
           <span class="archiv-titel">${a.titel}</span>
           <span class="archiv-datum">${formatiereDatum(a.datum)}</span>
