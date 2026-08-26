@@ -83,12 +83,6 @@
       grid-template-columns: repeat(3, 1fr);
       gap: 16px;
     }
-    .kachel-row.insta-row {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: flex-start;
-    }
 
     .kachel-item {
       aspect-ratio: 9 / 16;
@@ -114,27 +108,21 @@
       border: 3px solid #FF0000;
     }
 
+    /* Instagram bekommt exakt dieselbe Kachel-Größe/-Form wie YouTube (9:16).
+       object-fit:cover verhindert Verzerrung: der Inhalt wird gleichmäßig
+       skaliert und mittig zugeschnitten statt gestaucht/gestreckt zu werden —
+       genau wie bei einem Vorschaubild. */
     .kachel-item.insta {
-      aspect-ratio: unset;
-      height: auto;
-      width: auto;
-      max-width: 100%;
-      background: linear-gradient(45deg, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5);
-      padding: 4px;
-      overflow: visible;
-      box-shadow: var(--shadow-soft);
+      border: 4px solid transparent;
+      background:
+        linear-gradient(#1c1210, #1c1210) padding-box,
+        linear-gradient(45deg, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5) border-box;
     }
-    /* Instagrams offizielles Einbettungs-Skript (embed.js) ersetzt diese
-       blockquote automatisch durch einen korrekt dimensionierten iframe.
-       WICHTIG: Breite wird NICHT erzwungen — Instagram berechnet die Höhe
-       anhand der Breite, die es beim Laden vorfindet. Wird die Breite später
-       per CSS überschrieben, passt die (bereits berechnete) Höhe nicht mehr
-       zum Inhalt und es wird abgeschnitten. Instagram bekommt hier also
-       bewusst freie Hand über seine eigene, natürliche Größe. */
-    .kachel-item.insta .instagram-media {
-      margin: 0 !important;
-      border-radius: calc(var(--radius-md) - 4px);
-      overflow: hidden;
+    .kachel-item.insta iframe {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
     }
 
     .content-social-row {
@@ -299,15 +287,27 @@
         <span>Instagram</span>
         <span class="line"></span>
       </div>
-      <div class="kachel-row insta-row">
+      <div class="kachel-row">
         <div class="kachel-item insta">
-          <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/Dbgsby7kX40/" data-instgrm-version="14"></blockquote>
+          <iframe
+            src="https://www.instagram.com/p/Dbgsby7kX40/embed/?cr=1&v=14&wp=540&rd=https%3A%2F%2Fdasmufflon.de"
+            frameborder="0"
+            allowfullscreen>
+          </iframe>
         </div>
         <div class="kachel-item insta">
-          <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DZNbFbYq7yI/" data-instgrm-version="14"></blockquote>
+          <iframe
+            src="https://www.instagram.com/p/DZNbFbYq7yI/embed/?cr=1&v=14&wp=540&rd=https%3A%2F%2Fdasmufflon.de"
+            frameborder="0"
+            allowfullscreen>
+          </iframe>
         </div>
         <div class="kachel-item insta">
-          <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DaX1dtjq3pb/" data-instgrm-version="14"></blockquote>
+          <iframe
+            src="https://www.instagram.com/p/DaX1dtjq3pb/embed/?cr=1&v=14&wp=540&rd=https%3A%2F%2Fdasmufflon.de"
+            frameborder="0"
+            allowfullscreen>
+          </iframe>
         </div>
       </div>
     </div>
@@ -320,7 +320,6 @@
   </footer>
 
   <script src="js/main.js?v=7"></script>
-  <script async src="https://www.instagram.com/embed.js"></script>
 
 </body>
 </html>
