@@ -37,4 +37,5 @@ const MAHMORIES_MITGLIEDER = [
   { name: "Zocki",      seite_links: "assets/mähmories/links_zocki.png",      seite_rechts: "assets/mähmories/rechts_zocki.png" },
   { name: "TribalChief",       seite_links: "assets/mähmories/links_tribal.png",       seite_rechts: "assets/mähmories/rechts_tribal.png" },
   { name: "DievonDamals",      seite_links: "assets/mähmories/links_dievondamals.png",      seite_rechts: "assets/mähmories/rechts_dievondamals.png" },
+  { name: "Nono",      seite_links: "assets/mähmories/links_nono.png",      seite_rechts: "assets/mähmories/rechts_nono.png" },
 ];
