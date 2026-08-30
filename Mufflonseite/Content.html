@@ -4,17 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Content — Das__Mufflon</title>
-  <meta name="description" content="Alle Neuigkeiten aus Stream und Commähnity an einem Ort — Livestream, Shorts und Instagram.">
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Content — Das__Mufflon">
-  <meta property="og:description" content="Alle Neuigkeiten aus Stream und Commähnity an einem Ort — Livestream, Shorts und Instagram.">
-  <meta property="og:image" content="https://www.dasmufflon.de/assets/og-preview.png">
-  <meta property="og:url" content="https://www.dasmufflon.de/Content.html">
-  <meta property="og:site_name" content="Das__Mufflon">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Content — Das__Mufflon">
-  <meta name="twitter:description" content="Alle Neuigkeiten aus Stream und Commähnity an einem Ort — Livestream, Shorts und Instagram.">
-  <meta name="twitter:image" content="https://www.dasmufflon.de/assets/og-preview.png">
   <link rel="icon" type="image/png" href="assets/mufflon-mascot.png">
   <link rel="stylesheet" href="css/style.css?v=5">
   <style>
@@ -40,6 +29,105 @@
       max-width: 1080px;
       margin: 0 auto;
       padding: 0 24px 20px;
+    }
+
+    /* ---------- Stream-Countdown ---------- */
+    .stream-timer {
+      max-width: 620px;
+      margin: 0 auto 24px;
+      background: var(--cream-soft);
+      border: 2px solid rgba(107, 66, 38, 0.10);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      padding: 22px 26px;
+      text-align: center;
+    }
+    .stream-timer-top {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      margin-bottom: 14px;
+    }
+    .stream-timer-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: #b8a488;
+      flex-shrink: 0;
+      transition: background 0.2s ease;
+    }
+    .stream-timer.is-live .stream-timer-dot {
+      background: #e5484d;
+      animation: timerPulse 1.4s ease-in-out infinite;
+    }
+    @keyframes timerPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(229,72,77,0.55); }
+      50% { box-shadow: 0 0 0 7px rgba(229,72,77,0); }
+    }
+    .stream-timer-label {
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--horn-brown);
+    }
+    .stream-timer-count {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .timer-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 52px;
+    }
+    .timer-num {
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 800;
+      font-size: 2.3rem;
+      color: var(--terracotta-dark);
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+    .timer-unit {
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.72rem;
+      color: var(--text-soft);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 2px;
+    }
+    .timer-sep {
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 800;
+      font-size: 2rem;
+      color: rgba(107, 66, 38, 0.25);
+      transform: translateY(-6px);
+    }
+    .stream-timer-schedule {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-family: 'Patrick Hand', cursive;
+      font-size: 1.05rem;
+      color: var(--text-soft);
+      flex-wrap: wrap;
+    }
+    .stream-timer-schedule strong {
+      color: var(--horn-brown);
+    }
+    .schedule-dot { color: var(--terracotta); }
+
+    @media (max-width: 480px) {
+      .stream-timer { padding: 18px 16px; }
+      .timer-num { font-size: 1.8rem; }
+      .timer-block { min-width: 42px; }
+      .timer-sep { font-size: 1.5rem; }
     }
 
     .stream-wrap {
@@ -257,6 +345,27 @@
 
   <div class="content-container">
 
+    <div class="stream-timer" id="streamTimer">
+      <div class="stream-timer-top">
+        <span class="stream-timer-dot" id="timerDot"></span>
+        <span class="stream-timer-label" id="timerLabel">Nächster Stream in</span>
+      </div>
+      <div class="stream-timer-count" id="timerCount">
+        <div class="timer-block"><span class="timer-num" id="tDays">0</span><span class="timer-unit">Tage</span></div>
+        <div class="timer-sep">:</div>
+        <div class="timer-block"><span class="timer-num" id="tHours">00</span><span class="timer-unit">Std</span></div>
+        <div class="timer-sep">:</div>
+        <div class="timer-block"><span class="timer-num" id="tMinutes">00</span><span class="timer-unit">Min</span></div>
+        <div class="timer-sep">:</div>
+        <div class="timer-block"><span class="timer-num" id="tSeconds">00</span><span class="timer-unit">Sek</span></div>
+      </div>
+      <div class="stream-timer-schedule">
+        <span>Mi&ndash;Fr <strong>19:00</strong> Uhr</span>
+        <span class="schedule-dot">•</span>
+        <span>So <strong>16:00</strong> Uhr</span>
+      </div>
+    </div>
+
     <div class="stream-wrap">
       <div class="embed-wrap">
         <iframe
@@ -331,6 +440,88 @@
   </footer>
 
   <script src="js/main.js?v=7"></script>
+  <script>
+    // Stream-Countdown — Zeiten gelten in deutscher Zeit (Europe/Berlin),
+    // unabhängig davon, in welcher Zeitzone der Besucher gerade ist.
+    (function () {
+      const SCHEDULE = { 3: 19, 4: 19, 5: 19, 0: 16 }; // Mi=3, Do=4, Fr=5, So=0 -> Startstunde
+      const STREAM_DAUER_STUNDEN = 4; // grobe Annahme, um "live jetzt" zu erkennen
+
+      function jetztInBerlin() {
+        return new Date(new Date().toLocaleString('en-US', { timeZone: 'Europe/Berlin' }));
+      }
+
+      function naechsterStream(jetzt) {
+        for (let add = 0; add < 8; add++) {
+          const tag = new Date(jetzt);
+          tag.setDate(tag.getDate() + add);
+          const wochentag = tag.getDay();
+          if (SCHEDULE.hasOwnProperty(wochentag)) {
+            const start = new Date(tag);
+            start.setHours(SCHEDULE[wochentag], 0, 0, 0);
+            if (start.getTime() > jetzt.getTime()) {
+              return start;
+            }
+          }
+        }
+        return null;
+      }
+
+      function laeuftGeradeLive(jetzt) {
+        const wochentag = jetzt.getDay();
+        if (!SCHEDULE.hasOwnProperty(wochentag)) return false;
+        const start = new Date(jetzt);
+        start.setHours(SCHEDULE[wochentag], 0, 0, 0);
+        const ende = new Date(start.getTime() + STREAM_DAUER_STUNDEN * 60 * 60 * 1000);
+        return jetzt >= start && jetzt <= ende;
+      }
+
+      const el = document.getElementById('streamTimer');
+      const dotLabel = document.getElementById('timerLabel');
+      const tDays = document.getElementById('tDays');
+      const tHours = document.getElementById('tHours');
+      const tMinutes = document.getElementById('tMinutes');
+      const tSeconds = document.getElementById('tSeconds');
+      const countWrap = document.getElementById('timerCount');
+
+      function pad(n) { return String(n).padStart(2, '0'); }
+
+      function tick() {
+        const jetzt = jetztInBerlin();
+
+        if (laeuftGeradeLive(jetzt)) {
+          el.classList.add('is-live');
+          dotLabel.textContent = 'Vermutlich gerade LIVE — schau vorbei! 🔴';
+          countWrap.style.display = 'none';
+          return;
+        }
+
+        el.classList.remove('is-live');
+        countWrap.style.display = '';
+        dotLabel.textContent = 'Nächster Stream in';
+
+        const ziel = naechsterStream(jetzt);
+        if (!ziel) return;
+
+        let diff = Math.max(0, ziel.getTime() - jetzt.getTime());
+        const tage = Math.floor(diff / (1000 * 60 * 60 * 24));
+        diff -= tage * 24 * 60 * 60 * 1000;
+        const stunden = Math.floor(diff / (1000 * 60 * 60));
+        diff -= stunden * 60 * 60 * 1000;
+        const minuten = Math.floor(diff / (1000 * 60));
+        diff -= minuten * 60 * 1000;
+        const sekunden = Math.floor(diff / 1000);
+
+        tDays.textContent = tage;
+        tHours.textContent = pad(stunden);
+        tMinutes.textContent = pad(minuten);
+        tSeconds.textContent = pad(sekunden);
+      }
+
+      tick();
+      setInterval(tick, 1000);
+    })();
+  </script>
 
 </body>
 </html>
