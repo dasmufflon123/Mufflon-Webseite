@@ -34,24 +34,24 @@
     /* ---------- Stream-Countdown ---------- */
     .stream-timer {
       max-width: 620px;
-      margin: 0 auto 24px;
+      margin: 0 auto 20px;
       background: var(--cream-soft);
       border: 2px solid rgba(107, 66, 38, 0.10);
       border-radius: var(--radius-lg);
       box-shadow: var(--shadow-soft);
-      padding: 22px 26px;
+      padding: 12px 20px;
       text-align: center;
     }
     .stream-timer-top {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 9px;
-      margin-bottom: 14px;
+      gap: 8px;
+      margin-bottom: 4px;
     }
     .stream-timer-dot {
-      width: 11px;
-      height: 11px;
+      width: 9px;
+      height: 9px;
       border-radius: 50%;
       background: #b8a488;
       flex-shrink: 0;
@@ -68,53 +68,53 @@
     .stream-timer-label {
       font-family: 'Baloo 2', sans-serif;
       font-weight: 700;
-      font-size: 1.05rem;
+      font-size: 0.88rem;
       color: var(--horn-brown);
     }
     .stream-timer-count {
       display: flex;
       align-items: baseline;
       justify-content: center;
-      gap: 8px;
-      margin-bottom: 16px;
+      gap: 5px;
+      margin-bottom: 4px;
       flex-wrap: wrap;
     }
     .timer-block {
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-width: 52px;
+      min-width: 38px;
     }
     .timer-num {
       font-family: 'Baloo 2', sans-serif;
       font-weight: 800;
-      font-size: 2.3rem;
+      font-size: 1.6rem;
       color: var(--terracotta-dark);
       line-height: 1;
       font-variant-numeric: tabular-nums;
     }
     .timer-unit {
       font-family: 'Nunito', sans-serif;
-      font-size: 0.72rem;
+      font-size: 0.62rem;
       color: var(--text-soft);
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      margin-top: 2px;
+      margin-top: 0;
     }
     .timer-sep {
       font-family: 'Baloo 2', sans-serif;
       font-weight: 800;
-      font-size: 2rem;
+      font-size: 1.3rem;
       color: rgba(107, 66, 38, 0.25);
-      transform: translateY(-6px);
+      transform: translateY(-4px);
     }
     .stream-timer-schedule {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
+      gap: 8px;
       font-family: 'Patrick Hand', cursive;
-      font-size: 1.05rem;
+      font-size: 0.9rem;
       color: var(--text-soft);
       flex-wrap: wrap;
     }
@@ -124,10 +124,10 @@
     .schedule-dot { color: var(--terracotta); }
 
     @media (max-width: 480px) {
-      .stream-timer { padding: 18px 16px; }
-      .timer-num { font-size: 1.8rem; }
-      .timer-block { min-width: 42px; }
-      .timer-sep { font-size: 1.5rem; }
+      .stream-timer { padding: 10px 14px; }
+      .timer-num { font-size: 1.35rem; }
+      .timer-block { min-width: 32px; }
+      .timer-sep { font-size: 1.1rem; }
     }
 
     .stream-wrap {
