@@ -32,6 +32,14 @@
       font-size: 1rem;
       color: var(--text-soft);
       white-space: nowrap;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    }
+    .mini-timer:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-soft);
+      background: var(--white);
     }
     .mini-timer-dot {
       width: 8px;
@@ -177,11 +185,11 @@
         Opfanze lesen
       </a>
       <a href="Content.html" class="btn btn-ghost">Was macht das Mufflon?</a>
-      <div class="mini-timer" id="miniTimer">
+      <a href="Content.html" class="mini-timer" id="miniTimer">
         <span class="mini-timer-dot" id="miniTimerDot"></span>
         <span id="miniTimerLabel">Nächster Stream:</span>
         <span class="mini-timer-count" id="miniTimerCount">–</span>
-      </div>
+      </a>
     </div>
   </div>
   <div class="hero-image" style="flex:0 0 240px;">
