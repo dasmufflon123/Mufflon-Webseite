@@ -18,6 +18,45 @@
   <link rel="icon" type="image/png" href="assets/mufflon-mascot.png">
   <link rel="stylesheet" href="css/style.css?v=6">
   <style>
+    /* Schlanker Inline-Stream-Countdown neben den Hero-Buttons */
+    .mini-timer {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--cream-soft);
+      border: 1px solid rgba(107, 66, 38, 0.14);
+      border-radius: 999px;
+      padding: 9px 16px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.85rem;
+      color: var(--text-soft);
+      white-space: nowrap;
+    }
+    .mini-timer-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #b8a488;
+      flex-shrink: 0;
+    }
+    .mini-timer.is-live .mini-timer-dot {
+      background: #e5484d;
+      animation: miniTimerPulse 1.4s ease-in-out infinite;
+    }
+    @keyframes miniTimerPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(229,72,77,0.55); }
+      50% { box-shadow: 0 0 0 6px rgba(229,72,77,0); }
+    }
+    .mini-timer-count {
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 700;
+      color: var(--terracotta-dark);
+      font-variant-numeric: tabular-nums;
+    }
+    @media (max-width: 480px) {
+      .mini-timer { font-size: 0.78rem; padding: 8px 14px; }
+    }
+
     /* Hero-Bilder: Mufflon + Angey im harmonischen Layout */
     .hero-image {
       display: flex;
@@ -131,12 +170,17 @@
     <p>Mit dabei ist meistens auch mein Mann Bober. Er ist nicht nur mein größter Unterstützer, sondern darf sich auch regelmäßig anhören, was ich als Nächstes für eine Idee habe. Ohne ihn wären einige Projekte deutlich komplizierter und andere vermutlich nie entstanden. Dafür muss er dann eben auch gelegentlich mit mir vor der Kamera sitzen. Pech gehabt ❤️</p>
     <p>Was ich mir mit dem Mufflon aufgebaut habe, soll vor allem eines sein: ein Ort, an dem man einfach gerne vorbeikommt, ganz ohne Erwartungen. Egal ob du seit Jahren dabei bist, zum Großteil lurkst anstatt chattest, gerade zum ersten Mal reinschaust oder eigentlich nur wissen wolltest, warum hier überall Mufflons herumstehen und es ungewöhnlich riecht.</p>
     <p>Schön, dass du hier bist ❤️<br>Willkommen bei den Mufflons!</p>
-    <div style="display:flex; gap:14px; flex-wrap:wrap; margin-top:22px;">
+    <div style="display:flex; gap:14px; flex-wrap:wrap; align-items:center; margin-top:22px;">
       <a href="Opfanze.html" class="btn btn-primary">
         <img src="assets/Opfanze_assets/opfanze zeitung blatt.png" alt="Opfanze" style="height:26px; vertical-align:middle; margin-right:8px;">
         Opfanze lesen
       </a>
       <a href="Content.html" class="btn btn-ghost">Was macht das Mufflon?</a>
+      <div class="mini-timer" id="miniTimer">
+        <span class="mini-timer-dot" id="miniTimerDot"></span>
+        <span id="miniTimerLabel">Nächster Stream:</span>
+        <span class="mini-timer-count" id="miniTimerCount">–</span>
+      </div>
     </div>
   </div>
   <div class="hero-image" style="flex:0 0 240px;">
@@ -186,5 +230,76 @@
   </footer>
 
   <script src="js/main.js?v=6"></script>
+  <script>
+    // Schlanker Stream-Countdown — gleiche Zeitplan-Logik wie auf Content.html,
+    // Zeiten gelten in deutscher Zeit (Europe/Berlin).
+    (function () {
+      const SCHEDULE = { 3: 19, 4: 19, 5: 19, 0: 16 }; // Mi=3, Do=4, Fr=5, So=0
+      const STREAM_DAUER_STUNDEN = 4;
+
+      function jetztInBerlin() {
+        return new Date(new Date().toLocaleString('en-US', { timeZone: 'Europe/Berlin' }));
+      }
+
+      function naechsterStream(jetzt) {
+        for (let add = 0; add < 8; add++) {
+          const tag = new Date(jetzt);
+          tag.setDate(tag.getDate() + add);
+          const wochentag = tag.getDay();
+          if (SCHEDULE.hasOwnProperty(wochentag)) {
+            const start = new Date(tag);
+            start.setHours(SCHEDULE[wochentag], 0, 0, 0);
+            if (start.getTime() > jetzt.getTime()) return start;
+          }
+        }
+        return null;
+      }
+
+      function laeuftGeradeLive(jetzt) {
+        const wochentag = jetzt.getDay();
+        if (!SCHEDULE.hasOwnProperty(wochentag)) return false;
+        const start = new Date(jetzt);
+        start.setHours(SCHEDULE[wochentag], 0, 0, 0);
+        const ende = new Date(start.getTime() + STREAM_DAUER_STUNDEN * 60 * 60 * 1000);
+        return jetzt >= start && jetzt <= ende;
+      }
+
+      const el = document.getElementById('miniTimer');
+      const label = document.getElementById('miniTimerLabel');
+      const count = document.getElementById('miniTimerCount');
+      function pad(n) { return String(n).padStart(2, '0'); }
+
+      function tick() {
+        const jetzt = jetztInBerlin();
+
+        if (laeuftGeradeLive(jetzt)) {
+          el.classList.add('is-live');
+          label.textContent = '';
+          count.textContent = 'Vermutlich gerade LIVE 🔴';
+          return;
+        }
+        el.classList.remove('is-live');
+        label.textContent = 'Nächster Stream:';
+
+        const ziel = naechsterStream(jetzt);
+        if (!ziel) return;
+
+        let diff = Math.max(0, ziel.getTime() - jetzt.getTime());
+        const tage = Math.floor(diff / (1000 * 60 * 60 * 24));
+        diff -= tage * 24 * 60 * 60 * 1000;
+        const stunden = Math.floor(diff / (1000 * 60 * 60));
+        diff -= stunden * 60 * 60 * 1000;
+        const minuten = Math.floor(diff / (1000 * 60));
+        diff -= minuten * 60 * 1000;
+        const sekunden = Math.floor(diff / 1000);
+
+        const tagText = tage > 0 ? tage + 'T ' : '';
+        count.textContent = `${tagText}${pad(stunden)}:${pad(minuten)}:${pad(sekunden)}`;
+      }
+
+      tick();
+      setInterval(tick, 1000);
+    })();
+  </script>
 </body>
 </html>
