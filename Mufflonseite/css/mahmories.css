@@ -99,7 +99,7 @@
   display: flex;
   align-items: center;
   gap: 22px;
-  margin-top: 26px;
+  margin-bottom: 26px;
 }
 
 .book-nav-btn {
@@ -172,6 +172,6 @@
     object-fit: contain;
   }
   .book { width: 96vw; }
-  .book-controls { gap: 16px; margin-top: 20px; }
+  .book-controls { gap: 16px; margin-bottom: 20px; }
   .book-nav-btn { width: 42px; height: 42px; }
 }
