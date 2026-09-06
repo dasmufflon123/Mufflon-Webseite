@@ -987,6 +987,22 @@
   const DEFAULT_USER = 'Allgemein';
   let allData = { nextId: 1, notes: {} };
   let entries = [];
+
+  // ---- Lösch-Bremse ----
+  // Verhindert, dass beim schnellen Hintereinander-Klicken auf mehrere
+  // Löschen-Buttons (X) versehentlich die falsche Aufgabe erwischt wird,
+  // weil sich die Liste nach jedem Löschen sofort verschiebt. Nach einem
+  // Löschvorgang sind weitere Klicks kurz gesperrt, bis die Liste sich
+  // sichtbar neu aufgebaut hat.
+  let deleteLocked = false;
+  function guardedDelete(fn) {
+    return (e) => {
+      if (deleteLocked) return;
+      deleteLocked = true;
+      fn(e);
+      setTimeout(() => { deleteLocked = false; }, 350);
+    };
+  }
   let addMode = 'todo';
 
   // ---- LOCK gegen gleichzeitige Speichervorgänge ----
@@ -1458,11 +1474,11 @@
 
   function sortTodoItems(list) {
     list.sort((a, b) => {
-      const oa = a.order ?? a.id, ob = b.order ?? b.id;
-      if (ob !== oa) return ob - oa;
       const ra = PRIO_RANK[a.priority] ?? 2;
       const rb = PRIO_RANK[b.priority] ?? 2;
       if (ra !== rb) return ra - rb;
+      const oa = a.order ?? a.id, ob = b.order ?? b.id;
+      if (ob !== oa) return ob - oa;
       return naturalCompare(a.text, b.text);
     });
   }
@@ -1474,11 +1490,11 @@
 
   function sortEntries() {
     entries.sort((a, b) => {
-      const oa = a.order ?? a.id, ob = b.order ?? b.id;
-      if (ob !== oa) return ob - oa;
       const ra = a.type === 'todo' ? (PRIO_RANK[a.priority] ?? 2) : groupEffectiveRank(a);
       const rb = b.type === 'todo' ? (PRIO_RANK[b.priority] ?? 2) : groupEffectiveRank(b);
       if (ra !== rb) return ra - rb;
+      const oa = a.order ?? a.id, ob = b.order ?? b.id;
+      if (ob !== oa) return ob - oa;
       const ka = a.type === 'todo' ? a.text : a.title;
       const kb = b.type === 'todo' ? b.text : b.title;
       return naturalCompare(ka, kb);
@@ -1637,11 +1653,11 @@
         del.className = 'del-btn';
         del.innerHTML = '✕';
         del.title = 'Entfernen';
-        del.addEventListener('click', () => {
+        del.addEventListener('click', guardedDelete(() => {
           // NUR DIESE EINE Aufgabe entfernen!
           entries = entries.filter(e => e.id !== entry.id);
           renderTodos();
-        });
+        }));
 
         li.appendChild(handle);
         li.appendChild(check);
@@ -1684,11 +1700,11 @@
       del.className = 'group-del';
       del.innerHTML = '✕';
       del.title = 'Projekt entfernen';
-      del.addEventListener('click', (e) => {
+      del.addEventListener('click', guardedDelete((e) => {
         e.stopPropagation();
         entries = entries.filter(en => en.id !== entry.id);
         renderTodos();
-      });
+      }));
 
       header.addEventListener('click', () => {
         entry.collapsed = !entry.collapsed;
@@ -1742,11 +1758,11 @@
         subDel.className = 'del-btn';
         subDel.innerHTML = '✕';
         subDel.title = 'Entfernen';
-        subDel.addEventListener('click', () => {
+        subDel.addEventListener('click', guardedDelete(() => {
           // NUR DIESE EINE Unteraufgabe entfernen!
           entry.items = entry.items.filter(i => i.id !== item.id);
           renderTodos();
-        });
+        }));
 
         subLi.appendChild(subHandle);
         subLi.appendChild(check);
