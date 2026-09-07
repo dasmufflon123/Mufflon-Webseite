@@ -1055,6 +1055,30 @@
     return allData.nextId - 1;
   }
 
+  // Repariert defekte Daten, die z.B. von einer älteren Version dieser Seite
+  // stammen könnten: fehlende oder doppelt vergebene IDs. Ohne das könnte
+  // ein Löschvorgang (der bisher über ID-Vergleich lief) mehrere Aufgaben
+  // gleichzeitig treffen, wenn zwei Einträge zufällig dieselbe (oder gar
+  // keine) ID haben. Wird nach jedem Laden der Liste ausgeführt.
+  function repariereIds(liste) {
+    const gesehen = new Set();
+    liste.forEach(e => {
+      if (typeof e.id !== 'number' || gesehen.has(e.id)) {
+        e.id = nextId();
+      }
+      gesehen.add(e.id);
+      if (e.type === 'group' && Array.isArray(e.items)) {
+        const gesehenSub = new Set();
+        e.items.forEach(i => {
+          if (typeof i.id !== 'number' || gesehenSub.has(i.id)) {
+            i.id = nextId();
+          }
+          gesehenSub.add(i.id);
+        });
+      }
+    });
+  }
+
   // ---------- Login (Name + Passwort via Cloudflare API) ----------
   let currentUser = localStorage.getItem('mufflon_user') || '';
   let currentPasswordHash = localStorage.getItem('mufflon_pwhash') || '';
@@ -1126,6 +1150,7 @@
       localStorage.setItem('mufflon_pwhash', currentPasswordHash);
 
       entries = result.data.todos || [];
+      repariereIds(entries);
       if (!allData.notes) allData.notes = {};
       allData.notes[currentUser] = result.data.notes || [];
 
@@ -1190,6 +1215,7 @@
     .then(result => {
       if (result.success) {
         entries = result.data.todos || [];
+        repariereIds(entries);
         if (!allData.notes) allData.notes = {};
         allData.notes[currentUser] = result.data.notes || [];
         renderTodos();
@@ -1654,8 +1680,11 @@
         del.innerHTML = '✕';
         del.title = 'Entfernen';
         del.addEventListener('click', guardedDelete(() => {
-          // NUR DIESE EINE Aufgabe entfernen!
-          entries = entries.filter(e => e.id !== entry.id);
+          // NUR DIESE EINE Aufgabe entfernen — über die exakte Objekt-Referenz,
+          // nicht über die ID! So kann eine doppelte/fehlende ID nie mehr dazu
+          // führen, dass mehrere Aufgaben auf einmal verschwinden.
+          const idx = entries.indexOf(entry);
+          if (idx !== -1) entries.splice(idx, 1);
           renderTodos();
         }));
 
@@ -1702,7 +1731,8 @@
       del.title = 'Projekt entfernen';
       del.addEventListener('click', guardedDelete((e) => {
         e.stopPropagation();
-        entries = entries.filter(en => en.id !== entry.id);
+        const idx = entries.indexOf(entry);
+        if (idx !== -1) entries.splice(idx, 1);
         renderTodos();
       }));
 
@@ -1759,8 +1789,9 @@
         subDel.innerHTML = '✕';
         subDel.title = 'Entfernen';
         subDel.addEventListener('click', guardedDelete(() => {
-          // NUR DIESE EINE Unteraufgabe entfernen!
-          entry.items = entry.items.filter(i => i.id !== item.id);
+          // NUR DIESE EINE Unteraufgabe entfernen — über die Objekt-Referenz.
+          const idx = entry.items.indexOf(item);
+          if (idx !== -1) entry.items.splice(idx, 1);
           renderTodos();
         }));
 
