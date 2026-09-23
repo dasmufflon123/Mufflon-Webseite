@@ -84,11 +84,11 @@
       border-color: var(--terracotta);
     }
 
-    /* ---- FERTIG-Markierung (Goal erreicht) ---- */
+    /* ---- FERTIG-Markierung (Goal bereits abgestreamt) ---- */
     .sub-goal-card.completed {
       background: rgba(124, 148, 115, 0.08);
       border-color: var(--moss) !important;
-      opacity: 0.7;
+      opacity: 0.92;
     }
     .sub-goal-card.completed .sub-number {
       background: rgba(124, 148, 115, 0.15);
@@ -100,10 +100,10 @@
       color: var(--moss) !important;
     }
     .sub-goal-card.completed .sub-goal-text {
-      opacity: 0.6;
+      opacity: 0.85;
     }
     .sub-goal-card.completed .sub-badge {
-      opacity: 0.6;
+      opacity: 0.85;
     }
     .sub-goal-card.completed::after {
       content: "✓ FERTIG";
@@ -113,7 +113,23 @@
       font-size: 0.75rem;
       font-weight: 900;
       color: var(--moss);
-      opacity: 0.5;
+      opacity: 0.75;
+      font-family: 'Baloo 2', sans-serif;
+      letter-spacing: 0.04em;
+    }
+
+    /* ---- ERREICHT-Markierung (Sub-Zahl erreicht, aber noch nicht abgestreamt) ---- */
+    .sub-goal-card.reached {
+      border-color: rgba(124, 148, 115, 0.5) !important;
+    }
+    .sub-goal-card.reached::after {
+      content: "✓ Erreicht";
+      position: absolute;
+      bottom: 8px;
+      right: 14px;
+      font-size: 0.75rem;
+      font-weight: 900;
+      color: var(--moss);
       font-family: 'Baloo 2', sans-serif;
       letter-spacing: 0.04em;
     }
@@ -333,13 +349,19 @@
     // ============================================================
 
     // ============================================================
-    // ⚠️ HIER TRÄGST DU DIE ZAHLEN DER ERREICHTEN GOALS EIN!
+    // ⚠️ ZWEI LISTEN JETZT GETRENNT:
     // ============================================================
-    // Beispiel: Nach Tag 1 sind 10, 20 und 30 erreicht:
-    // const COMPLETED_SUBS = [10, 20, 30];
+    // COMPLETED_SUBS = wirklich schon ABGESTREAMT (durchgestrichen + "FERTIG")
+    // REACHED_SUBS   = Sub-Zahl zwar schon erreicht, aber noch nicht
+    //                  live gemacht (nur grüner Haken, kein Durchstreichen)
     // ============================================================
 
+    // TODO: Hier die Nummern eintragen, die laut deinem Screenshot
+    // WIRKLICH schon abgestreamt wurden (bisher noch leer)
     const COMPLETED_SUBS = [
+    ];
+
+    const REACHED_SUBS = [
       10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
       110, 120, 130, 140, 150, 160, 170, 180, 190, 200,
       225, 250, 275, 300, 325, 350, 375, 400, 425, 450,
@@ -371,7 +393,7 @@
       { subs: 170, text: 'Strafenrad (30 Min TTS-Hölle mit Eggin On, Hühnerhut, 1 Ingwershot, doppelte Strafdrehs, privates Foto Reveal + 1 Stunde Spielzeit)', category: 'punishment' },
       { subs: 180, text: 'Super Mario World (SNES) mit Super Mario Maske — 9 Stunden', category: 'game' },
       { subs: 190, text: 'Trashsong Songbattle — alles erlaubt (TOS-konform), max. 5 Minuten Länge', category: 'community' },
-      { subs: 200, text: 'Online IQ Test — Live im Stream', category: 'challenge' },
+      { subs: 200, text: 'Bobers Allgemeinwissensquiz — Live und in Farbe', category: 'community' },
       { subs: 225, text: 'PowerPoint Karaoke — Chat sucht 3 Powerpoints, Mufflon trägt sie als Experte vor', category: 'community' },
       { subs: 250, text: 'Bob Ross Bild nach Vorgabe malen — inkl. Verlosung (40×60 cm)', category: 'creative' },
       { subs: 275, text: 'Strafenrad (30 Min TTS-Hölle mit Eggin On, Hühnerhut, 1 Ingwershot, doppelte Strafdrehs, privates Foto Reveal + 1 Stunde Spielzeit)', category: 'punishment' },
@@ -391,7 +413,7 @@
       { subs: 625, text: '9h Horrorstream inkl. Facepaint oder Maske — Horrorgames werden von der Commähnity vorgeschlagen (Bober bekommt 3 Erschreckerlies)', category: 'game' },
       { subs: 650, text: 'Mufflon komponiert & schreibt einen Community-Song — Live auf Gitarre gespielt & gesungen!', category: 'creative' },
       { subs: 675, text: 'Bob Ross Bild nach Vorgabe malen — inkl. Verlosung (40×60 cm)', category: 'creative' },
-      { subs: 700, text: 'Bobers Allgemeinwissensquiz — Live und in Farbe', category: 'community' },
+      { subs: 700, text: 'Online IQ Test im Stream (ausgiebig)', category: 'challenge' },
       { subs: 725, text: 'Strafenrad (30 Min TTS-Hölle mit Eggin On, Hühnerhut, 1 Ingwershot, doppelte Strafdrehs, privates Foto Reveal + 1 Stunde Spielzeit)', category: 'punishment' },
       { subs: 750, text: '9h Diktatur — Der Chat bestimmt: Wann Mufflon Pause macht, isst, welches Game gespielt wird und wie Mufflon sich im Spiel zu verhalten hat (Kein Amogus!)', category: 'punishment' },
       { subs: 800, text: 'Das Herdenhörspiel • Wir schreiben zusammen eine mähgische Geschichte aus dem Mufflonuniversum doch damit nicht genug! Während ich sie zum großteil Einspreche seid ihr für "special effects" oder andere Sprechrollen gefragt)', category: 'special' },
@@ -434,10 +456,11 @@
 
       ALL_GOALS.forEach((goal) => {
         const isCompleted = COMPLETED_SUBS.includes(goal.subs);
+        const isReached = !isCompleted && REACHED_SUBS.includes(goal.subs);
         const hasFaqLink = FAQ_GOALS.includes(goal.subs);
 
         const card = document.createElement('div');
-        card.className = 'sub-goal-card' + (isCompleted ? ' completed' : '');
+        card.className = 'sub-goal-card' + (isCompleted ? ' completed' : isReached ? ' reached' : '');
 
         const catLabels = {
           game: '🎮 Game',
