@@ -120,18 +120,23 @@
 
     /* ---- ERREICHT-Markierung (Sub-Zahl erreicht, aber noch nicht abgestreamt) ---- */
     .sub-goal-card.reached {
-      border-color: rgba(124, 148, 115, 0.5) !important;
+      border-color: var(--moss) !important;
+      box-shadow: 0 0 0 3px rgba(124, 148, 115, 0.35), 0 0 22px rgba(124, 148, 115, 0.5), var(--shadow-soft);
     }
     .sub-goal-card.reached::after {
       content: "✓ Erreicht";
       position: absolute;
-      bottom: 8px;
-      right: 14px;
-      font-size: 0.75rem;
+      top: 10px;
+      right: 10px;
+      background: var(--moss);
+      color: var(--white);
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 0.72rem;
       font-weight: 900;
-      color: var(--moss);
       font-family: 'Baloo 2', sans-serif;
       letter-spacing: 0.04em;
+      box-shadow: 0 3px 10px rgba(124, 148, 115, 0.45);
     }
 
     /* ---- FAQ-Link im Panel (unten rechts) ---- */
@@ -357,8 +362,10 @@
     // ============================================================
 
     // TODO: Hier die Nummern eintragen, die laut deinem Screenshot
-    // WIRKLICH schon abgestreamt wurden (bisher noch leer)
+    // WIRKLICH schon abgestreamt wurden
     const COMPLETED_SUBS = [
+      10, 20, 30, 40, 60, 80, 90, 100, 110, 120, 160, 170, 200,
+      325
     ];
 
     const REACHED_SUBS = [
