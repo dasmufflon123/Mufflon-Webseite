@@ -200,7 +200,8 @@ nav.main-nav a.active {
    stattdessen ein "Plop" (leicht größer) + violettes Glühen drumrum. */
 nav.main-nav a[href="subathon_goals.html"],
 nav.main-nav a[href="subathon_bombs.html"],
-nav.main-nav a[href="FAQ.html"] {
+nav.main-nav a[href="FAQ.html"],
+nav.main-nav a[href="subathon_extended.html"] {
   position: relative;
   padding: 6px 36px 6px 20px;
   border-radius: 999px 0 0 999px;
@@ -218,7 +219,9 @@ nav.main-nav a[href="subathon_goals.html"].active,
 nav.main-nav a[href="subathon_bombs.html"]:hover,
 nav.main-nav a[href="subathon_bombs.html"].active,
 nav.main-nav a[href="FAQ.html"]:hover,
-nav.main-nav a[href="FAQ.html"].active {
+nav.main-nav a[href="FAQ.html"].active,
+nav.main-nav a[href="subathon_extended.html"]:hover,
+nav.main-nav a[href="subathon_extended.html"].active {
   background-color: transparent !important;
   background-image: url('../assets/subathon-schnacky-trimmed.png') !important;
   color: var(--white);
@@ -336,7 +339,8 @@ nav.main-nav a.nav-home img {
   }
   nav.main-nav a[href="subathon_goals.html"],
   nav.main-nav a[href="subathon_bombs.html"],
-  nav.main-nav a[href="FAQ.html"] {
+  nav.main-nav a[href="FAQ.html"],
+  nav.main-nav a[href="subathon_extended.html"] {
     padding: 3px 24px 3px 12px;
   }
 }
