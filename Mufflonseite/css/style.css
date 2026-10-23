@@ -772,3 +772,10 @@ footer.site-footer .footer-brand {
   .pdf-lightbox-box { width: 100vw; height: 100vh; border-radius: 0; }
   .pdf-lightbox-header .title { font-size: 0.85rem; }
 }
+/* Subathon vorbei: Subathon-Links im Menü ausblenden */
+nav.main-nav a[href="subathon_goals.html"],
+nav.main-nav a[href="subathon_bombs.html"],
+nav.main-nav a[href="FAQ.html"],
+nav.main-nav a[href="subathon_extended.html"] {
+  display: none !important;
+}
