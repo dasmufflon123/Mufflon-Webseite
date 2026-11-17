@@ -169,11 +169,11 @@ header.site-header {
 nav.main-nav {
   display: flex;
   align-items: center;
-  gap: 6px 10px;
+  gap: 4px 6px;
   flex-wrap: wrap; /* Erlaubt das Umbrechen in die nächste Zeile */
-  overflow: visible;
+  overflow: hidden; /* Verhindert jegliche Scrollbalken im Menü */
   flex: 1;
-  padding: 4px 0;
+  padding: 2px 0;
 }
 
 nav.main-nav a {
@@ -181,9 +181,9 @@ nav.main-nav a {
   font-family: 'Baloo 2', sans-serif;
   font-weight: 600;
   color: var(--cream);
-  padding: 6px 12px;
+  padding: 3px 6px; /* Etwas kompakter, damit mehr nebeneinander passt */
   border-radius: 999px;
-  font-size: 1.33rem; /* ~70% größer als vorher (0.78rem) - jetzt ist ja Platz */
+  font-size: 0.78rem; /* Minimal kleiner für bessere Passform */
   white-space: nowrap;
   transition: background 0.15s ease, color 0.15s ease;
 }
@@ -191,43 +191,6 @@ nav.main-nav a:hover,
 nav.main-nav a.active {
   background: var(--terracotta);
   color: var(--white);
-}
-
-/* Subathon-Saison: die 3 Subathon-Buttons SIND jetzt Schnacky — das ganze
-   Bild (mit transparentem Rand, echte Wurm-Silhouette) als Button-Form,
-   Text auf dem Körper, Gesicht unbeschnitten am rechten Ende. Beim Hover/
-   als aktive Seite kein Orange-Overlay (würde Schnacky übermalen),
-   stattdessen ein "Plop" (leicht größer) + violettes Glühen drumrum. */
-nav.main-nav a[href="subathon_goals.html"],
-nav.main-nav a[href="subathon_bombs.html"],
-nav.main-nav a[href="FAQ.html"],
-nav.main-nav a[href="subathon_extended.html"] {
-  position: relative;
-  padding: 6px 36px 6px 20px;
-  border-radius: 999px 0 0 999px;
-  background-image: url('../assets/subathon-schnacky-trimmed.png');
-  background-repeat: no-repeat;
-  background-size: auto 100%;
-  background-position: right center;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
-  outline: none;
-  -webkit-tap-highlight-color: transparent;
-  transition: transform 0.18s cubic-bezier(.34, 1.56, .64, 1), filter 0.18s ease;
-}
-nav.main-nav a[href="subathon_goals.html"]:hover,
-nav.main-nav a[href="subathon_goals.html"].active,
-nav.main-nav a[href="subathon_bombs.html"]:hover,
-nav.main-nav a[href="subathon_bombs.html"].active,
-nav.main-nav a[href="FAQ.html"]:hover,
-nav.main-nav a[href="FAQ.html"].active,
-nav.main-nav a[href="subathon_extended.html"]:hover,
-nav.main-nav a[href="subathon_extended.html"].active {
-  background-color: transparent !important;
-  background-image: url('../assets/subathon-schnacky-trimmed.png') !important;
-  color: var(--white);
-  transform: scale(1.08);
-  filter: brightness(1.08);
-  box-shadow: 0 0 0 4px rgba(145, 71, 254, 0.35), 0 6px 16px rgba(124, 62, 240, 0.45);
 }
 
 nav.main-nav a.nav-home {
@@ -240,82 +203,6 @@ nav.main-nav a.nav-home img {
   height: 26px;
   object-fit: contain;
   filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
-}
-
-/* ---------- "Mähr" Dropdown ---------- */
-.nav-dropdown {
-  position: relative;
-}
-.nav-dropdown-trigger {
-  background: rgba(221, 138, 70, 0.22);
-  border: 2px solid var(--terracotta);
-  cursor: pointer;
-  font-family: 'Baloo 2', sans-serif;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-  color: var(--cream);
-  padding: 5px 14px;
-  border-radius: 999px;
-  font-size: 1.33rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
-}
-.nav-dropdown-trigger .caret {
-  font-size: 0.7em;
-  transition: transform 0.15s ease;
-}
-.nav-dropdown-trigger:hover,
-.nav-dropdown.active .nav-dropdown-trigger {
-  background: var(--terracotta);
-  color: var(--white);
-  transform: translateY(-1px);
-}
-.nav-dropdown.open .nav-dropdown-trigger .caret {
-  transform: rotate(180deg);
-}
-
-.nav-dropdown-menu {
-  position: fixed;
-  background: linear-gradient(180deg, #7d5636, #4f3119);
-  border: 1px solid rgba(0,0,0,0.28);
-  border-radius: 14px;
-  padding: 6px;
-  min-width: 220px;
-  display: none;
-  flex-direction: column;
-  gap: 2px;
-  box-shadow: 0 12px 30px rgba(0,0,0,0.38);
-  z-index: 999;
-}
-.nav-dropdown.open .nav-dropdown-menu {
-  display: flex;
-}
-.nav-dropdown-menu a {
-  padding: 11px 16px;
-  border-radius: 9px;
-  font-size: 1.4rem;
-  white-space: nowrap;
-}
-.nav-dropdown-menu a:hover,
-.nav-dropdown-menu a.active {
-  background: var(--terracotta);
-  color: var(--white);
-}
-
-@media (max-width: 720px) {
-  .nav-dropdown-menu {
-    position: static !important;
-    width: 100%;
-    box-shadow: none;
-    margin-top: 6px;
-    background: rgba(0,0,0,0.18);
-    top: auto !important;
-    left: auto !important;
-    right: auto !important;
-  }
 }
 
 .nav-toggle {
@@ -336,12 +223,6 @@ nav.main-nav a.nav-home img {
   nav.main-nav a.nav-home img {
     width: 22px;
     height: 22px;
-  }
-  nav.main-nav a[href="subathon_goals.html"],
-  nav.main-nav a[href="subathon_bombs.html"],
-  nav.main-nav a[href="FAQ.html"],
-  nav.main-nav a[href="subathon_extended.html"] {
-    padding: 3px 24px 3px 12px;
   }
 }
 
@@ -771,11 +652,4 @@ footer.site-footer .footer-brand {
   .pdf-lightbox-overlay { padding: 0; }
   .pdf-lightbox-box { width: 100vw; height: 100vh; border-radius: 0; }
   .pdf-lightbox-header .title { font-size: 0.85rem; }
-}
-/* Subathon vorbei: Subathon-Links im Menü ausblenden */
-nav.main-nav a[href="subathon_goals.html"],
-nav.main-nav a[href="subathon_bombs.html"],
-nav.main-nav a[href="FAQ.html"],
-nav.main-nav a[href="subathon_extended.html"] {
-  display: none !important;
 }
