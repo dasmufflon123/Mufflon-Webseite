@@ -39,4 +39,6 @@ const MAHMORIES_MITGLIEDER = [
   { name: "DievonDamals",      seite_links: "assets/mähmories/links_dievondamals.png",      seite_rechts: "assets/mähmories/rechts_dievondamals.png" },
   { name: "Nono",      seite_links: "assets/mähmories/links_nono.png",      seite_rechts: "assets/mähmories/rechts_nono.png" },      
   { name: "tekk_engel",      seite_links: "assets/mähmories/links_tekk_hase.png",      seite_rechts: "assets/mähmories/rechts_tekk_hase.png" },
+  { name: "Blu",      seite_links: "assets/mähmories/links_Blu.png",      seite_rechts: "assets/mähmories/rechts_blu.png" },    
+  { name: "Jochen",      seite_links: "assets/mähmories/links_jochen.png",      seite_rechts: "assets/mähmories/rechts_jochen.png" },    
 ];
