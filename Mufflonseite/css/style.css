@@ -181,9 +181,9 @@ nav.main-nav a {
   font-family: 'Baloo 2', sans-serif;
   font-weight: 600;
   color: var(--cream);
-  padding: 3px 6px; /* Etwas kompakter, damit mehr nebeneinander passt */
+  padding: 5px 12px;
   border-radius: 999px;
-  font-size: 0.78rem; /* Minimal kleiner für bessere Passform */
+  font-size: 1.05rem;
   white-space: nowrap;
   transition: background 0.15s ease, color 0.15s ease;
 }
@@ -199,8 +199,8 @@ nav.main-nav a.nav-home {
   align-items: center;
 }
 nav.main-nav a.nav-home img {
-  width: 26px;
-  height: 26px;
+  width: 30px;
+  height: 30px;
   object-fit: contain;
   filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
 }
@@ -217,8 +217,8 @@ nav.main-nav a.nav-home img {
 /* ---------- Mobile Navigation ---------- */
 @media (max-width: 900px) {
   nav.main-nav a {
-    font-size: 0.75rem;
-    padding: 3px 6px;
+    font-size: 0.95rem;
+    padding: 4px 9px;
   }
   nav.main-nav a.nav-home img {
     width: 22px;
@@ -253,8 +253,8 @@ nav.main-nav a.nav-home img {
   
   nav.main-nav a {
     text-align: center;
-    padding: 4px 10px;
-    font-size: 0.78rem;
+    padding: 6px 12px;
+    font-size: 1rem;
     white-space: nowrap;
     border-radius: 999px;
     background: rgba(255,255,255,0.05);
@@ -272,7 +272,7 @@ nav.main-nav a.nav-home img {
 
 @media (max-width: 480px) {
   nav.main-nav a {
-    font-size: 0.65rem;
+    font-size: 0.9rem;
     padding: 3px 7px;
   }
   nav.main-nav a.nav-home img {

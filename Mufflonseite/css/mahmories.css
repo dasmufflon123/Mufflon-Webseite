@@ -145,6 +145,12 @@
   font-size: 0.92rem;
   text-align: center;
 }
+.book-jump-total{
+  font-family: 'Baloo 2', sans-serif;
+  font-weight: 700;
+  color: var(--horn-brown);
+  white-space: nowrap;
+}
 .book-jump input:focus{ outline: none; border-color: var(--terracotta); }
 .book-jump button{
   border: none;
