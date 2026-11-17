@@ -16,8 +16,8 @@
   <meta name="twitter:image" content="https://www.dasmufflon.de/assets/og-preview.png">
   <meta name="description" content="Mähmories — das digitale Erinnerungsbuch der Das__Mufflon Commähnity.">
   <link rel="icon" type="image/png" href="assets/mufflon-mascot.png">
-  <link rel="stylesheet" href="css/style.css?v=10">
-  <link rel="stylesheet" href="css/mahmories.css">
+  <link rel="stylesheet" href="css/style.css?v=11">
+  <link rel="stylesheet" href="css/mahmories.css?v=2">
 </head>
 <body>
 
@@ -32,9 +32,6 @@
   <a href="index.html" class="nav-home"><img src="assets/mufflon-icon.png" alt="Stall" title="Stall"></a>
   <a href="Content.html">Content</a>
   <a href="Highlights.html">Events</a>
-  <a href="subathon_goals.html">SUB Goals</a>
-  <a href="subathon_bombs.html">SUB Bombs</a>
-  <a href="FAQ.html">SUB FAQ</a>
   <a href="Opfanze.html">Opfanze</a>
   <a href="pomodoro.html">Pomodoro</a>
   <a href="mahmories.html" class="active">Mähmories</a>
@@ -80,7 +77,8 @@
       <div class="book-page-indicator" id="pageIndicator">Cover</div>
       <button class="book-nav-btn" id="nextBtn" aria-label="Nächste Seite">→</button>
       <div class="book-jump">
-        <input type="number" id="pageJumpInput" min="1" placeholder="Seite …" aria-label="Zu Seite springen">
+        <input type="number" id="pageJumpInput" min="1" placeholder="Seite …" title="Seitenzahl eingeben" aria-label="Zu Seite springen">
+        <span class="book-jump-total" id="pageJumpTotal"></span>
         <button id="pageJumpBtn" aria-label="Springen">Los</button>
       </div>
     </div>
@@ -230,7 +228,7 @@
       // Seitenanzeige
       const total = allPages.length;
       let label;
-      if (index === 0) label = '📖 Cover';
+      if (index === 0) label = '📖 Cover · ' + (total - 2) + ' Seiten';
       else if (index === total - 1) label = '🔚 Rückseite';
       else label = (index) + ' / ' + (total - 2);
 
@@ -358,7 +356,7 @@
 
     function jumpToPage(num) {
       if (isAnimating || isNaN(num)) return;
-      const target = Math.min(Math.max(1, num), allPages.length) - 1;
+      const target = Math.min(Math.max(1, num), allPages.length - 2);
       if (target === currentIndex) return;
       currentIndex = target;
       renderBaseInstant(currentIndex);
@@ -375,6 +373,12 @@
       if (e.key === 'ArrowRight') turn(1);
       if (e.key === 'ArrowLeft') turn(-1);
     });
+
+    // Gesamtanzahl direkt anzeigen
+    const maxSeite = allPages.length - 2;
+    pageJumpInput.max = maxSeite;
+    pageJumpInput.placeholder = '1–' + maxSeite;
+    document.getElementById('pageJumpTotal').textContent = 'von ' + maxSeite;
 
     renderBaseInstant(currentIndex);
   </script>
